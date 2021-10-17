@@ -7,28 +7,44 @@ interface FullCanvasProps {
     magnify?: number
 }
 
+interface FullCanvasState {
+    viewPort?: ViewPort
+}
+
 export type { FullCanvasProps };
 
 export default class FullCanvas extends React.Component {
     props!: FullCanvasProps
+    state!: FullCanvasState
     canvasRef: React.RefObject<HTMLCanvasElement>;
-    viewPort?: ViewPort
+
 
     constructor(props: FullCanvasProps) {
         super(props);
+        this.state = {
+            viewPort: undefined
+        }
         this.canvasRef = React.createRef();
+
+        this.createViewPort = this.createViewPort.bind(this);
     }
 
 
-    componentDidMount() {
-        console.log('FullCanvas did mount')
+    createViewPort():void {
         const { world, magnify = 1 } = this.props
         const canvas = this.canvasRef.current
+
         if (canvas) {
-            this.viewPort = ViewPort.full(world, canvas, magnify);
+            this.setState({
+                viewPort: ViewPort.full(world, canvas, magnify)
+            })
         } else {
             console.log('no canvas!')
         }
+    }
+
+    componentDidMount() {
+        this.createViewPort()
     }
 
     render() {

@@ -1,6 +1,6 @@
-import { Body, Force, ViewPort, World } from "physics-worlds";
+import { Body, Force, World } from "physics-worlds";
 
-function makeWorld(): World {
+function makeWorld(color?: string): World {
 
     return new World([
         new Body({ x: 50, y: 10, size: 20, elasticity: .75 }),
@@ -11,6 +11,7 @@ function makeWorld(): World {
         gravitationalConstant: 1,
         globalGravityForce: new Force(1, 0),
         hasHardEdges: true,
+        fillColor: color,
     });
 }
 
