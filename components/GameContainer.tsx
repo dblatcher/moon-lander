@@ -1,62 +1,71 @@
 import React from "react";
-import react from "react";
 import { World } from "physics-worlds";
-import { Command, makeWorld, respondToCommand } from "../modules/worldFactory";
-import Controls from "./Controls";
 import FullCanvas from "./FullCanvas";
 import styles from "./GameContainer.module.scss";
+import KeyReader from "./KeyReader";
+import WorldInterface from "./WorldInterface";
 
-interface GameContainerProps {
-    title: string
+import { makeWorld } from "../modules/worldFactory";
+import { controlSpaceShip } from "../modules/controlSpaceShip";
+
+const SPEED = 50;
+
+const controlMapping: { [index: string]: string } = {
+    "w": "up",
+    "ArrowUp": "up",
+    "a": "left",
+    "ArrowLeft": "left",
+    "d": "right",
+    "ArrowRight": "right",
+    "s": "down",
+    "ArrowDown": "down"
 }
 
-interface GameContainerState {
-    world: World
-    worldCreationTimeStamp: number
-}
-
-export type { GameContainerProps }
-
-export default class GameContainer extends react.Component {
-    props!: GameContainerProps;
-    state!: GameContainerState;
+export default class GameContainer extends React.Component {
+    props!: {
+        title: string
+    };
+    state!: {
+        world: World
+        worldCreationTimeStamp: number
+        controls: { [index: string]: boolean }
+    };
     canvasRef: React.RefObject<HTMLCanvasElement>;
 
-    constructor(props: GameContainerProps) {
+    constructor(props: GameContainer["props"]) {
         super(props);
         this.canvasRef = React.createRef();
 
         this.state = {
             world: makeWorld(),
             worldCreationTimeStamp: Date.now(),
+            controls: {}
         }
 
-
-        this.state.world.ticksPerSecond = 50
+        this.state.world.ticksPerSecond = SPEED
         this.togglePaused = this.togglePaused.bind(this)
         this.reset = this.reset.bind(this)
-        this.handleInput = this.handleInput.bind(this)
     }
 
     togglePaused() {
-        this.state.world.ticksPerSecond = this.state.world.ticksPerSecond ? 0 : 50
+        // eslint-disable-next-line react/no-direct-mutation-state
+        this.state.world.ticksPerSecond = this.state.world.ticksPerSecond ? 0 : SPEED
     }
 
     reset() {
         const newWorld = makeWorld();
-        newWorld.ticksPerSecond = 50;
-        this.setState({ 
+        newWorld.ticksPerSecond = SPEED;
+        this.setState({
             world: newWorld,
             worldCreationTimeStamp: Date.now(),
         })
     }
 
-    handleInput(key: Command) {
-        return respondToCommand(this.state.world, key);
-    }
 
     render() {
         const { title } = this.props;
+        const { controls, world, worldCreationTimeStamp } = this.state;
+
 
         return (
             <main className={styles.component}>
@@ -66,9 +75,21 @@ export default class GameContainer extends react.Component {
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={this.reset}>reset</button>
                 </div>
-                <FullCanvas key={"A"+this.state.worldCreationTimeStamp} world={this.state.world} />
-                <FullCanvas key={"B"+this.state.worldCreationTimeStamp} world={this.state.world} magnify={.2}/>
-                <Controls handleInput={this.handleInput} />
+                <FullCanvas key={"A" + worldCreationTimeStamp} world={world} />
+                <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
+
+                <KeyReader
+                    report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
+                    controlMapping={controlMapping}
+                />
+
+                <WorldInterface
+                    controls={controls}
+                    world={world}
+                    controlFunction={controlSpaceShip}
+                    key={"C" + worldCreationTimeStamp}
+                />
+
             </main>
         )
     }

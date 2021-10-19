@@ -2,24 +2,18 @@ import { ViewPort, World } from "physics-worlds";
 import React from "react";
 
 
-interface FullCanvasProps {
-    world: World
-    magnify?: number
-}
-
-interface FullCanvasState {
-    viewPort?: ViewPort
-}
-
-export type { FullCanvasProps };
-
 export default class FullCanvas extends React.Component {
-    props!: FullCanvasProps
-    state!: FullCanvasState
+    props!: {
+        world: World
+        magnify?: number
+    }
+    state!: {
+        viewPort?: ViewPort
+    }
     canvasRef: React.RefObject<HTMLCanvasElement>;
 
 
-    constructor(props: FullCanvasProps) {
+    constructor(props: FullCanvas["props"]) {
         super(props);
         this.state = {
             viewPort: undefined
