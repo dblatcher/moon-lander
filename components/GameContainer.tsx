@@ -7,6 +7,7 @@ import WorldInterface from "./WorldInterface";
 
 import { makeWorld } from "../modules/worldFactory";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
+import ThrustMeter from "./ThrustMeter";
 
 const SPEED = 50;
 
@@ -75,8 +76,12 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={this.reset}>reset</button>
                 </div>
-                <FullCanvas key={"A" + worldCreationTimeStamp} world={world} />
-                <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
+
+                <div className={styles.row}>
+                    <ThrustMeter world={world} />
+                    <FullCanvas key={"A" + worldCreationTimeStamp} world={world} />
+                    <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
+                </div>
 
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
@@ -89,6 +94,8 @@ export default class GameContainer extends React.Component {
                     controlFunction={controlSpaceShip}
                     key={"C" + worldCreationTimeStamp}
                 />
+
+                
 
             </main>
         )

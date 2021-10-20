@@ -1,0 +1,18 @@
+.meter {
+    display: inline-flex;
+    align-items: flex-end;
+    border: 3px double white;
+    width: 2rem;
+    height: 10rem;
+    box-sizing: border-box;
+    background-color: burlywood;
+    padding: .1rem;
+    margin: .2rem;
+
+    .bar {
+        background-color: red;
+        height: 100%;
+        width: 100%;
+        transform-origin: bottom;
+    }
+}
