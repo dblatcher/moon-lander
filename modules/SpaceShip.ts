@@ -18,6 +18,7 @@ interface SpaceShipData extends BodyData {
     fillColor?: string
     thrust?: number
     maxThrust?: number
+    maxImpact?: number
 
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
@@ -139,11 +140,19 @@ class SpaceShip extends Body {
 
     handleCollision(report: CollisionDetection.CollisionReport) {
 
-        switch (report.item2.typeId) {
-            case 'Rock':
-                const drift = Geometry.getXYVector(-1, this.momentum.direction);
-                this.explode({ driftBiasX: drift.x, driftBiasY: drift.y })
-                this.world.emitter.emit('shipDeath', this)
+        const { maxImpact = 0 } = this.data
+
+        if (report) {
+            const otherThing = report.item1 === this ? report.item2 : report.item1
+
+            const forceThatCounts = otherThing.data.immobile ? report.force
+                : report.item1 === this
+                    ? report.force2
+                    : report.force;
+
+            if (forceThatCounts > maxImpact) {
+                this.explode()
+            }
         }
 
         Body.prototype.handleCollision(report)
