@@ -1,6 +1,6 @@
-import { World, Body } from "physics-worlds";
+import { World } from "physics-worlds";
 import { useEffect, useState } from "react";
-import { SpaceShip } from "../modules/SpaceShip";
+import { getPlayerSpaceship } from "../modules/worldFactory";
 import styles from "./ThrustMeter.module.scss";
 
 export default function ThrustMeter(props: {
@@ -11,9 +11,8 @@ export default function ThrustMeter(props: {
     let [maxThrust, setMaxThrust] = useState(0);
 
     function getThrustValueFromWorld() {
-        const playerBody: Body | undefined = world.bodies.find(body => body.typeId == "SpaceShip")
-        if (!playerBody) { return }
-        const player = playerBody as SpaceShip;
+        const player = getPlayerSpaceship(world);
+        if (!player) { return }
         setThrust(player.data.thrust || 0);
         setMaxThrust(player.data.maxThrust || 0);
     }
@@ -26,10 +25,10 @@ export default function ThrustMeter(props: {
     })
 
     const barStyle = {
-        transform: `scaleY(${(thrust/maxThrust)*100}%)`
+        transform: `scaleY(${(thrust / maxThrust) * 100}%)`
     }
 
-    return ( 
+    return (
         <figure className={styles.meter}>
             <div className={styles.bar} style={barStyle}></div>
         </figure>

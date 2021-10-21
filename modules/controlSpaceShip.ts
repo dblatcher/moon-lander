@@ -1,13 +1,11 @@
-import { World, Body } from "physics-worlds";
-import { SpaceShip } from "./SpaceShip";
+import { World } from "physics-worlds";
+import { getPlayerSpaceship } from "./worldFactory";
 
 
 function controlSpaceShip(world: World, key: string) {
 
-    const playerBody: Body | undefined = world.bodies.find(body => body.typeId == "SpaceShip")
-    if (!playerBody) { return }
-
-    const player = playerBody as SpaceShip;
+    const player = getPlayerSpaceship(world)
+    if (!player) { return }
 
     switch (key) {
         case 'up':
