@@ -1,11 +1,11 @@
-import { Body, Force, World, Geometry, shapes } from "physics-worlds";
+import { Body, Force, World, Geometry, shapes, StarField } from "physics-worlds";
 
 import { SpaceShip } from "./SpaceShip";
 import { Terrain } from "./Terrain";
 
 const worldDimensions = {
     width: 800,
-    height: 600
+    height: 1600
 }
 
 function makeWorld(color?: string): World {
@@ -51,6 +51,19 @@ function makeWorld(color?: string): World {
         ...worldDimensions,
         gravitationalConstant: .1,
         globalGravityForce: new Force(1, 0),
+
+        backGrounds:[
+            new StarField({
+                numberOfStars:15,
+                depth:3,
+                ...worldDimensions
+            }),
+            new StarField({
+                numberOfStars:15,
+                depth:6,
+                ...worldDimensions
+            }),
+        ],
 
         edges: {
             left: "WRAP",

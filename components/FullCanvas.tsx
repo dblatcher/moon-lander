@@ -1,7 +1,7 @@
 import { ViewPort, World } from "physics-worlds";
 import React, { useEffect, useRef } from "react";
 
-export default function CanvasFull(props: {
+export default function FullCanvas(props: {
     world: World
     magnify?: number
 }) {
@@ -10,7 +10,7 @@ export default function CanvasFull(props: {
     const viewPort = useRef<ViewPort | null>(null)
 
     useEffect(() => {
-        if (canvas.current) {
+        if (canvas.current && !viewPort.current) {
             viewPort.current = ViewPort.full(world, canvas.current, magnify)
         }
     })

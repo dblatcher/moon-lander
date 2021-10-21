@@ -8,6 +8,7 @@ import WorldInterface from "./WorldInterface";
 import { makeWorld } from "../modules/worldFactory";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import ThrustMeter from "./ThrustMeter";
+import FollowBodyCanvas from "./FollowBodyCanvas";
 
 const SPEED = 50;
 
@@ -79,7 +80,13 @@ export default class GameContainer extends React.Component {
 
                 <div className={styles.row}>
                     <ThrustMeter world={world} />
-                    <FullCanvas key={"A" + worldCreationTimeStamp} world={world} />
+                    <FollowBodyCanvas
+                        key={"A" + worldCreationTimeStamp}
+                        world={world}
+                        magnify={.8}
+                        height={500} width={500}
+                        framefill={'white'}
+                    />
                     <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
                 </div>
 
@@ -95,7 +102,7 @@ export default class GameContainer extends React.Component {
                     key={"C" + worldCreationTimeStamp}
                 />
 
-                
+
 
             </main>
         )
