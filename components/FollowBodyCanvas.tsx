@@ -1,6 +1,6 @@
 import { AbstractGradientFill, CameraFollowInstruction, ViewPort, World } from "physics-worlds";
 import React, { useEffect, useRef } from "react";
-import { getPlayerSpaceship } from "../modules/worldFactory";
+import { getPlayerSpaceship } from "../modules/worldValues";
 
 export default function FollowBodyCanvas(props: {
     world: World

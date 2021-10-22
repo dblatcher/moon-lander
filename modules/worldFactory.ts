@@ -19,7 +19,7 @@ function makeWorld(color?: string): World {
             maxThrust: 7500,
             maxImpact: 40000,
             heading: Geometry._360deg / 2
-        },Force.none),
+        }, Force.none),
 
         new Area({
             x: worldDimensions.width / 2,
@@ -98,12 +98,7 @@ function makeWorld(color?: string): World {
     });
 }
 
-function getPlayerSpaceship(world: World): SpaceShip | null {
-    const playerBody: Body | undefined = world.bodies.find(body => body.typeId == "SpaceShip")
-    if (!playerBody) { return null }
-    return playerBody as SpaceShip;
-}
 
 export {
-    makeWorld, getPlayerSpaceship
+    makeWorld
 }

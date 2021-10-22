@@ -6,9 +6,10 @@ import KeyReader from "./KeyReader";
 import WorldInterface from "./WorldInterface";
 
 import { makeWorld } from "../modules/worldFactory";
+import { getPlayerFuel, getPlayerThrust, } from "../modules/worldValues";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
-import ThrustMeter from "./ThrustMeter";
 import FollowBodyCanvas from "./FollowBodyCanvas";
+import BarMeter from "./BarMeter";
 
 const SPEED = 50;
 
@@ -79,7 +80,9 @@ export default class GameContainer extends React.Component {
                 </div>
 
                 <div className={styles.row}>
-                    <ThrustMeter world={world} />
+                    <BarMeter world={world} getValues={getPlayerThrust} />
+                    <BarMeter world={world} getValues={getPlayerFuel} />
+
                     <FollowBodyCanvas
                         key={"A" + worldCreationTimeStamp}
                         world={world}

@@ -20,6 +20,9 @@ interface SpaceShipData extends BodyData {
     maxThrust?: number
     maxImpact?: number
 
+    maxFuel?: number
+    fuel?: number
+
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
 }
@@ -33,6 +36,9 @@ class SpaceShip extends Body {
         this.data.fillColor = config.fillColor || 'white'
         this.data.thrust = config.thrust || 0
         this.data.maxThrust = config.maxThrust || 100
+        this.data.maxFuel = config.maxFuel || 1000
+        this.data.fuel = config.fuel || this.data.maxFuel
+
         this.data.shootCooldownCurrent = 0
         this.data.shootCooldownDuration = config.shootCooldownDuration || 20
     }
@@ -40,8 +46,17 @@ class SpaceShip extends Body {
     get typeId() { return 'SpaceShip' }
 
     tick() {
-        const { shootCooldownCurrent = 0 } = this.data;
+        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1 } = this.data;
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
+
+        if (thrust > 0) {
+            this.data.fuel = currentFuel - (thrust / 1000);
+            console.log(this.data.fuel)
+            if (this.data.fuel <= 0) {
+                this.data.fuel = 0;
+                this.data.thrust = 0;
+            }
+        }
     }
 
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
@@ -205,7 +220,11 @@ class SpaceShip extends Body {
     }
 
     changeThrottle(change: number) {
-        const { thrust = 0, maxThrust = 0 } = this.data
+        const { thrust = 0, maxThrust = 0, fuel = 1 } = this.data
+        if (fuel <= 0) {
+            this.data.thrust = 0
+            return
+        }
         let newAmount = thrust + change
         if (newAmount < 0) { newAmount = 0 }
         if (newAmount > maxThrust) { newAmount = maxThrust }
