@@ -51,7 +51,6 @@ class SpaceShip extends Body {
 
         if (thrust > 0) {
             this.data.fuel = currentFuel - (thrust / 1000);
-            console.log(this.data.fuel)
             if (this.data.fuel <= 0) {
                 this.data.fuel = 0;
                 this.data.thrust = 0;

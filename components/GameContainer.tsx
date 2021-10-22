@@ -81,7 +81,7 @@ export default class GameContainer extends React.Component {
 
                 <div className={styles.row}>
                     <BarMeter world={world} getValues={getPlayerThrust} />
-                    <BarMeter world={world} getValues={getPlayerFuel} />
+                    <BarMeter meterType="GAGE" world={world} getValues={getPlayerFuel} />
 
                     <FollowBodyCanvas
                         key={"A" + worldCreationTimeStamp}
