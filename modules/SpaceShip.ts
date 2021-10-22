@@ -143,7 +143,7 @@ class SpaceShip extends Body {
             x: this.data.x,
             y: this.data.y,
             duration: 100,
-            driftSpeed: 2,
+            driftSpeed: 1,
             driftBiasX,
             driftBiasY,
             colors: ['white', color, color]
@@ -165,7 +165,10 @@ class SpaceShip extends Body {
                     : report.force;
 
             if (forceThatCounts > maxImpact) {
-                this.explode()
+                this.explode({
+                    driftBiasX: -this.momentum.vectorX / this.momentum.magnitude * 2,
+                    driftBiasY: -this.momentum.vectorY / this.momentum.magnitude * 2
+                })
             }
         }
 

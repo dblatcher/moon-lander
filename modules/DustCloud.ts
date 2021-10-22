@@ -49,18 +49,16 @@ class DustCloud extends Effect {
     size!: number
     specs: Spec[]
     numberOfSpecs: number
+    disapearRate:number
 
     constructor(config: DustCloudData) {
         super(config)
         this.specs = []
         this.numberOfSpecs = config.numberOfSpecs
+        this.disapearRate = Math.round(1 / (this.numberOfSpecs / this.duration))
         for (let i = 0; i < config.numberOfSpecs; i++) {
             this.specs.push(new Spec(config))
         }
-    }
-
-    get disapearRate() {
-        return Math.round(1 / (this.numberOfSpecs / this.duration))
     }
 
     tick() {
