@@ -1,4 +1,5 @@
 import { Body, World } from "physics-worlds";
+import { LandingPad } from "./LandingPad";
 import { SpaceShip } from "./SpaceShip";
 
 
@@ -30,9 +31,27 @@ const getPlayerThrust: GetMeterValuesFunction = (world: World) => {
     }
 }
 
+interface WorldStatus {
+    playerDead?: boolean
+    landingPadPlayerIsOn?: LandingPad
+}
+
+interface WorldStatusFunction {
+    (world: World) : WorldStatus
+}
+
+const getWorldStatus = (world:World) => {
+    const player = getPlayerSpaceship(world)
+
+    return {
+        playerDead: !player,
+        landingPadPlayerIsOn: player?.landingPadIsRestingOn
+    }
+}
+
 export type {
-    GetMeterValuesFunction
+    GetMeterValuesFunction, WorldStatusFunction, WorldStatus
 }
 export {
-    getPlayerSpaceship, getPlayerFuel, getPlayerThrust
+    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus
 }

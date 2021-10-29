@@ -1,5 +1,6 @@
 import { Body, Force, World, Geometry, shapes, StarField, Area, RadialGradientFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
+import { LandingPad } from "./LandingPad";
 
 import { SpaceShip } from "./SpaceShip";
 import { Terrain } from "./Terrain";
@@ -47,6 +48,14 @@ function makeWorld(color?: string): World {
             size: 10,
             elasticity: .75,
             density: 5.01
+        }),
+
+        new LandingPad({
+            x: worldDimensions.width * (3/16),
+            y: worldDimensions.height-100,
+            size:100,
+            fillColor:'green',
+            shape: shapes.square,
         }),
 
         new Terrain({

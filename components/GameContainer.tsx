@@ -6,7 +6,7 @@ import KeyReader from "./KeyReader";
 import WorldInterface from "./WorldInterface";
 
 import { makeWorld } from "../modules/worldFactory";
-import { getPlayerFuel, getPlayerThrust, } from "../modules/worldValues";
+import { getPlayerFuel, getPlayerThrust, WorldStatus, } from "../modules/worldValues";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
@@ -32,6 +32,8 @@ export default class GameContainer extends React.Component {
         world: World
         worldCreationTimeStamp: number
         controls: { [index: string]: boolean }
+        playerHasLanded: boolean
+        playerHasDied: boolean
     };
     canvasRef: React.RefObject<HTMLCanvasElement>;
 
@@ -42,12 +44,31 @@ export default class GameContainer extends React.Component {
         this.state = {
             world: makeWorld(),
             worldCreationTimeStamp: Date.now(),
-            controls: {}
+            controls: {},
+            playerHasLanded: false,
+            playerHasDied: false,
         }
 
         this.state.world.ticksPerSecond = SPEED
         this.togglePaused = this.togglePaused.bind(this)
+        this.handleWorldStatus = this.handleWorldStatus.bind(this)
         this.reset = this.reset.bind(this)
+    }
+
+    handleWorldStatus(status: WorldStatus) {
+        const { landingPadPlayerIsOn, playerDead } = status;
+
+        const modification: any = {}
+
+        if (!this.state.playerHasDied && playerDead) {
+            modification.playerHasDied = true
+        }
+
+        if (!this.state.playerHasLanded && landingPadPlayerIsOn) {
+            modification.playerHasLanded = true
+        }
+
+        this.setState(modification)
     }
 
     togglePaused() {
@@ -61,13 +82,15 @@ export default class GameContainer extends React.Component {
         this.setState({
             world: newWorld,
             worldCreationTimeStamp: Date.now(),
+            playerHasLanded: false,
+            playerHasDied: false,
         })
     }
 
 
     render() {
         const { title } = this.props;
-        const { controls, world, worldCreationTimeStamp } = this.state;
+        const { controls, world, worldCreationTimeStamp, playerHasLanded, playerHasDied } = this.state;
 
 
         return (
@@ -77,6 +100,10 @@ export default class GameContainer extends React.Component {
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={this.reset}>reset</button>
+                </div>
+                <div>
+                    <span>{playerHasLanded ? 'landed!' : 'not landed...'}</span>
+                    <span>{playerHasDied ? 'CRASHED!' : 'operational...'}</span>
                 </div>
 
                 <div className={styles.row}>
@@ -102,10 +129,9 @@ export default class GameContainer extends React.Component {
                     controls={controls}
                     world={world}
                     controlFunction={controlSpaceShip}
+                    reportWorldStatus={this.handleWorldStatus}
                     key={"C" + worldCreationTimeStamp}
                 />
-
-
 
             </main>
         )

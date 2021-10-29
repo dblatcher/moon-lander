@@ -1,6 +1,7 @@
 import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
+import { LandingPad } from './LandingPad'
 
 const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
 
@@ -44,6 +45,34 @@ class SpaceShip extends Body {
     }
 
     get typeId() { return 'SpaceShip' }
+
+    static negligableSpeed = 0.2
+
+    get seemsStill(): boolean {
+        const { thrust = 0 } = this.data
+        const { momentum } = this
+        if (thrust > 0) { return false }
+        if (momentum.magnitude > SpaceShip.negligableSpeed) { return false }
+        return true
+    }
+
+    get landingPadIsRestingOn(): LandingPad | undefined {
+
+        if (!this.seemsStill) { return undefined }
+        const landingPads: LandingPad[] = this.world.bodies.filter(body => body.typeId === 'LandingPad');
+
+        return landingPads.find(landingPad => {
+            const edges = Geometry.getPolygonLineSegments(landingPad.polygonPoints)
+            const closestPoints = edges.map(edge => Geometry.closestPointOnLineSegment(...edge, this.shapeValues))
+            const distance = Math.min(...closestPoints.map(point => Geometry.getDistanceBetweenPoints(point, this.shapeValues))) - this.shapeValues.radius
+
+            // need to allow some threshold for tiny bouncing
+            return distance < 1
+
+            // TO DO - distinguish being ON TOP of the landing pad and begin next to it
+            // using global gravity direction
+        })
+    }
 
     tick() {
         const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1 } = this.data;
@@ -144,8 +173,8 @@ class SpaceShip extends Body {
             y: this.data.y,
             duration: 100,
             driftSpeed: 1,
-            driftBiasX,
-            driftBiasY,
+            driftBiasX: driftBiasX * (1 / 3),
+            driftBiasY: driftBiasY * (1 / 3),
             colors: ['white', color, color]
         }).enterWorld(this.world)
 
