@@ -6,7 +6,7 @@ import KeyReader from "./KeyReader";
 import WorldInterface from "./WorldInterface";
 
 import { makeWorld } from "../modules/worldFactory";
-import { getPlayerFuel, getPlayerThrust, WorldStatus, } from "../modules/worldValues";
+import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
@@ -103,7 +103,7 @@ export default class GameContainer extends React.Component {
                 </div>
                 <div>
                     <span>{playerHasLanded ? 'landed!' : 'not landed...'}</span>
-                    <span>{playerHasDied ? 'CRASHED!' : 'operational...'}</span>
+                    <span>{playerHasDied ? ' CRASHED!' : ' operational...'}</span>
                 </div>
 
                 <div className={styles.row}>
@@ -129,6 +129,7 @@ export default class GameContainer extends React.Component {
                     controls={controls}
                     world={world}
                     controlFunction={controlSpaceShip}
+                    getWorldStatus={getWorldStatus}
                     reportWorldStatus={this.handleWorldStatus}
                     key={"C" + worldCreationTimeStamp}
                 />

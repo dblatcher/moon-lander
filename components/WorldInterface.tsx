@@ -1,28 +1,31 @@
 import { World } from "physics-worlds";
 import React, { useEffect } from "react";
-import { getPlayerSpaceship, getWorldStatus } from "../modules/worldValues";
 
 
 interface ControlFunction {
     (world: World, key: string): void
 }
 
+interface WorldStatusFunction {
+    (world: World): any
+}
 
 /**
  * Component that executes a control function on a World,
- * issuing the commands based on the state of the controls
- * every time the World ticks and reports back events in the
- * world that are relevant to the GameContainer state.
+ * issuing the commands based on the controls prop
+ * every time the World ticks then reports back a status object
+ * with properties relevant to the parent's state.
  */
 export default function WorldInterface(props: {
     controls: { [index: string]: boolean }
     displayInput?: boolean
     controlFunction: ControlFunction
     reportWorldStatus: Function
+    getWorldStatus: WorldStatusFunction
     world: World
 }) {
 
-    const { controls, world, controlFunction, reportWorldStatus: report = () => { } } = props;
+    const { controls, world, controlFunction, reportWorldStatus: report = () => { }, getWorldStatus } = props;
 
     function executeControlFunction(tickReport: any): void {
         Object.keys(controls)

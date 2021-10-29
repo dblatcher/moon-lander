@@ -3,17 +3,13 @@ import { LandingPad } from "./LandingPad";
 import { SpaceShip } from "./SpaceShip";
 
 
-interface GetMeterValuesFunction {
-    (world: World): { value: number, max: number } | null
-}
-
 function getPlayerSpaceship(world: World): SpaceShip | null {
     const playerBody: Body | undefined = world.bodies.find(body => body.typeId == "SpaceShip")
     if (!playerBody) { return null }
     return playerBody as SpaceShip;
 }
 
-const getPlayerFuel: GetMeterValuesFunction = (world: World) => {
+const getPlayerFuel = (world: World) => {
     const player = getPlayerSpaceship(world)
     if (!player) { return null }
     return {
@@ -22,7 +18,7 @@ const getPlayerFuel: GetMeterValuesFunction = (world: World) => {
     }
 }
 
-const getPlayerThrust: GetMeterValuesFunction = (world: World) => {
+const getPlayerThrust = (world: World) => {
     const player = getPlayerSpaceship(world)
     if (!player) { return null }
     return {
@@ -36,9 +32,6 @@ interface WorldStatus {
     landingPadPlayerIsOn?: LandingPad
 }
 
-interface WorldStatusFunction {
-    (world: World) : WorldStatus
-}
 
 const getWorldStatus = (world:World) => {
     const player = getPlayerSpaceship(world)
@@ -50,7 +43,7 @@ const getWorldStatus = (world:World) => {
 }
 
 export type {
-    GetMeterValuesFunction, WorldStatusFunction, WorldStatus
+    WorldStatus
 }
 export {
     getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus

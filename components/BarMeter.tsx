@@ -1,9 +1,12 @@
 import { World } from "physics-worlds";
 import { useEffect, useState } from "react";
-import { GetMeterValuesFunction } from "../modules/worldValues";
+
 import styles from "./BarMeter.module.scss";
 
 
+interface GetMeterValuesFunction {
+    (world: World): { value: number, max: number } | null
+}
 
 function renderBar(value: number, maxValue: number) {
     const barStyle = {
