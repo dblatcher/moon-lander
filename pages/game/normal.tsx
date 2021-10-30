@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import FullScreenWrapper from '../../components/FullScreenWrapper'
 import GameContainer from '../../components/GameContainer'
 
 
@@ -18,7 +19,9 @@ const NormalGame: NextPage = () => {
 
                 <Link href="/" passHref={true}>homepage</Link>
 
-                <GameContainer title="normal game"/>
+                <FullScreenWrapper>
+                    <GameContainer title="normal game"/>
+                </FullScreenWrapper>
             </main>
         </div>
     )
