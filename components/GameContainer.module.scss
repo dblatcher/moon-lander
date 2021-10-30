@@ -1,20 +1,62 @@
+@import "../styles/mixins";
+
 .component {
-    background-color: aqua;
-    position: relative;
+    @include fullHeight;
 
     h2 {
-        background-color: bisque;
+        margin: 0
     }
-    
+
+    .mainScreen {
+        @include fullHeight;
+        justify-content: stretch;
+        align-items: center;
+        padding: 1.5rem;
+
+        &>div {
+            flex-basis: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &>canvas {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    }
+
+    .panel {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        max-height: inherit;
+
+        canvas {
+            opacity: .75;
+            max-height: inherit;
+            max-width: 20rem;
+        }
+
+        &--left {
+            right: unset;
+            left: 0;
+        }
+    }
+
     .row {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: center;
     }
 
     .dialogue {
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 25%;
         transform: translateX(-50%) translateY(-50%);
         background-color: cadetblue;
         padding: 1.5rem;

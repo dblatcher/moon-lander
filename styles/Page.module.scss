@@ -1,0 +1,11 @@
+@import "./_mixins.scss";
+
+.full-height-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.full-height-container {
+    @include fullHeight;
+}

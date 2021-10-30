@@ -4,18 +4,18 @@ import Link from 'next/link'
 import FullScreenWrapper from '../../components/FullScreenWrapper'
 import GameContainer from '../../components/GameContainer'
 
-
+import styles from '../../styles/Page.module.scss'
 
 const NormalGame: NextPage = () => {
 
     return (
-        <div>
+        <div className={styles["full-height-page"]}>
 
             <Head>
                 <title>Normal game page</title>
             </Head>
 
-            <main>
+            <main className={styles["full-height-container"]}>
 
                 <Link href="/" passHref={true}>homepage</Link>
 

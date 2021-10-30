@@ -1,5 +1,7 @@
 import { CSSProperties, ReactChild, ReactChildren, useEffect, useRef, useState } from "react"
 
+import styles from '../styles/Page.module.scss'
+
 const buttonStyle:CSSProperties = {
     position:'absolute',
     top:0,
@@ -31,12 +33,12 @@ export default function FullScreenWrapper(props: {
         }
     })
 
-    return <div ref={wrapper}>
+    return <div ref={wrapper} className={styles["full-height-container"]}>
+        {props.children}
         {!isFullScreen && (
             <button 
             style = {buttonStyle}
             onClick={requestFullScreen}>full screen</button>
         )}
-        {props.children}
     </div>
 }

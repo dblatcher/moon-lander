@@ -114,6 +114,29 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.reset}>reset</button>
                 </div>
 
+                <div className={styles.mainScreen}>
+                    <div>
+                        <FollowBodyCanvas
+                            key={"A" + worldCreationTimeStamp}
+                            world={world}
+                            magnify={1}
+                            height={1200} width={1200}
+                            framefill={'white'}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.panel}>
+                    <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
+                </div>
+
+                <div className={[styles.panel, styles["panel--left"]].join(" ")}>
+                    <div className={styles.row}>
+                        <BarMeter world={world} getValues={getPlayerThrust} />
+                        <BarMeter meterType="GAGE" world={world} getValues={getPlayerFuel} />
+                    </div>
+                </div>
+
                 {playerHasLanded && (
                     <article className={styles.dialogue}>
                         <p>You have landed!</p>
@@ -127,20 +150,6 @@ export default class GameContainer extends React.Component {
                         <div className={styles.button} onClick={this.reset}>Try again....</div>
                     </article>
                 )}
-
-                <div className={styles.row}>
-                    <BarMeter world={world} getValues={getPlayerThrust} />
-                    <BarMeter meterType="GAGE" world={world} getValues={getPlayerFuel} />
-
-                    <FollowBodyCanvas
-                        key={"A" + worldCreationTimeStamp}
-                        world={world}
-                        magnify={.8}
-                        height={500} width={500}
-                        framefill={'white'}
-                    />
-                    <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
-                </div>
 
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}

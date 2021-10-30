@@ -1,0 +1,8 @@
+@mixin fullHeight {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
