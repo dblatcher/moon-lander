@@ -5,7 +5,7 @@ import styles from "./GameContainer.module.scss";
 import KeyReader from "./KeyReader";
 import WorldInterface from "./WorldInterface";
 
-import { makeWorld } from "../modules/worldFactory";
+import { makeWorld, numberOfLevels } from "../modules/worldFactory";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import FollowBodyCanvas from "./FollowBodyCanvas";
@@ -29,6 +29,7 @@ export default class GameContainer extends React.Component {
         title: string
     };
     state!: {
+        level: number
         world: World
         worldCreationTimeStamp: number
         controls: { [index: string]: boolean }
@@ -42,6 +43,7 @@ export default class GameContainer extends React.Component {
         this.canvasRef = React.createRef();
 
         this.state = {
+            level: 1,
             world: makeWorld(),
             worldCreationTimeStamp: Date.now(),
             controls: {},
@@ -52,6 +54,7 @@ export default class GameContainer extends React.Component {
         this.state.world.ticksPerSecond = SPEED
         this.togglePaused = this.togglePaused.bind(this)
         this.handleWorldStatus = this.handleWorldStatus.bind(this)
+        this.goToNextLevel = this.goToNextLevel.bind(this)
         this.reset = this.reset.bind(this)
     }
 
@@ -77,7 +80,8 @@ export default class GameContainer extends React.Component {
     }
 
     reset() {
-        const newWorld = makeWorld();
+        this.state.world.stopTime();
+        const newWorld = makeWorld(this.state.level);
         newWorld.ticksPerSecond = SPEED;
         this.setState({
             world: newWorld,
@@ -87,6 +91,14 @@ export default class GameContainer extends React.Component {
         })
     }
 
+    goToNextLevel() {
+
+        const nextLevelNumber = this.state.level + 1 > numberOfLevels ? 1 : this.state.level + 1;
+
+        this.setState({
+            level: nextLevelNumber
+        }, this.reset)
+    }
 
     render() {
         const { title } = this.props;
@@ -101,10 +113,20 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={this.reset}>reset</button>
                 </div>
-                <div>
-                    <span>{playerHasLanded ? 'landed!' : 'not landed...'}</span>
-                    <span>{playerHasDied ? ' CRASHED!' : ' operational...'}</span>
-                </div>
+
+                {playerHasLanded && (
+                    <article className={styles.dialogue}>
+                        <p>You have landed!</p>
+                        <div className={styles.button} onClick={this.goToNextLevel}>Go to next level!</div>
+                    </article>
+                )}
+
+                {playerHasDied && (
+                    <article className={styles.dialogue}>
+                        <p>You have crashed.</p>
+                        <div className={styles.button} onClick={this.reset}>Try again....</div>
+                    </article>
+                )}
 
                 <div className={styles.row}>
                     <BarMeter world={world} getValues={getPlayerThrust} />
@@ -126,7 +148,7 @@ export default class GameContainer extends React.Component {
                 />
 
                 <WorldInterface
-                    controls={controls}
+                    controls={playerHasLanded ? {} : controls}
                     world={world}
                     controlFunction={controlSpaceShip}
                     getWorldStatus={getWorldStatus}
