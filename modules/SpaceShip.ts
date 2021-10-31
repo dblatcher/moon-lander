@@ -264,4 +264,5 @@ class SpaceShip extends Body {
 
 }
 
+export type { SpaceShipData }
 export { SpaceShip }

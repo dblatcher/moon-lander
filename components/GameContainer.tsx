@@ -112,6 +112,7 @@ export default class GameContainer extends React.Component {
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={this.reset}>reset</button>
+                    <button onClick={this.goToNextLevel}>skip</button>
                 </div>
 
                 <div className={styles.mainScreen}>

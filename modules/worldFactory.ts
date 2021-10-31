@@ -2,7 +2,7 @@ import { Body, Force, World, Geometry, shapes, StarField, Area, RadialGradientFi
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 import { LandingPad } from "./LandingPad";
 
-import { SpaceShip } from "./SpaceShip";
+import { SpaceShip, SpaceShipData } from "./SpaceShip";
 import { Terrain } from "./Terrain";
 
 const atmosphere = new RadialGradientFill({
@@ -19,6 +19,22 @@ const atmosphere = new RadialGradientFill({
     }
 });
 
+
+function makeShip(config: SpaceShipData) {
+
+    const finalConfig: SpaceShipData = Object.assign(
+        {
+            size: 15,
+            elasticity: .01,
+            maxThrust: 7500,
+            maxImpact: 40000,
+            maxFuel: 2000,
+            heading: Geometry._360deg / 2
+        }, config)
+
+    return new SpaceShip(finalConfig)
+}
+
 const levelFunctions = [
     function makeLevel1(): World {
         const worldDimensions = {
@@ -27,14 +43,11 @@ const levelFunctions = [
         }
 
         return new World([
-            new SpaceShip({
-                x: worldDimensions.width / 2, y: 310,
-                size: 15,
-                elasticity: .1,
-                maxThrust: 7500,
-                maxImpact: 40000,
-                heading: Geometry._360deg / 2
-            }, Force.none),
+            makeShip({
+                x: worldDimensions.width / 2,
+                y: 310,
+                fuel: 1200,
+            }),
 
             new Area({
                 x: worldDimensions.width / 2,
@@ -116,16 +129,10 @@ const levelFunctions = [
         }
 
         return new World([
-            new SpaceShip({
+            makeShip({
                 x: worldDimensions.width / 2,
-                y: 500,
-                size: 15,
-                elasticity: .1,
-                maxThrust: 7500,
-                maxImpact: 40000,
-                maxFuel: 10000,
-                heading: Geometry._360deg / 2
-            }, Force.none),
+                y: (worldDimensions.height / 2) - 1200,
+            }),
 
             new Terrain({
                 x: worldDimensions.width / 2,
