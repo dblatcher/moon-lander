@@ -124,7 +124,7 @@ export default class GameContainer extends React.Component {
                         magnify={.2} />
                 </div>
 
-                <div className={[styles.panel, styles["panel--left"]].join(" ")}>
+                <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
                     <div className={styles.row}>
                         <BarMeter
                             world={world}

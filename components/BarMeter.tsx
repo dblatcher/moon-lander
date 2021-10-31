@@ -28,6 +28,7 @@ function renderGage(value: number, maxValue: number) {
         <figure className={styles.gage}>
             <div className={styles.panel}></div>
             <div className={styles.needle} style={needleStyle}></div>
+            <div className={styles.center}></div>
         </figure>
     )
 }
