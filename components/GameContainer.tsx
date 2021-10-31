@@ -31,7 +31,6 @@ export default class GameContainer extends React.Component {
     state!: {
         level: number
         world: World
-        worldCreationTimeStamp: number
         controls: { [index: string]: boolean }
         playerHasLanded: boolean
         playerHasDied: boolean
@@ -45,7 +44,6 @@ export default class GameContainer extends React.Component {
         this.state = {
             level: 1,
             world: makeWorld(),
-            worldCreationTimeStamp: Date.now(),
             controls: {},
             playerHasLanded: false,
             playerHasDied: false,
@@ -60,7 +58,6 @@ export default class GameContainer extends React.Component {
 
     handleWorldStatus(status: WorldStatus) {
         const { landingPadPlayerIsOn, playerDead } = status;
-
         const modification: any = {}
 
         if (!this.state.playerHasDied && playerDead) {
@@ -85,16 +82,13 @@ export default class GameContainer extends React.Component {
         newWorld.ticksPerSecond = SPEED;
         this.setState({
             world: newWorld,
-            worldCreationTimeStamp: Date.now(),
             playerHasLanded: false,
             playerHasDied: false,
         })
     }
 
     goToNextLevel() {
-
         const nextLevelNumber = this.state.level + 1 > numberOfLevels ? 1 : this.state.level + 1;
-
         this.setState({
             level: nextLevelNumber
         }, this.reset)
@@ -102,11 +96,10 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { title } = this.props;
-        const { controls, world, worldCreationTimeStamp, playerHasLanded, playerHasDied } = this.state;
-
+        const { controls, world, playerHasLanded, playerHasDied } = this.state;
 
         return (
-            <main className={styles.component}>
+            <main className={styles.component} key={world.name}>
 
                 <h2>{title}</h2>
                 <div>
@@ -118,23 +111,28 @@ export default class GameContainer extends React.Component {
                 <div className={styles.mainScreen}>
                     <div>
                         <FollowBodyCanvas
-                            key={"A" + worldCreationTimeStamp}
                             world={world}
                             magnify={1}
                             height={1200} width={1200}
-                            framefill={'white'}
-                        />
+                            framefill={'white'} />
                     </div>
                 </div>
 
                 <div className={styles.panel}>
-                    <FullCanvas key={"B" + worldCreationTimeStamp} world={world} magnify={.2} />
+                    <FullCanvas
+                        world={world}
+                        magnify={.2} />
                 </div>
 
                 <div className={[styles.panel, styles["panel--left"]].join(" ")}>
                     <div className={styles.row}>
-                        <BarMeter world={world} getValues={getPlayerThrust} />
-                        <BarMeter meterType="GAGE" world={world} getValues={getPlayerFuel} />
+                        <BarMeter
+                            world={world}
+                            getValues={getPlayerThrust} />
+                        <BarMeter
+                            meterType="GAGE"
+                            world={world}
+                            getValues={getPlayerFuel} />
                     </div>
                 </div>
 
@@ -154,17 +152,14 @@ export default class GameContainer extends React.Component {
 
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
-                    controlMapping={controlMapping}
-                />
+                    controlMapping={controlMapping} />
 
                 <WorldInterface
                     controls={playerHasLanded ? {} : controls}
                     world={world}
                     controlFunction={controlSpaceShip}
                     getWorldStatus={getWorldStatus}
-                    reportWorldStatus={this.handleWorldStatus}
-                    key={"C" + worldCreationTimeStamp}
-                />
+                    reportWorldStatus={this.handleWorldStatus} />
 
             </main>
         )

@@ -186,7 +186,9 @@ function makeWorld(levelNumber = 1) {
     if (levelNumber > numberOfLevels || levelNumber < 1) {
         return levelFunctions[0]()
     }
-    return levelFunctions[levelNumber - 1]()
+    const world = levelFunctions[levelNumber - 1]();
+    world.name = "WORLD_" + Date.now().toString();
+    return world
 }
 
 export {
