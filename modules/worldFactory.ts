@@ -19,6 +19,18 @@ const atmosphere = new RadialGradientFill({
     }
 });
 
+function makeMountain(fromLeft: number, size: number, worldDimensions: { height: number, width: number }) {
+    return new Terrain({
+        x: worldDimensions.width * fromLeft,
+        y: worldDimensions.height - (worldDimensions.width * size),
+        size: worldDimensions.width * size,
+        fillColor: 'brown',
+        color: 'brown',
+        elasticity: .75, immobile: true,
+        shape: shapes.polygon,
+        corners: [{ x: -1, y: 1 }, { x: -.2, y: -.5 }, { x: 0, y: -1 }, { x: .1, y: -.5 }, { x: .3, y: -.6 }, { x: 1, y: 1 }]
+    })
+}
 
 function makeShip(config: SpaceShipData) {
 
@@ -93,6 +105,9 @@ const levelFunctions = [
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
             }),
 
+            makeMountain(5 / 12, 1 / 12, worldDimensions),
+            makeMountain(8 / 12, 2 / 12, worldDimensions),
+            makeMountain(10 / 12, 1 / 18, worldDimensions),
         ], {
             ...worldDimensions,
             gravitationalConstant: .001,
