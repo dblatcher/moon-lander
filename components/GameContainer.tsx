@@ -10,6 +10,7 @@ import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
+import { makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
 
 const SPEED = 50;
 
@@ -118,9 +119,14 @@ export default class GameContainer extends React.Component {
                     </div>
                 </div>
 
-                <div className={styles.panel}>
+                <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
                     <FullCanvas
                         world={world}
+                        dontRenderBackground={true}
+                        transformRules={[
+                            makeTerrainWhite,
+                            spaceShipIsRedCircle,
+                        ]}
                         magnify={.2} />
                 </div>
 
