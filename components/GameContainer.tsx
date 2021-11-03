@@ -10,7 +10,7 @@ import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
-import { makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
+import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
 
 const SPEED = 50;
 
@@ -126,6 +126,7 @@ export default class GameContainer extends React.Component {
                         transformRules={[
                             makeTerrainWhite,
                             spaceShipIsRedCircle,
+                            highlightLandingPad,
                         ]}
                         magnify={.2} />
                 </div>
