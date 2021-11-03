@@ -31,12 +31,12 @@ export default class GameContainer extends React.Component {
     };
     state!: {
         level: number
-        world: World
         controls: { [index: string]: boolean }
         playerHasLanded: boolean
         playerHasDied: boolean
     };
     canvasRef: React.RefObject<HTMLCanvasElement>;
+    world?: World
 
     constructor(props: GameContainer["props"]) {
         super(props);
@@ -44,17 +44,19 @@ export default class GameContainer extends React.Component {
 
         this.state = {
             level: 1,
-            world: makeWorld(),
             controls: {},
             playerHasLanded: false,
             playerHasDied: false,
         }
 
-        this.state.world.ticksPerSecond = SPEED
         this.togglePaused = this.togglePaused.bind(this)
         this.handleWorldStatus = this.handleWorldStatus.bind(this)
         this.goToNextLevel = this.goToNextLevel.bind(this)
         this.reset = this.reset.bind(this)
+    }
+
+    componentDidMount() {
+        this.reset()
     }
 
     handleWorldStatus(status: WorldStatus) {
@@ -73,18 +75,22 @@ export default class GameContainer extends React.Component {
     }
 
     togglePaused() {
-        // eslint-disable-next-line react/no-direct-mutation-state
-        this.state.world.ticksPerSecond = this.state.world.ticksPerSecond ? 0 : SPEED
+        if (!this.world) { return }
+        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : SPEED
     }
 
     reset() {
-        this.state.world.stopTime();
-        const newWorld = makeWorld(this.state.level);
-        newWorld.ticksPerSecond = SPEED;
+
+        this.world?.stopTime();
+
         this.setState({
-            world: newWorld,
             playerHasLanded: false,
             playerHasDied: false,
+        }, () => {
+            const newWorld = makeWorld(this.state.level);
+            newWorld.ticksPerSecond = SPEED;
+            this.world = newWorld;
+            this.forceUpdate();
         })
     }
 
@@ -97,10 +103,11 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { title } = this.props;
-        const { controls, world, playerHasLanded, playerHasDied } = this.state;
+        const { controls, playerHasLanded, playerHasDied } = this.state;
+        const { world } = this;
 
         return (
-            <main className={styles.component} key={world.name}>
+            <main className={styles.component} key={world?.name || "no_world"}>
 
                 <h2>{title}</h2>
                 <div>
@@ -109,39 +116,49 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.goToNextLevel}>skip</button>
                 </div>
 
-                <div className={styles.mainScreen}>
-                    <div>
-                        <FollowBodyCanvas
-                            world={world}
-                            magnify={1}
-                            height={1200} width={1200}
-                            framefill={'white'} />
+                {!!world && <>
+                    <div className={styles.mainScreen}>
+                        <div>
+                            <FollowBodyCanvas
+                                world={world}
+                                magnify={1}
+                                height={1200} width={1200}
+                                framefill={'white'} />
+                        </div>
                     </div>
-                </div>
 
-                <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
-                    <FullCanvas
+                    <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
+                        <FullCanvas
+                            world={world}
+                            dontRenderBackground={true}
+                            transformRules={[
+                                makeTerrainWhite,
+                                spaceShipIsRedCircle,
+                                highlightLandingPad,
+                            ]}
+                            magnify={.2} />
+                    </div>
+
+                    <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
+                        <div className={styles.row}>
+                            <BarMeter
+                                world={world}
+                                getValues={getPlayerThrust} />
+                            <BarMeter
+                                meterType="GAGE"
+                                world={world}
+                                getValues={getPlayerFuel} />
+                        </div>
+                    </div>
+
+                    <WorldInterface
+                        controls={playerHasLanded ? {} : controls}
                         world={world}
-                        dontRenderBackground={true}
-                        transformRules={[
-                            makeTerrainWhite,
-                            spaceShipIsRedCircle,
-                            highlightLandingPad,
-                        ]}
-                        magnify={.2} />
-                </div>
+                        controlFunction={controlSpaceShip}
+                        getWorldStatus={getWorldStatus}
+                        reportWorldStatus={this.handleWorldStatus} />
 
-                <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
-                    <div className={styles.row}>
-                        <BarMeter
-                            world={world}
-                            getValues={getPlayerThrust} />
-                        <BarMeter
-                            meterType="GAGE"
-                            world={world}
-                            getValues={getPlayerFuel} />
-                    </div>
-                </div>
+                </>}
 
                 {playerHasLanded && (
                     <article className={styles.dialogue}>
@@ -160,13 +177,6 @@ export default class GameContainer extends React.Component {
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
                     controlMapping={controlMapping} />
-
-                <WorldInterface
-                    controls={playerHasLanded ? {} : controls}
-                    world={world}
-                    controlFunction={controlSpaceShip}
-                    getWorldStatus={getWorldStatus}
-                    reportWorldStatus={this.handleWorldStatus} />
 
             </main>
         )
