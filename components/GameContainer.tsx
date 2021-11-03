@@ -1,16 +1,11 @@
 import React from "react";
 import { World } from "physics-worlds";
-import FullCanvas from "./FullCanvas";
 import styles from "./GameContainer.module.scss";
 import KeyReader from "./KeyReader";
-import WorldInterface from "./WorldInterface";
 
 import { makeWorld, numberOfLevels } from "../modules/worldFactory";
-import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
-import { controlSpaceShip } from "../modules/controlSpaceShip";
-import FollowBodyCanvas from "./FollowBodyCanvas";
-import BarMeter from "./BarMeter";
-import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
+import { WorldStatus } from "../modules/worldValues";
+import MoonLanderGame from "./MoonLanderGame";
 
 const SPEED = 50;
 
@@ -59,7 +54,7 @@ export default class GameContainer extends React.Component {
         this.reset()
     }
 
-    handleWorldStatus(status: WorldStatus) {
+    handleWorldStatus(status: WorldStatus): void {
         const { landingPadPlayerIsOn, playerDead } = status;
         const modification: any = {}
 
@@ -74,12 +69,12 @@ export default class GameContainer extends React.Component {
         this.setState(modification)
     }
 
-    togglePaused() {
+    togglePaused(): void {
         if (!this.world) { return }
         this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : SPEED
     }
 
-    reset() {
+    reset(): void {
 
         this.world?.stopTime();
 
@@ -94,7 +89,7 @@ export default class GameContainer extends React.Component {
         })
     }
 
-    goToNextLevel() {
+    goToNextLevel(): void {
         const nextLevelNumber = this.state.level + 1 > numberOfLevels ? 1 : this.state.level + 1;
         this.setState({
             level: nextLevelNumber
@@ -116,63 +111,17 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.goToNextLevel}>skip</button>
                 </div>
 
-                {!!world && <>
-                    <div className={styles.mainScreen}>
-                        <div>
-                            <FollowBodyCanvas
-                                world={world}
-                                magnify={1}
-                                height={1200} width={1200}
-                                framefill={'white'} />
-                        </div>
-                    </div>
-
-                    <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
-                        <FullCanvas
-                            world={world}
-                            dontRenderBackground={true}
-                            transformRules={[
-                                makeTerrainWhite,
-                                spaceShipIsRedCircle,
-                                highlightLandingPad,
-                            ]}
-                            magnify={.2} />
-                    </div>
-
-                    <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
-                        <div className={styles.row}>
-                            <BarMeter
-                                world={world}
-                                getValues={getPlayerThrust} />
-                            <BarMeter
-                                meterType="GAGE"
-                                world={world}
-                                getValues={getPlayerFuel} />
-                        </div>
-                    </div>
-
-                    <WorldInterface
-                        controls={playerHasLanded ? {} : controls}
+                {!!world &&
+                    <MoonLanderGame key={world.name}
                         world={world}
-                        controlFunction={controlSpaceShip}
-                        getWorldStatus={getWorldStatus}
-                        reportWorldStatus={this.handleWorldStatus} />
-
-                </>}
-
-                {playerHasLanded && (
-                    <article className={styles.dialogue}>
-                        <p>You have landed!</p>
-                        <div className={styles.button} onClick={this.goToNextLevel}>Go to next level!</div>
-                    </article>
-                )}
-
-                {playerHasDied && (
-                    <article className={styles.dialogue}>
-                        <p>You have crashed.</p>
-                        <div className={styles.button} onClick={this.reset}>Try again....</div>
-                    </article>
-                )}
+                        playerHasDied={playerHasDied}
+                        playerHasLanded={playerHasLanded}
+                        controls={controls}
+                        handleWorldStatus={this.handleWorldStatus}
+                        goToNextLevel={this.goToNextLevel}
+                        reset={this.reset}
+                    />
+                }
 
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
