@@ -32,7 +32,7 @@ export default function FollowBodyCanvas(props: {
                 body: player, followHeading: false, magnify, leadDistance: 0
             })
         }
-    })
+    }, [world])
 
     return <canvas ref={canvas}></canvas>
 }

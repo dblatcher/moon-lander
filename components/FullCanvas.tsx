@@ -19,7 +19,8 @@ export default function FullCanvas(props: {
             if (framefill) { viewPort.current.framefill = framefill }
             if (dontRenderBackground) { viewPort.current.dontRenderBackground = true }
         }
-    })
+
+    }, [world])
 
     return <canvas ref={canvas}></canvas>
 }
