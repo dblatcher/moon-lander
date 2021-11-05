@@ -60,14 +60,14 @@ export default function MoonLanderGame(props: {
         {playerHasLanded && (
             <article className={styles.dialogue}>
                 <p>You have landed!</p>
-                <div className={styles.button} onClick={goToNextLevel}>Go to next level!</div>
+                <button className={styles.button} onClick={goToNextLevel}>Go to next level!</button>
             </article>
         )}
 
         {playerHasDied && (
             <article className={styles.dialogue}>
                 <p>You have crashed.</p>
-                <div className={styles.button} onClick={reset}>Try again....</div>
+                <button className={styles.button} onClick={reset}>Try again....</button>
             </article>
         )}
 
