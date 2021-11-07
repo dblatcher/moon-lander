@@ -1,14 +1,16 @@
 import React from "react";
 import { World } from "physics-worlds";
-import FullCanvas from "./FullCanvas";
-import styles from "./GameContainer.module.scss";
-import WorldInterface from "./WorldInterface";
 
-import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
-import { controlSpaceShip } from "../modules/controlSpaceShip";
+import FullCanvas from "./FullCanvas";
+import WorldInterface from "./WorldInterface";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
+
+import { controlSpaceShip } from "../modules/controlSpaceShip";
+import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
 import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
+
+import styles from "./GameContainer.module.scss";
 
 export default function MoonLanderGame(props: {
     world: World,
