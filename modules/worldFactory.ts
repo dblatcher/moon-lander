@@ -19,12 +19,30 @@ const atmosphere = new RadialGradientFill({
     }
 });
 
+const mountainGradient = new RadialGradientFill({
+    fallbackColor: 'brown',
+    canvasFunction: (ctx: CanvasRenderingContext2D, circle: Circle, heading: number) => {
+
+        const f = Geometry.getXYVector(400, -heading);
+        const gradient = ctx.createLinearGradient(
+            circle.x-f.x, circle.y-f.y, 
+            circle.x+f.x, circle.y+f.y
+        )
+
+        gradient.addColorStop(1, 'brown')
+        gradient.addColorStop(.1, 'white')
+        gradient.addColorStop(0, 'white')
+        
+        return gradient;
+    }
+})
+
 function makeMountain(fromLeft: number, size: number, worldDimensions: { height: number, width: number }) {
     return new Terrain({
         x: worldDimensions.width * fromLeft,
         y: worldDimensions.height - (worldDimensions.width * size),
         size: worldDimensions.width * size,
-        fillColor: 'brown',
+        fillColor: mountainGradient,
         color: 'brown',
         elasticity: .75, immobile: true,
         shape: shapes.polygon,
@@ -78,11 +96,12 @@ const levelFunctions = [
             }),
 
             new LandingPad({
-                x: worldDimensions.width * (3 / 16),
-                y: worldDimensions.height - 100,
-                size: 100,
+                x: worldDimensions.width * (9.25 / 16),
+                y: worldDimensions.height - 220,
+                size: 75,
                 fillColor: 'green',
-                shape: shapes.square,
+                shape: shapes.polygon,
+                corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
             }),
 
             new Terrain({
@@ -105,9 +124,10 @@ const levelFunctions = [
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
             }),
 
-            makeMountain(5 / 12, 1 / 12, worldDimensions),
-            makeMountain(8 / 12, 2 / 12, worldDimensions),
+            makeMountain(2 / 12, 3.5 / 12, worldDimensions),
             makeMountain(10 / 12, 1 / 18, worldDimensions),
+            makeMountain(5.5 / 12, 1 / 12, worldDimensions),
+            makeMountain(8 / 12, 2 / 12, worldDimensions),
         ], {
             ...worldDimensions,
             gravitationalConstant: .001,
@@ -168,9 +188,10 @@ const levelFunctions = [
             new LandingPad({
                 x: 300 + worldDimensions.width / 2,
                 y: worldDimensions.height / 2,
-                size: 25,
+                size: 40,
                 fillColor: 'green',
-                shape: shapes.square,
+                shape: shapes.polygon,
+                corners: [{ x: -.25, y: -1 }, { x: .25, y: -1 }, { x: .25, y: 1 }, { x: -.25, y: 1 },]
             }),
         ], {
             ...worldDimensions,

@@ -16,8 +16,8 @@ const highlightLandingPad = new RenderTransformationRule(
     (body: Body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
         const duplicate: Body = body.duplicate();
 
-        duplicate.data.color = "green";
-        duplicate.data.fillColor = "green";
+        duplicate.data.color = "rgb(0,255,0)";
+        duplicate.data.fillColor = "rgb(0,255,0)";
         duplicate.renderOnCanvas(ctx, viewPort)
     }
 )
