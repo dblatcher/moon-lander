@@ -26,6 +26,7 @@ export default class GameContainer extends React.Component {
     };
     state!: {
         level: number
+        score: number
         controls: { [index: string]: boolean }
         playerHasLanded: boolean
         playerHasDied: boolean
@@ -40,6 +41,7 @@ export default class GameContainer extends React.Component {
         this.state = {
             level: 1,
             controls: {},
+            score: 0,
             playerHasLanded: false,
             playerHasDied: false,
         }
@@ -47,6 +49,7 @@ export default class GameContainer extends React.Component {
         this.togglePaused = this.togglePaused.bind(this)
         this.handleWorldStatus = this.handleWorldStatus.bind(this)
         this.goToNextLevel = this.goToNextLevel.bind(this)
+        this.addPoints = this.addPoints.bind(this)
         this.reset = this.reset.bind(this)
     }
 
@@ -96,9 +99,13 @@ export default class GameContainer extends React.Component {
         }, this.reset)
     }
 
+    addPoints(amount: number): void {
+        this.setState({ score: this.state.score + amount })
+    }
+
     render() {
         const { title } = this.props;
-        const { controls, playerHasLanded, playerHasDied } = this.state;
+        const { controls, playerHasLanded, playerHasDied, score } = this.state;
         const { world } = this;
 
         return (
@@ -117,7 +124,9 @@ export default class GameContainer extends React.Component {
                         playerHasDied={playerHasDied}
                         playerHasLanded={playerHasLanded}
                         controls={controls}
+                        score={score}
                         handleWorldStatus={this.handleWorldStatus}
+                        addPoints={this.addPoints}
                         goToNextLevel={this.goToNextLevel}
                         reset={this.reset}
                     />

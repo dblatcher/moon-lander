@@ -16,15 +16,27 @@ export default function MoonLanderGame(props: {
     world: World,
     playerHasLanded: boolean
     playerHasDied: boolean
+    score: number
     controls: { [index: string]: boolean }
     handleWorldStatus: { (worldStatus: WorldStatus): void }
+    addPoints: { (points: number): void }
     goToNextLevel: { (): void }
     reset: { (): void }
 }) {
 
-    const { world, playerHasLanded, controls, handleWorldStatus, playerHasDied, goToNextLevel, reset } = props
+    const {
+        world, playerHasLanded, score, controls, playerHasDied,
+        handleWorldStatus, goToNextLevel, reset, addPoints,
+    } = props
+
+
+    function advance() {
+        addPoints(100)
+        goToNextLevel()
+    }
 
     return <>
+        <p>score: {score}</p>
         <div className={styles.mainScreen}>
             <div>
                 <FollowBodyCanvas
@@ -62,7 +74,7 @@ export default function MoonLanderGame(props: {
         {playerHasLanded && (
             <article className={styles.dialogue}>
                 <p>You have landed!</p>
-                <button className={styles.button} onClick={goToNextLevel}>Go to next level!</button>
+                <button className={styles.button} onClick={advance}>Go to next level!</button>
             </article>
         )}
 
