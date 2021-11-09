@@ -17,16 +17,17 @@ export default function MoonLanderGame(props: {
     playerHasLanded: boolean
     playerHasDied: boolean
     score: number
+    isPaused:boolean
     controls: { [index: string]: boolean }
     handleWorldStatus: { (worldStatus: WorldStatus): void }
     addPoints: { (points: number): void }
     goToNextLevel: { (): void }
-    reset: { (): void }
+    resetLevel: { (): void }
 }) {
 
     const {
-        world, playerHasLanded, score, controls, playerHasDied,
-        handleWorldStatus, goToNextLevel, reset, addPoints,
+        world, playerHasLanded, score, controls, playerHasDied, isPaused,
+        handleWorldStatus, goToNextLevel, resetLevel, addPoints,
     } = props
 
 
@@ -81,7 +82,13 @@ export default function MoonLanderGame(props: {
         {playerHasDied && (
             <article className={styles.dialogue}>
                 <p>You have crashed.</p>
-                <button className={styles.button} onClick={reset}>Try again....</button>
+                <button className={styles.button} onClick={resetLevel}>Try again....</button>
+            </article>
+        )}
+
+        {isPaused && (
+            <article className={styles.dialogue}>
+                <p>PAUSED</p>
             </article>
         )}
 

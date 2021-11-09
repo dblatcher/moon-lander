@@ -6,8 +6,11 @@ import KeyReader from "./KeyReader";
 import { makeWorld, numberOfLevels } from "../modules/worldFactory";
 import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
+import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
 
 const SPEED = 50;
+
+const STARTING_LIVES = 2;
 
 const controlMapping: { [index: string]: string } = {
     "w": "up",
@@ -17,7 +20,10 @@ const controlMapping: { [index: string]: string } = {
     "d": "right",
     "ArrowRight": "right",
     "s": "down",
-    "ArrowDown": "down"
+    "ArrowDown": "down",
+    " ": "START",
+    "p": "PAUSE",
+    "P": "PAUSE",
 }
 
 export default class GameContainer extends React.Component {
@@ -27,9 +33,11 @@ export default class GameContainer extends React.Component {
     state!: {
         level: number
         score: number
+        lives: number,
         controls: { [index: string]: boolean }
         playerHasLanded: boolean
         playerHasDied: boolean
+        mode: "TITLE" | "PLAY"
     };
     canvasRef: React.RefObject<HTMLCanvasElement>;
     world?: World
@@ -40,21 +48,46 @@ export default class GameContainer extends React.Component {
 
         this.state = {
             level: 1,
-            controls: {},
             score: 0,
+            lives: STARTING_LIVES,
+            controls: {},
             playerHasLanded: false,
             playerHasDied: false,
+            mode: "TITLE",
         }
 
         this.togglePaused = this.togglePaused.bind(this)
         this.handleWorldStatus = this.handleWorldStatus.bind(this)
         this.goToNextLevel = this.goToNextLevel.bind(this)
         this.addPoints = this.addPoints.bind(this)
-        this.reset = this.reset.bind(this)
+        this.resetLevel = this.resetLevel.bind(this)
+        this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
-    componentDidMount() {
-        this.reset()
+    handleCommandPress(command: string) {
+        const { mode, playerHasDied, playerHasLanded } = this.state;
+
+
+        switch (command) {
+            case "START":
+                if (mode !== "TITLE") { return }
+
+                this.setState({
+                    mode: "PLAY",
+                    level: 1,
+                    lives: STARTING_LIVES,
+                    score: 0,
+                }, () => {
+                    this.resetLevel();
+                })
+                break;
+
+            case "PAUSE":
+                if (mode !== "PLAY" || playerHasDied || playerHasLanded) { return }
+                this.togglePaused();
+                break;
+        }
+
     }
 
     handleWorldStatus(status: WorldStatus): void {
@@ -77,18 +110,23 @@ export default class GameContainer extends React.Component {
         this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : SPEED
     }
 
-    reset(): void {
+    get isPaused(): boolean {
+        return this.world ? this.world.ticksPerSecond === 0 : false;
+    }
 
-        this.world?.stopTime();
-
-        this.setState({
-            playerHasLanded: false,
-            playerHasDied: false,
-        }, () => {
+    resetLevel(): Promise<void> {
+        return new Promise(resolve => {
+            this.world?.stopTime();
             const newWorld = makeWorld(this.state.level);
             newWorld.ticksPerSecond = SPEED;
             this.world = newWorld;
-            this.forceUpdate();
+    
+            this.setState({
+                playerHasLanded: false,
+                playerHasDied: false,
+            }, () => {
+                resolve()
+            })
         })
     }
 
@@ -96,7 +134,7 @@ export default class GameContainer extends React.Component {
         const nextLevelNumber = this.state.level + 1 > numberOfLevels ? 1 : this.state.level + 1;
         this.setState({
             level: nextLevelNumber
-        }, this.reset)
+        }, this.resetLevel)
     }
 
     addPoints(amount: number): void {
@@ -105,7 +143,7 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { title } = this.props;
-        const { controls, playerHasLanded, playerHasDied, score } = this.state;
+        const { controls, playerHasLanded, playerHasDied, score, mode } = this.state;
         const { world } = this;
 
         return (
@@ -114,28 +152,34 @@ export default class GameContainer extends React.Component {
                 <h2>{title}</h2>
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
-                    <button onClick={this.reset}>reset</button>
+                    <button onClick={this.resetLevel}>resetLevel</button>
                     <button onClick={this.goToNextLevel}>skip</button>
                 </div>
 
-                {!!world &&
+
+                {(mode === "TITLE") &&
+                    <MoonLanderTitleScreen />
+                }
+
+                {(!!world && mode === "PLAY") &&
                     <MoonLanderGame key={world.name}
                         world={world}
                         playerHasDied={playerHasDied}
                         playerHasLanded={playerHasLanded}
                         controls={controls}
                         score={score}
+                        isPaused={this.isPaused}
                         handleWorldStatus={this.handleWorldStatus}
                         addPoints={this.addPoints}
                         goToNextLevel={this.goToNextLevel}
-                        reset={this.reset}
+                        resetLevel={this.resetLevel}
                     />
                 }
 
                 <KeyReader
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
+                    reportPress={(command: string) => { this.handleCommandPress(command) }}
                     controlMapping={controlMapping} />
-
             </main>
         )
     }
