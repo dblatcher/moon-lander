@@ -63,14 +63,15 @@ export default function MoonLanderGame(props: {
                     world={world}
                     magnify={1}
                     height={1200} width={1200}
-                    framefill={'white'} />
+                    framefill={'gray'} />
             </div>
         </div>
 
         <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
             <FullCanvas
                 world={world}
-                dontRenderBackground={true}
+                dontRenderBackground
+                dontRenderEffects
                 transformRules={[
                     makeTerrainWhite,
                     spaceShipIsRedCircle,
