@@ -23,7 +23,7 @@ const getPlayerThrust = (world: World) => {
     if (!player) { return null }
     return {
         value: player.data.thrust || 0,
-        max: player.data.maxThrust || 0
+        max: player.data.maxThrust || 1
     }
 }
 

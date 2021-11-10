@@ -56,8 +56,8 @@ function makeShip(config: SpaceShipData) {
         {
             size: 15,
             elasticity: .01,
-            maxThrust: 7500,
-            maxImpact: 40000,
+            maxThrust: 3000,
+            maxImpact: 50000,
             maxFuel: 2000,
             heading: Geometry._360deg / 2
         }, config)

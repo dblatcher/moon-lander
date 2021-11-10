@@ -9,10 +9,10 @@ function controlSpaceShip(world: World, key: string) {
 
     switch (key) {
         case 'up':
-            player.changeThrottle(player.data.maxThrust ? player.data.maxThrust / 20 : 10)
+            player.changeThrottle(100)
             break;
         case 'down':
-            player.changeThrottle(player.data.maxThrust ? -player.data.maxThrust / 20 : -10)
+            player.changeThrottle(-100)
             break;
         case 'right':
             player.steer("RIGHT")
