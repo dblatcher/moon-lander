@@ -31,11 +31,12 @@ export default function MoonLanderGame(props: {
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
     startLevel: { (level?: number): Promise<GameContainerState> }
+    goToTitles: { (level?: number): Promise<GameContainerState> }
 }) {
 
     const {
         world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused,
-        handleWorldStatus, startLevel, addPoints, addLives,
+        handleWorldStatus, startLevel, addPoints, addLives, goToTitles
     } = props
 
 
@@ -104,7 +105,8 @@ export default function MoonLanderGame(props: {
                 {lives > 0 ? (
                     <button className={styles.button} onClick={retry}>Try again....</button>
                 ) : (
-                    <p>Game over!</p>
+                    <button className={styles.button} onClick={() => { goToTitles() }}>Game Over!</button>
+
                 )}
             </article>
         )}

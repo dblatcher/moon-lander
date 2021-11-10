@@ -10,7 +10,7 @@ import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
 
 const SPEED = 50;
 
-const STARTING_LIVES = 2;
+const STARTING_LIVES = 1;
 
 const controlMapping: { [index: string]: string } = {
     "w": "up",
@@ -65,6 +65,7 @@ export default class GameContainer extends React.Component {
         this.addPoints = this.addPoints.bind(this)
         this.addLives = this.addLives.bind(this)
         this.startLevel = this.startLevel.bind(this)
+        this.goToTitles = this.goToTitles.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
@@ -119,9 +120,7 @@ export default class GameContainer extends React.Component {
     }
 
     startLevel(levelNumber?: number): Promise<GameContainerState> {
-
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
-
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
         return new Promise(resolve => {
@@ -138,6 +137,25 @@ export default class GameContainer extends React.Component {
                 resolve(this.state)
             })
         })
+    }
+
+    goToTitles():Promise<GameContainerState> {
+
+        return new Promise(resolve => {
+            this.world?.stopTime();
+            this.world = undefined;
+            this.setState({
+                level: 1,
+                lives:STARTING_LIVES,
+                playerHasLanded: false,
+                playerHasDied: false,
+                score:0,
+                mode: "TITLE"
+            }, () => {
+                resolve(this.state)
+            })
+        })
+
     }
 
     addPoints(amount: number): Promise<GameContainerState> {
@@ -165,6 +183,7 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={() => { this.startLevel() }}>restart</button>
                     <button onClick={() => { this.startLevel(level + 1) }}>skip</button>
+                    <button onClick={() => { this.goToTitles() }}>quit</button>
                 </div>
 
 
@@ -186,6 +205,7 @@ export default class GameContainer extends React.Component {
                         addPoints={this.addPoints}
                         addLives={this.addLives}
                         startLevel={this.startLevel}
+                        goToTitles={this.goToTitles}
                     />
                 }
 
