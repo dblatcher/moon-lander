@@ -26,19 +26,23 @@ const controlMapping: { [index: string]: string } = {
     "P": "PAUSE",
 }
 
+interface GameContainerState {
+    level: number
+    score: number
+    lives: number,
+    controls: { [index: string]: boolean }
+    playerHasLanded: boolean
+    playerHasDied: boolean
+    mode: "TITLE" | "PLAY"
+}
+
+export type {GameContainerState}
+
 export default class GameContainer extends React.Component {
     props!: {
         title: string
     };
-    state!: {
-        level: number
-        score: number
-        lives: number,
-        controls: { [index: string]: boolean }
-        playerHasLanded: boolean
-        playerHasDied: boolean
-        mode: "TITLE" | "PLAY"
-    };
+    state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
     world?: World
 
@@ -60,7 +64,8 @@ export default class GameContainer extends React.Component {
         this.handleWorldStatus = this.handleWorldStatus.bind(this)
         this.goToNextLevel = this.goToNextLevel.bind(this)
         this.addPoints = this.addPoints.bind(this)
-        this.resetLevel = this.resetLevel.bind(this)
+        this.addLives = this.addLives.bind(this)
+        this.startLevel = this.startLevel.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
@@ -78,7 +83,7 @@ export default class GameContainer extends React.Component {
                     lives: STARTING_LIVES,
                     score: 0,
                 }, () => {
-                    this.resetLevel();
+                    this.startLevel();
                 })
                 break;
 
@@ -114,36 +119,46 @@ export default class GameContainer extends React.Component {
         return this.world ? this.world.ticksPerSecond === 0 : false;
     }
 
-    resetLevel(): Promise<void> {
+    startLevel(levelNumber?: number): Promise<GameContainerState> {
+
+        if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
+
         return new Promise(resolve => {
             this.world?.stopTime();
-            const newWorld = makeWorld(this.state.level);
+            const newWorld = makeWorld(levelNumber);
             newWorld.ticksPerSecond = SPEED;
             this.world = newWorld;
-    
+
             this.setState({
+                level: levelNumber,
                 playerHasLanded: false,
                 playerHasDied: false,
             }, () => {
-                resolve()
+                resolve(this.state)
             })
         })
     }
 
-    goToNextLevel(): void {
+    goToNextLevel(): Promise<GameContainerState> {
         const nextLevelNumber = this.state.level + 1 > numberOfLevels ? 1 : this.state.level + 1;
-        this.setState({
-            level: nextLevelNumber
-        }, this.resetLevel)
+        return this.startLevel(nextLevelNumber);
     }
 
-    addPoints(amount: number): void {
-        this.setState({ score: this.state.score + amount })
+    addPoints(amount: number): Promise<GameContainerState> {
+        return new Promise(resolve => {
+            this.setState({ score: this.state.score + amount }, () => { resolve(this.state) })
+        })
+    }
+
+    addLives(amount: number): Promise<GameContainerState> {
+        return new Promise(resolve => {
+            this.setState({ lives: this.state.lives + amount }, () => { resolve(this.state) })
+        })
     }
 
     render() {
         const { title } = this.props;
-        const { controls, playerHasLanded, playerHasDied, score, mode } = this.state;
+        const { controls, playerHasLanded, playerHasDied, score, lives, mode, level } = this.state;
         const { world } = this;
 
         return (
@@ -152,7 +167,7 @@ export default class GameContainer extends React.Component {
                 <h2>{title}</h2>
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
-                    <button onClick={this.resetLevel}>resetLevel</button>
+                    <button onClick={() => { this.startLevel() }}>restart</button>
                     <button onClick={this.goToNextLevel}>skip</button>
                 </div>
 
@@ -168,11 +183,13 @@ export default class GameContainer extends React.Component {
                         playerHasLanded={playerHasLanded}
                         controls={controls}
                         score={score}
+                        lives={lives}
+                        level={level}
                         isPaused={this.isPaused}
                         handleWorldStatus={this.handleWorldStatus}
                         addPoints={this.addPoints}
-                        goToNextLevel={this.goToNextLevel}
-                        resetLevel={this.resetLevel}
+                        addLives={this.addLives}
+                        startLevel={this.startLevel}
                     />
                 }
 
@@ -184,3 +201,4 @@ export default class GameContainer extends React.Component {
         )
     }
 }
+

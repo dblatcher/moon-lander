@@ -10,34 +10,52 @@ import { controlSpaceShip } from "../modules/controlSpaceShip";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
 import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
 
-import styles from "./GameContainer.module.scss";
+import styles from "./MoonLanderGame.module.scss";
+
+import { GameContainerState } from "./GameContainer";
+
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default function MoonLanderGame(props: {
     world: World,
     playerHasLanded: boolean
     playerHasDied: boolean
     score: number
-    isPaused:boolean
+    lives: number
+    level: number
+    isPaused: boolean
     controls: { [index: string]: boolean }
     handleWorldStatus: { (worldStatus: WorldStatus): void }
-    addPoints: { (points: number): void }
-    goToNextLevel: { (): void }
-    resetLevel: { (): void }
+    addPoints: { (points: number): Promise<GameContainerState> }
+    addLives: { (points: number): Promise<GameContainerState> }
+    startLevel: { (level?: number): Promise<GameContainerState> }
 }) {
 
     const {
-        world, playerHasLanded, score, controls, playerHasDied, isPaused,
-        handleWorldStatus, goToNextLevel, resetLevel, addPoints,
+        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused,
+        handleWorldStatus, startLevel, addPoints, addLives,
     } = props
 
 
-    function advance() {
-        addPoints(100)
-        goToNextLevel()
+    async function advance() {
+        await addPoints(100)
+        await sleep(1000);
+        await startLevel(level + 1)
+    }
+
+    async function retry() {
+        await addLives(-1);
+        await startLevel();
     }
 
     return <>
-        <p>score: {score}</p>
+        <p className={styles.numberPanel}>
+            <span>level: {level}</span>
+            <span>score: {score}</span>
+            <span>lives: {lives}</span>
+        </p>
         <div className={styles.mainScreen}>
             <div>
                 <FollowBodyCanvas
@@ -82,7 +100,12 @@ export default function MoonLanderGame(props: {
         {playerHasDied && (
             <article className={styles.dialogue}>
                 <p>You have crashed.</p>
-                <button className={styles.button} onClick={resetLevel}>Try again....</button>
+
+                {lives > 0 ? (
+                    <button className={styles.button} onClick={retry}>Try again....</button>
+                ) : (
+                    <p>Game over!</p>
+                )}
             </article>
         )}
 
