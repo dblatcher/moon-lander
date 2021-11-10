@@ -51,7 +51,7 @@ export default function MoonLanderGame(props: {
         await startLevel();
     }
 
-    return <>
+    return <article className={styles.article}>
         <p className={styles.numberPanel}>
             <span>level: {level}</span>
             <span>score: {score}</span>
@@ -106,7 +106,6 @@ export default function MoonLanderGame(props: {
                     <button className={styles.button} onClick={retry}>Try again....</button>
                 ) : (
                     <button className={styles.button} onClick={() => { goToTitles() }}>Game Over!</button>
-
                 )}
             </article>
         )}
@@ -124,5 +123,5 @@ export default function MoonLanderGame(props: {
             getWorldStatus={getWorldStatus}
             reportWorldStatus={handleWorldStatus} />
 
-    </>
+    </article>
 }

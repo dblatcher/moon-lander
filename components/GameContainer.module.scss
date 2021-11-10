@@ -2,10 +2,10 @@
 
 .component {
     @include fullHeight;
+    background-image: linear-gradient(crimson, darkgreen);
+    padding: .25rem;
 
     h2 {
         margin: 0
     }
-
-
 }

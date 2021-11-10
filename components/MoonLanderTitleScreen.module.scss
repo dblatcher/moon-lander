@@ -1,11 +1,18 @@
+@import "../styles/mixins";
+
 .article {
+    @include fullHeight;
     text-align: center;
+    justify-content: center;
     background-color:black;
     color: white;
     margin: 2rem;
     padding: 2rem;
-
+    
     h1 {
+        @include metal;
+        position: relative;
         color: yellow;
+        padding: 2rem;
     }
 }
