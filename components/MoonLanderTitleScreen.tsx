@@ -1,8 +1,10 @@
 
+import { ScoreData } from "../modules/ScoreData";
+import HighScoreTable from "./HighScoreTable";
 import styles from "./MoonLanderTitleScreen.module.scss";
 
 export default function  MoonLanderTitleScreen(props: {
-
+    scoreData: ScoreData
 }) {
 
     return <article className={styles.article}>
@@ -12,5 +14,7 @@ export default function  MoonLanderTitleScreen(props: {
         <div>
             press space to start
         </div>
+
+        <HighScoreTable data={props.scoreData}/>
     </article>
 }

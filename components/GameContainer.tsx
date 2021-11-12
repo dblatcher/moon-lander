@@ -7,6 +7,7 @@ import { makeWorld, numberOfLevels } from "../modules/worldFactory";
 import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
 import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
+import { ScoreData } from "../modules/ScoreData";
 
 const SPEED = 50;
 
@@ -41,6 +42,7 @@ export type { GameContainerState }
 export default class GameContainer extends React.Component {
     props!: {
         title: string
+        scoreData: ScoreData
     };
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -171,7 +173,7 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        const { title } = this.props;
+        const { title, scoreData } = this.props;
         const { controls, playerHasLanded, playerHasDied, score, lives, mode, level } = this.state;
         const { world } = this;
 
@@ -188,7 +190,7 @@ export default class GameContainer extends React.Component {
 
 
                 {(mode === "TITLE") &&
-                    <MoonLanderTitleScreen />
+                    <MoonLanderTitleScreen scoreData={scoreData}/>
                 }
 
                 {(!!world && mode === "PLAY") &&
