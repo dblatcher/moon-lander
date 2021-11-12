@@ -42,7 +42,7 @@ export type { GameContainerState }
 export default class GameContainer extends React.Component {
     props!: {
         title: string
-        scoreData: ScoreData
+        scoreData?: ScoreData
     };
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -141,17 +141,17 @@ export default class GameContainer extends React.Component {
         })
     }
 
-    goToTitles():Promise<GameContainerState> {
+    goToTitles(): Promise<GameContainerState> {
 
         return new Promise(resolve => {
             this.world?.stopTime();
             this.world = undefined;
             this.setState({
                 level: 1,
-                lives:STARTING_LIVES,
+                lives: STARTING_LIVES,
                 playerHasLanded: false,
                 playerHasDied: false,
-                score:0,
+                score: 0,
                 mode: "TITLE"
             }, () => {
                 resolve(this.state)
@@ -190,7 +190,7 @@ export default class GameContainer extends React.Component {
 
 
                 {(mode === "TITLE") &&
-                    <MoonLanderTitleScreen scoreData={scoreData}/>
+                    <MoonLanderTitleScreen scoreData={scoreData} />
                 }
 
                 {(!!world && mode === "PLAY") &&

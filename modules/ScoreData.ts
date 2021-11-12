@@ -1,6 +1,10 @@
-type ScoreData = {
-    message: string
-    scores: { name: string, score: number }[]
-  }
+interface Score {
+  name: string, score: number
+}
 
-  export type { ScoreData }
+type ScoreData = {
+  message: string
+  scores: Score[]
+}
+
+export type { ScoreData, Score }

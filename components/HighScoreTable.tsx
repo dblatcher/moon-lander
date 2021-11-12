@@ -3,16 +3,18 @@ import { ScoreData } from "../modules/ScoreData";
 
 export default function HighScoreTable(props: {
   data: ScoreData
+
+  displayErrors?: boolean
 }) {
 
-  const {data} = props
+  const { data, displayErrors } = props
 
-  if (!data) {
-    return <p>Nothing in scores yet</p>
+  if (displayErrors && data.message) {
+    return <p>{data.message}</p>
   }
 
   return <div>
-  
+
     <table>
       <tbody>
         {data.scores.map((entry, index) => (

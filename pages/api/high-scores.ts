@@ -1,20 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { getScores } from '../../modules/database';
 import { ScoreData } from "../../modules/ScoreData";
 
 
-const staticTestData = {
-  message: "this is test data",
-  scores: [
-    { name: "Linda", score: 220 },
-    { name: "Bob", score: 110 },
-  ]
-}
 
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ScoreData>
 ) {
-  res.status(200).json(staticTestData)
+
+  const data = await getScores();
+  
+  res.status(200).json(data)
 }
