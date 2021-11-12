@@ -2,13 +2,13 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import useSWR from 'swr';
 
 import styles from '../styles/Page.module.scss'
 
-import { ScoreData } from "../modules/ScoreData";
+import { ScoreData, Score } from "../modules/ScoreData";
 import HighScoreTable from '../components/HighScoreTable';
 import { useEffect, useState } from 'react';
+import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';
 
 
 
@@ -16,32 +16,45 @@ const NormalGame: NextPage = () => {
 
 
     const [highScores, setHighScores] = useState<ScoreData>()
+    const [message, setMessage] = useState<string>("")
 
 
-    const requestScores = async() => {
-        const res = await fetch("/api/high-scores")
-        const data: ScoreData = await res.json()
-        setHighScores(data);
+    const fetchScores = async () => {
+        const data = await requestGetScores();
+
+        if (data) {
+            setHighScores(data);
+        } else {
+            setMessage("Could not get scores!")
+        }
     }
 
-    const requestReset = async () => {
-        const res = await fetch("/api/reset-db")
+    const addTestScore = async () => {
+        const scoreInput: Score = { name: "TEST", score: Math.floor(Math.random() * 100) }
+        const addScoreResult = await requestAddScore(scoreInput)
+
+        if (addScoreResult) {
+            setMessage("ADDED SCORE TO DB : " + `${addScoreResult.name} = ${addScoreResult.score}`)
+            fetchScores();
+        } else {
+            setMessage("FAILED ADD SCORE TO DB!")
+        }
+    }
+
+    const resetDatabase = async (password?: string) => {
+        const res = await requestResetDbGetFullResponse(password)
 
         if (res.status === 200) {
-            console.log("RESET DB!")
-            requestScores();
-            return true
+            setMessage("RESET DB!")
+            fetchScores();
         } else {
-            console.log("FAILED TO RESET DB!")
-            requestScores();
-            return false
+            setMessage("FAILED TO RESET DB!")
+            fetchScores();
         }
     }
 
-    useEffect(()=> {
-        if (!highScores) {
-            requestScores()
-        }
+    useEffect(() => {
+        if (!highScores) { fetchScores() }
     })
 
     return (
@@ -59,8 +72,11 @@ const NormalGame: NextPage = () => {
 
                 <section>
                     <h2>Scores:</h2>
-                    {highScores && <HighScoreTable data={highScores} displayErrors /> }
-                    <button onClick={requestReset}>RESET</button>
+                    {highScores && <HighScoreTable data={highScores} displayErrors />}
+                    <button onClick={() => resetDatabase()}>RESET</button>
+
+                    <button onClick={addTestScore}>add test score</button>
+                    <p> :: {message}</p>
                 </section>
 
             </main>

@@ -23,7 +23,7 @@ const fetcher = async (url: string) => {
 
 const NormalGame: NextPage = () => {
 
-    const { data, error } = useSWR('/api/high-scores', fetcher)
+    const { data, error } = useSWR('/api/scores', fetcher)
 
     return (
         <div className={styles["full-height-page"]}>

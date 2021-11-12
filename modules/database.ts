@@ -37,26 +37,41 @@ export async function resetDataBase(): Promise<boolean> {
 }
 
 export async function getScores(): Promise<ScoreData> {
-    let scoreData: ScoreData = {
+    const scoreData: ScoreData = {
         message: "",
-        scores: [
-
-        ]
+        scores: []
     }
 
     const db = await openDb();
 
     try {
         const results = await db.all('SELECT name,score FROM scores') as Score[];
-    
+
         results.forEach(result => {
             scoreData.scores.push(result)
         })
-        
+
     } catch (error) {
         console.warn("**getScores error", error)
         scoreData.message = "FAILED TO GET SCORES"
     }
 
     return scoreData
+}
+
+export async function addScore(score: Score): Promise<boolean> {
+    const db = await openDb();
+
+    try {
+
+        await db.run(
+            'INSERT INTO scores VALUES (?, ?)',
+            score.name, score.score
+        )
+
+        return true
+    } catch (error) {
+        console.warn("**addScore error", error)
+        return false
+    }
 }
