@@ -46,7 +46,6 @@
         .lcd {
             max-height: inherit;
             @include lcdDark();
-            @include withScanLines(10s);
 
             canvas {
                 opacity: .5;
