@@ -9,7 +9,7 @@ export default class KeyReader extends React.Component {
     props!: {
         controlMapping?: { [index: string]: string }
         displayInput?: boolean
-        report: Function
+        report?: Function
         reportPress?: Function
     }
     state!: {
@@ -44,6 +44,7 @@ export default class KeyReader extends React.Component {
     }
 
     handleKeyEvent(keyState: boolean, key: string) {
+        const { report = () => { } } = this.props;
 
         if (!!this.state.keyMap[key] == !!keyState) { return }
 
@@ -51,7 +52,7 @@ export default class KeyReader extends React.Component {
             state.keyMap[key] = keyState
             return { keyMap: state.keyMap }
         }, () => {
-            this.props.report(this.mappedKeys)
+            report(this.mappedKeys)
         })
     }
 
@@ -59,11 +60,15 @@ export default class KeyReader extends React.Component {
     handleKeyUp(event: KeyboardEvent) { this.handleKeyEvent(false, event.key) }
 
     reportKeyPress(event: KeyboardEvent) {
-        const { controlMapping = {}, reportPress } = this.props;
-        if (!reportPress) {return}
+        const { controlMapping, reportPress } = this.props;
+        if (!reportPress) { return }
 
-        if (controlMapping[event.key]) {
-            reportPress(controlMapping[event.key])
+        if (controlMapping) {
+            if (controlMapping[event.key]) {
+                reportPress(controlMapping[event.key])
+            }
+        } else {
+            reportPress(event.key)
         }
     }
 
