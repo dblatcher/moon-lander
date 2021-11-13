@@ -12,9 +12,10 @@ export default function MoonLanderTitleScreen(props: {
     return <article className={styles.article}>
         <header>
             <h1>MOON LANDER</h1>
+            <span className={styles["bottom-rivets"]}></span>
         </header>
-        <div>
-            press space to start
+        <div className="message">
+            <p>press space to start</p>
         </div>
 
         {scoreData && <HighScoreTable data={scoreData} />}

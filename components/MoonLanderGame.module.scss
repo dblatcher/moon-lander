@@ -43,10 +43,16 @@
         right: 0;
         max-height: inherit;
 
-        canvas {
-            opacity: .75;
+        .lcd {
             max-height: inherit;
-            max-width: 10rem;
+            @include lcdDark();
+            @include withScanLines(10s);
+
+            canvas {
+                opacity: .5;
+                max-height: inherit;
+                max-width: 10rem;
+            }
         }
 
         &--left {

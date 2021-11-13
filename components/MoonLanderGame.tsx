@@ -77,16 +77,20 @@ export default function MoonLanderGame(props: {
         </div>
 
         <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
-            <FullCanvas
-                world={world}
-                dontRenderBackground
-                dontRenderEffects
-                transformRules={[
-                    makeTerrainWhite,
-                    spaceShipIsRedCircle,
-                    highlightLandingPad,
-                ]}
-                magnify={.2} />
+
+            <div className={styles.lcd}>
+                <FullCanvas
+                    world={world}
+                    dontRenderBackground
+                    dontRenderEffects
+                    transformRules={[
+                        makeTerrainWhite,
+                        spaceShipIsRedCircle,
+                        highlightLandingPad,
+                    ]}
+                    magnify={.2} />
+            </div>
+            <span className={styles["bottom-rivets"]}></span>
         </div>
 
         <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
@@ -99,6 +103,7 @@ export default function MoonLanderGame(props: {
                     world={world}
                     getValues={getPlayerFuel} />
             </div>
+            <span className={styles["bottom-rivets"]}></span>
         </div>
 
         {(playerHasLanded && mode === "PLAY") && (

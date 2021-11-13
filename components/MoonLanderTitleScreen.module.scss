@@ -4,16 +4,21 @@
 .article {
     @include fullHeight;
     text-align: center;
-    justify-content: center;
+    justify-content: flex-start;
     background-color:black;
     color: white;
     margin: 2rem;
     padding: 2rem;
-    
-    h1 {
+
+    header {
         @include metal;
         position: relative;
-        color: yellow;
         padding: 2rem;
+        font-size: 3rem;
+
+        h1 {
+            @include engraved(regular);
+            margin: 0;
+        }
     }
 }

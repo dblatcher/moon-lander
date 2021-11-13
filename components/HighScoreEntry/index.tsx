@@ -36,7 +36,11 @@ export default function HighScoreEntry(props: {
 
     return (
         <article className={styles.frame}>
-            <h2>High Score</h2>
+
+            <header>
+                <h2>High Score</h2>
+            </header>
+
             <p>You got {score} points!</p>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -46,7 +50,7 @@ export default function HighScoreEntry(props: {
                     </div>
                 </div>
                 <div>
-                    <button onClick={event => { event.preventDefault(); exit(); }}>No thanks</button>
+                    <button onClick={event => { event.preventDefault(); exit(); }}>Don't enter score</button>
                     <button>Send score</button>
                 </div>
             </form>

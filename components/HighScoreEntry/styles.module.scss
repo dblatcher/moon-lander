@@ -8,6 +8,14 @@
     text-align: center;
     padding: 2rem 3rem;
 
+    header {
+        font-size: 1.5rem;
+
+        h2 {
+            @include engraved(regular);
+        }
+    }
+
     form > div {
         padding: 0 0 1rem 0;
         display: flex;
@@ -21,7 +29,7 @@
     }
 
     form input[type=text] {
-        color: black;
+        color: inherit;
         font-family: monospace;
         font-size: 150%;
         background: none;
@@ -31,9 +39,6 @@
 
     .input-frame {
         @include lcd;
+        @include withScanLines(45s);
     }
-}
-
-.bottom-rivets {
-    @include bottomRivets();
 }

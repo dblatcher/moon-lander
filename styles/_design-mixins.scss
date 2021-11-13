@@ -7,6 +7,24 @@
     height: 10px;
 }
 
+@mixin bottomRivets {
+    display: inline;
+    position: static;
+
+    &:after, &:before {
+        @include rivet();
+        bottom: 5px;
+    }
+
+    &:after {
+        left: 5px;
+    }
+
+    &:before {
+        right: 5px;
+    }
+}
+
 @mixin metal {
     background: linear-gradient(320deg, rgb(90, 98, 90), rgb(225, 225, 225));
 
@@ -24,28 +42,61 @@
     &:before {
         right: 5px;
     }
+
+    &>.bottom-rivets {
+        @include bottomRivets();
+    }
 }
 
-@mixin bottomRivets {
-    display: inline;
-    position: static;
+@mixin engraved ($size) {
+    $engraveShadeBrightness: 175;
+    $engravedBackground: #414141;
+    background-color: $engravedBackground;
+    background-clip: text;
+    color: transparent;
 
-    &:after, &:before {
-        @include rivet();
-        bottom: 5px;
-    }
+    $engraveShadeColor: rgba($engraveShadeBrightness,$engraveShadeBrightness,$engraveShadeBrightness,0.5);
 
-    &:after {
-        left: 5px;
+    @if ($size == 'big') {
+        font-size: 100px;
+        text-shadow: $engraveShadeColor 3px 5px 1px;
+    } @else {
+        font-size: 1em;
+        text-shadow: $engraveShadeColor .03em .05em .1em;
     }
-
-    &:before {
-        right: 5px;
-    }
-} 
+ }
 
 @mixin lcd {
-    background-color: greenyellow;
+    background-color: rgb(163 192 75);
+    color: #252c14;
     padding: 3px;
     border: 5px inset darkgray;
+}
+
+@mixin lcdDark {
+    background-color: black;
+    color: rgb(163 192 75);
+    padding: 3px;
+    border: 5px inset darkgray;
+}
+
+
+@keyframes scanLines {
+    from {
+        background-image: linear-gradient(transparent 10px, #fff01f, transparent 15px);
+        background-position: 0% 0px;
+    }
+
+    to {
+        background-image: linear-gradient(transparent 10px, #fff01f, transparent 15px);
+        background-position: 0% 1000px;
+    }
+}
+
+@mixin withScanLines($speed) {
+    position: relative;
+    animation-name: scanLines;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: $speed;
 }
