@@ -8,6 +8,7 @@ import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
 import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
 import { ScoreData } from "../modules/ScoreData";
+import HighScoreEntry from "./HighScoreEntry";
 
 const SPEED = 50;
 
@@ -34,7 +35,7 @@ interface GameContainerState {
     controls: { [index: string]: boolean }
     playerHasLanded: boolean
     playerHasDied: boolean
-    mode: "TITLE" | "PLAY"
+    mode: "TITLE" | "PLAY" | "HIGHSCORE"
 }
 
 export type { GameContainerState }
@@ -68,6 +69,7 @@ export default class GameContainer extends React.Component {
         this.addLives = this.addLives.bind(this)
         this.startLevel = this.startLevel.bind(this)
         this.goToTitles = this.goToTitles.bind(this)
+        this.goToHighScore = this.goToHighScore.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
@@ -132,7 +134,20 @@ export default class GameContainer extends React.Component {
             this.world = newWorld;
 
             this.setState({
+                mode: "PLAY",
                 level: levelNumber,
+                playerHasLanded: false,
+                playerHasDied: false,
+            }, () => {
+                resolve(this.state)
+            })
+        })
+    }
+
+    goToHighScore(): Promise<GameContainerState> {
+        return new Promise(resolve => {
+            this.setState({
+                mode: "HIGHSCORE",
                 playerHasLanded: false,
                 playerHasDied: false,
             }, () => {
@@ -186,6 +201,7 @@ export default class GameContainer extends React.Component {
                     <button onClick={() => { this.startLevel() }}>restart</button>
                     <button onClick={() => { this.startLevel(level + 1) }}>skip</button>
                     <button onClick={() => { this.goToTitles() }}>quit</button>
+                    <button onClick={() => { this.goToHighScore() }}>quit to highscores</button>
                 </div>
 
 
@@ -193,13 +209,14 @@ export default class GameContainer extends React.Component {
                     <MoonLanderTitleScreen scoreData={scoreData} />
                 }
 
-                {(!!world && mode === "PLAY") &&
+                {(!!world && (mode === "PLAY" || mode === "HIGHSCORE")) &&
                     <MoonLanderGame key={world.name}
                         world={world}
                         playerHasDied={playerHasDied}
                         playerHasLanded={playerHasLanded}
                         controls={controls}
                         score={score}
+                        mode={mode}
                         lives={lives}
                         level={level}
                         isPaused={this.isPaused}
@@ -208,7 +225,12 @@ export default class GameContainer extends React.Component {
                         addLives={this.addLives}
                         startLevel={this.startLevel}
                         goToTitles={this.goToTitles}
+                        goToHighScore={this.goToHighScore}
                     />
+                }
+
+                {(mode === "HIGHSCORE") &&
+                    <HighScoreEntry score={score} exit={this.goToTitles} />
                 }
 
                 <KeyReader

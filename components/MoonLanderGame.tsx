@@ -25,18 +25,20 @@ export default function MoonLanderGame(props: {
     score: number
     lives: number
     level: number
+    mode: "TITLE" | "PLAY" | "HIGHSCORE"
     isPaused: boolean
     controls: { [index: string]: boolean }
     handleWorldStatus: { (worldStatus: WorldStatus): void }
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
     startLevel: { (level?: number): Promise<GameContainerState> }
-    goToTitles: { (level?: number): Promise<GameContainerState> }
+    goToTitles: { (): Promise<GameContainerState> }
+    goToHighScore: { (): Promise<GameContainerState> }
 }) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused,
-        handleWorldStatus, startLevel, addPoints, addLives, goToTitles
+        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode,
+        handleWorldStatus, startLevel, addPoints, addLives, goToTitles, goToHighScore
     } = props
 
 
@@ -49,6 +51,13 @@ export default function MoonLanderGame(props: {
     async function retry() {
         await addLives(-1);
         await startLevel();
+    }
+
+    async function endSession() {
+        if (score > 0) {
+            return goToHighScore()
+        }
+        return goToTitles()
     }
 
     return <article className={styles.article}>
@@ -92,33 +101,33 @@ export default function MoonLanderGame(props: {
             </div>
         </div>
 
-        {playerHasLanded && (
+        {(playerHasLanded && mode === "PLAY") && (
             <article className={styles.dialogue}>
                 <p>You have landed!</p>
                 <button className={styles.button} onClick={advance}>Go to next level!</button>
             </article>
         )}
 
-        {playerHasDied && (
+        {(playerHasDied && mode === "PLAY") && (
             <article className={styles.dialogue}>
                 <p>You have crashed.</p>
 
                 {lives > 0 ? (
                     <button className={styles.button} onClick={retry}>Try again....</button>
                 ) : (
-                    <button className={styles.button} onClick={() => { goToTitles() }}>Game Over!</button>
+                    <button className={styles.button} onClick={() => { endSession() }}>Game Over!</button>
                 )}
             </article>
         )}
 
-        {isPaused && (
+        {(isPaused && mode === "PLAY") && (
             <article className={styles.dialogue}>
                 <p>PAUSED</p>
             </article>
         )}
 
         <WorldInterface
-            controls={playerHasLanded ? {} : controls}
+            controls={(!playerHasLanded && mode === "PLAY") ? controls : {}}
             world={world}
             controlFunction={controlSpaceShip}
             getWorldStatus={getWorldStatus}
