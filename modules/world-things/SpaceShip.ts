@@ -2,6 +2,7 @@ import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetec
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 import { LandingPad } from './LandingPad'
+import { Terrain } from './Terrain'
 
 const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
 
@@ -30,6 +31,7 @@ interface SpaceShipData extends BodyData {
 
 class SpaceShip extends Body {
     data: SpaceShipData
+
     constructor(config: SpaceShipData, momentum: Force = Force.none) {
         super(config, momentum);
         this.data = config
@@ -47,6 +49,7 @@ class SpaceShip extends Body {
     get typeId() { return 'SpaceShip' }
 
     static negligableSpeed = 0.2
+    static MAX_IMPACT_SPEED = 3
 
     get seemsStill(): boolean {
         const { thrust = 0 } = this.data
@@ -87,41 +90,75 @@ class SpaceShip extends Body {
         }
     }
 
-    renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
+    renderFlame(ctx: CanvasRenderingContext2D, viewPort: ViewPort, leftBoosterCorner: Geometry.Point, rightBoosterCorner: Geometry.Point) {
 
-        const { x, y, size = 0, heading = 0, color, fillColor, thrust = 0, maxThrust = 0 } = this.data
-        const { shapeValues } = this
+        const { size = 0, thrust = 0, maxThrust = 0, heading = 0 } = this.data
 
-        const frontPoint = translatePoint(shapeValues, getXYVector(size, heading))
-        const midPoint = translatePoint(shapeValues, getXYVector(size * (4 / 6), heading))
-
-        const backSideAngle = Math.PI * .75
-        const backLeftPoint = translatePoint(shapeValues, getXYVector(size, heading - backSideAngle))
-        const backRightPoint = translatePoint(shapeValues, getXYVector(size, heading + backSideAngle))
-
-        const cockpit: Geometry.Wedge = {
-            x: midPoint.x, y: midPoint.y,
-            radius: size * (2 / 3),
-            heading: reverseHeading(heading),
-            angle: backSideAngle * (2 / 6)
+        let flameStartPoint = {
+            x: (leftBoosterCorner.x + rightBoosterCorner.x) / 2,
+            y: (leftBoosterCorner.y + rightBoosterCorner.y) / 2,
         }
 
-        RenderFunctions.renderPolygon.onCanvas(ctx, [frontPoint, backLeftPoint, backRightPoint], { strokeColor: color, fillColor }, viewPort)
+        let flicker = (Math.random() - .5) * .5
+        let leftFlameEndPoint = {
+            x: flameStartPoint.x + getVectorX(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker)),
+            y: flameStartPoint.y + getVectorY(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker))
+        }
+
+        RenderFunctions.renderPolygon.onCanvas(ctx, [leftBoosterCorner, leftFlameEndPoint, rightBoosterCorner], { strokeColor: 'yellow', fillColor: 'red' }, viewPort)
+
+    }
+
+    renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
+
+        const { x, y, size = 0, heading = 0, color, fillColor, thrust = 0 } = this.data
+        const { shapeValues } = this
+
+        const chasis: Geometry.Wedge = {
+            x: x, y: y,
+            radius: size,
+            heading: heading,
+            angle: Geometry._deg * 240,
+        }
+
+        const cockpit: Geometry.Wedge = {
+            x: x, y: y,
+            radius: size * (2 / 3),
+            heading: heading,
+            angle: Geometry._deg * 150,
+        }
+
+        const vRight = getXYVector(size, heading + Geometry._90deg);
+        const vRightHalf = getXYVector(size / 2, heading + Geometry._90deg);
+        const vBack = getXYVector(size, heading - (Geometry._deg * 180))
+
+        const rightPoint = translatePoint(shapeValues, vRight)
+        const rightBackPoint = translatePoint(rightPoint, vBack)
+        const rightBackLeftPoint = translatePoint(rightBackPoint, vRightHalf, true)
+        const rightLeftPoint = translatePoint(rightBackLeftPoint, vBack, true)
+
+        const rightLeg: Geometry.Point[] = [
+            rightPoint, rightBackPoint, rightBackLeftPoint, rightLeftPoint
+        ]
+
+
+        const leftPoint = translatePoint(shapeValues, vRight, true)
+        const leftBackPoint = translatePoint(leftPoint, vBack)
+        const leftBackRightPoint = translatePoint(leftBackPoint, vRightHalf)
+        const leftRightPoint = translatePoint(leftBackRightPoint, vBack, true)
+
+        const leftLeg: Geometry.Point[] = [
+            leftPoint, leftBackPoint, leftBackRightPoint, leftRightPoint
+        ]
+
+        RenderFunctions.renderWedge.onCanvas(ctx, chasis, { fillColor: fillColor, lineWidth: 1 / 2 }, viewPort);
         RenderFunctions.renderWedge.onCanvas(ctx, cockpit, { fillColor: color, lineWidth: 1 / 2 }, viewPort);
+        RenderFunctions.renderPolygon.onCanvas(ctx, leftLeg, { strokeColor: color, fillColor:"gray" }, viewPort)
+        RenderFunctions.renderPolygon.onCanvas(ctx, rightLeg, { strokeColor: color, fillColor:"gray" }, viewPort)
 
         if (thrust > 0) {
-            let backPoint = {
-                x: x - getVectorX(size, heading),
-                y: y - getVectorY(size, heading)
-            }
-
-            let flicker = (Math.random() - .5) * .5
-            let flameEndPoint = {
-                x: backPoint.x + getVectorX(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker)),
-                y: backPoint.y + getVectorY(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker))
-            }
-
-            RenderFunctions.renderPolygon.onCanvas(ctx, [backRightPoint, flameEndPoint, backLeftPoint], { strokeColor: 'blue', fillColor: 'green' }, viewPort)
+            this.renderFlame(ctx,viewPort,leftBackPoint,leftBackRightPoint);
+            this.renderFlame(ctx,viewPort,rightBackPoint,rightBackLeftPoint);
         }
     }
 
@@ -183,21 +220,22 @@ class SpaceShip extends Body {
 
     handleCollision(report: CollisionDetection.CollisionReport) {
 
-        const { maxImpact = 0 } = this.data
+        const { magnitude: impactSpeed } = this.momentum;
 
         if (report) {
             const otherThing = report.item1 === this ? report.item2 : report.item1
 
-            const forceThatCounts = otherThing.data.immobile ? report.force
-                : report.item1 === this
-                    ? report.force2
-                    : report.force;
+            if (otherThing instanceof Terrain) {
 
-            if (forceThatCounts > maxImpact) {
-                this.explode({
-                    driftBiasX: -this.momentum.vectorX / this.momentum.magnitude * 2,
-                    driftBiasY: -this.momentum.vectorY / this.momentum.magnitude * 2
-                })
+                const elasticityAdjustment = 1 - (otherThing.data.elasticity || 1);
+                const adjustedImpactSpeed = impactSpeed * elasticityAdjustment;
+
+                if (adjustedImpactSpeed > SpaceShip.MAX_IMPACT_SPEED) {
+                    this.explode({
+                        driftBiasX: -this.momentum.vectorX / this.momentum.magnitude * 2,
+                        driftBiasY: -this.momentum.vectorY / this.momentum.magnitude * 2
+                    })
+                }
             }
         }
 
@@ -206,15 +244,8 @@ class SpaceShip extends Body {
 
 
     respondToImpact(report: CollisionDetection.CollisionReport) {
-
         switch (report.item1.typeId) {
-            case 'Rock':
-                const drift = Geometry.getXYVector(1, report.item1.momentum.direction);
-                this.explode({ driftBiasX: drift.x, driftBiasY: drift.y })
-                this.world.emitter.emit('shipDeath', this)
-                break;
         }
-
     }
 
     get steerSpeed() { return .075 }

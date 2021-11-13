@@ -44,7 +44,6 @@ function makeMountain(fromLeft: number, size: number, worldDimensions: { height:
         size: worldDimensions.width * size,
         fillColor: mountainGradient,
         color: 'brown',
-        elasticity: .75, immobile: true,
         shape: shapes.polygon,
         corners: [{ x: -1, y: 1 }, { x: -.2, y: -.5 }, { x: 0, y: -1 }, { x: .1, y: -.5 }, { x: .3, y: -.6 }, { x: 1, y: 1 }]
     })
@@ -54,11 +53,11 @@ function makeShip(config: SpaceShipData) {
 
     const finalConfig: SpaceShipData = Object.assign(
         {
-            size: 15,
+            size: 20,
             elasticity: .01,
-            maxThrust: 3000,
+            maxThrust: 6000,
             maxImpact: 50000,
-            maxFuel: 2000,
+            maxFuel: 4000,
             heading: Geometry._360deg / 2
         }, config)
 
@@ -76,7 +75,6 @@ const levelFunctions = [
             makeShip({
                 x: worldDimensions.width / 2,
                 y: 310,
-                fuel: 1200,
             }),
 
             new Area({
@@ -109,7 +107,6 @@ const levelFunctions = [
                 size: worldDimensions.width / 4,
                 fillColor: 'brown',
                 color: 'brown',
-                elasticity: .75, immobile: true,
                 shape: shapes.polygon,
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
             }),
@@ -119,7 +116,6 @@ const levelFunctions = [
                 size: worldDimensions.width / 4,
                 fillColor: 'brown',
                 color: 'brown',
-                elasticity: .75, immobile: true,
                 shape: shapes.polygon,
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
             }),
@@ -173,7 +169,7 @@ const levelFunctions = [
                 x: worldDimensions.width / 2,
                 y: worldDimensions.height / 2,
                 size: 300,
-                density: .25,
+                density: .20,
                 fillColor: 'blue',
             }),
 

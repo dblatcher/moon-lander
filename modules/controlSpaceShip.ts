@@ -7,12 +7,14 @@ function controlSpaceShip(world: World, key: string) {
     const player = getPlayerSpaceship(world)
     if (!player) { return }
 
+    const throttleRate = player.data.maxThrust ? (player.data.maxThrust / 30) : 200
+
     switch (key) {
         case 'up':
-            player.changeThrottle(100)
+            player.changeThrottle(throttleRate)
             break;
         case 'down':
-            player.changeThrottle(-100)
+            player.changeThrottle(-throttleRate)
             break;
         case 'right':
             player.steer("RIGHT")
