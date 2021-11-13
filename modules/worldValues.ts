@@ -1,6 +1,6 @@
 import { Body, World } from "physics-worlds";
-import { LandingPad } from "./LandingPad";
-import { SpaceShip } from "./SpaceShip";
+import { LandingPad } from "./world-things/LandingPad";
+import { SpaceShip } from "./world-things/SpaceShip";
 
 
 function getPlayerSpaceship(world: World): SpaceShip | null {

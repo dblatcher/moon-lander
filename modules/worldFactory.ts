@@ -1,9 +1,9 @@
 import { Body, Force, World, Geometry, shapes, StarField, Area, RadialGradientFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
-import { LandingPad } from "./LandingPad";
+import { LandingPad } from "./world-things/LandingPad";
 
-import { SpaceShip, SpaceShipData } from "./SpaceShip";
-import { Terrain } from "./Terrain";
+import { SpaceShip, SpaceShipData } from "./world-things/SpaceShip";
+import { Terrain } from "./world-things/Terrain";
 
 const atmosphere = new RadialGradientFill({
     fallbackColor: 'rgba(100,100,200,.5)',
