@@ -43,7 +43,9 @@ export default function MoonLanderGame(props: {
 
 
     async function advance() {
-        await addPoints(100)
+        const fuelLeft = getPlayerFuel(world)?.value;
+        const points = fuelLeft ? Math.floor(fuelLeft / 50) : 0;
+        await addPoints(points)
         await sleep(1000);
         await startLevel(level + 1)
     }
