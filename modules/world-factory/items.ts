@@ -49,6 +49,26 @@ function makeMountain(fromLeft: number, size: number, worldDimensions: { height:
     })
 }
 
+
+function makeBuilding(fromLeft: number, height: number, relativeWidth: number, worldDimensions: { width: number, height: number }) {
+    return new Terrain({
+
+        x: worldDimensions.width * fromLeft,
+        y: worldDimensions.height - (worldDimensions.width * height),
+        size: worldDimensions.width * height,
+        fillColor: "gray",
+        color: 'white',
+        shape: shapes.polygon,
+        corners: [
+            { x: -relativeWidth, y: -1 },
+            { x: relativeWidth, y: -1 },
+            { x: relativeWidth, y: 1 },
+            { x: -relativeWidth, y: 1 },
+        ]
+    })
+
+}
+
 function makeShip(config: SpaceShipData) {
 
     const finalConfig: SpaceShipData = Object.assign(
@@ -65,4 +85,4 @@ function makeShip(config: SpaceShipData) {
 }
 
 
-export {atmosphere, mountainGradient, makeMountain, makeShip}
+export {atmosphere, mountainGradient, makeMountain, makeShip, makeBuilding}
