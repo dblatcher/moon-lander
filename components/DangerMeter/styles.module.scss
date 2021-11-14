@@ -1,0 +1,37 @@
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+
+
+
+.frame {
+    @include lcd();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: .25rem;
+    font-size: 1.4rem;
+
+    width: 3.5em;
+}
+
+@keyframes glow {
+    from {
+        filter: drop-shadow(0 0 0em black);
+        transform: scale(1);
+    }
+
+    to {
+        filter: drop-shadow(0 0 1em red);
+        transform: scale(1.2);
+    }
+}
+
+.number {
+    font-family: monospace;
+
+    &.glowing {
+        animation-name: glow;
+        animation-iteration-count: infinite;
+        animation-duration: .75s;
+    }
+}

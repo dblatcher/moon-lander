@@ -27,13 +27,22 @@ const getPlayerThrust = (world: World) => {
     }
 }
 
+const getPlayerSpeed = (world: World) => {
+    const player = getPlayerSpaceship(world)
+    if (!player) { return null }
+    return {
+        value: player.momentum.magnitude,
+        danger: SpaceShip.MAX_IMPACT_SPEED
+    }
+}
+
 interface WorldStatus {
     playerDead?: boolean
     landingPadPlayerIsOn?: LandingPad
 }
 
 
-const getWorldStatus = (world:World) => {
+const getWorldStatus = (world: World) => {
     const player = getPlayerSpaceship(world)
 
     return {
@@ -46,5 +55,5 @@ export type {
     WorldStatus
 }
 export {
-    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus
+    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed
 }

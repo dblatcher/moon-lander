@@ -7,12 +7,13 @@ import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
 
 import { controlSpaceShip } from "../modules/controlSpaceShip";
-import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus } from "../modules/worldValues";
+import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
 import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
 
 import { GameContainerState } from "./GameContainer";
+import DangerMeter from "./DangerMeter";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -104,6 +105,9 @@ export default function MoonLanderGame(props: {
                     meterType="GAGE"
                     world={world}
                     getValues={getPlayerFuel} />
+                <DangerMeter
+                    world={world}
+                    getValues={getPlayerSpeed} />
             </div>
             <span className={styles["bottom-rivets"]}></span>
         </div>
