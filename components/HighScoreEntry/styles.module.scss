@@ -1,5 +1,6 @@
 @import "../../styles/mixins";
 @import "../../styles/design-mixins";
+@import "../../styles/button";
 
 
 .frame {
@@ -40,5 +41,16 @@
     .input-frame {
         @include lcd;
         @include withScanLines(45s);
+    }
+
+    .orangeButton {
+        background-color: darkorange;
+        color: white;
+        @include button();
+    }
+    .greenButton {
+        background-color: forestgreen;
+        color: white;
+        @include button();
     }
 }

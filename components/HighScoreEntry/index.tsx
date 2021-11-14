@@ -34,6 +34,8 @@ export default function HighScoreEntry(props: {
         }
     })
 
+    const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton,styles["greenButton--disabled"]].join(" ");
+
     return (
         <article className={styles.frame}>
 
@@ -50,8 +52,8 @@ export default function HighScoreEntry(props: {
                     </div>
                 </div>
                 <div>
-                    <button onClick={event => { event.preventDefault(); exit(); }}>Don't enter score</button>
-                    <button>Send score</button>
+                    <button className={styles.orangeButton} onClick={event => { event.preventDefault(); exit(); }}>Don't enter score</button>
+                    <button className={submitButtonClassNames}>Send score</button>
                 </div>
             </form>
             <span className={styles["bottom-rivets"]}></span>

@@ -1,0 +1,34 @@
+$shadow-modal: 5px 4px 10px 2px black;
+$shadow-6: 1px 3px 6px 1px black;
+$shadow-5: 1px 1px 5px 0 black;
+$shadow-4: 0px 1px 4px 0 black;
+
+
+
+@mixin button() {
+    display: inline-block;
+    min-width: 6em;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    padding: .25rem;
+    margin: .25rem .5rem;
+    border: none;
+
+    transition: transform .5s, box-shadow .5s;
+    transform: translateY(-1px);
+
+    box-shadow: $shadow-6;
+
+
+    &:hover,&:focus {
+        box-shadow: $shadow-5;
+        transform: translateY(0);
+    }
+
+    &--disabled, &--disabled:hover, &--disabled:hover:focus  {
+        box-shadow: none;
+        transform: none;
+        cursor: default;
+    }
+}

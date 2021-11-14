@@ -64,11 +64,12 @@ export default function MoonLanderGame(props: {
     }
 
     return <article className={styles.article}>
-        <p className={styles.numberPanel}>
-            <span>level: {level}</span>
-            <span>score: {score}</span>
-            <span>lives: {lives}</span>
-        </p>
+        <aside className={styles.numberPanel}>
+            <div>level: <span>{level}</span></div>
+            <div>score: <span>{score}</span></div>
+            <div>lives: <span>{lives}</span></div>
+            <span className={styles["bottom-rivets"]}></span>
+        </aside>
         <div className={styles.mainScreen}>
             <div>
                 <FollowBodyCanvas

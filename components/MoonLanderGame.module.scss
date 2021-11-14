@@ -1,5 +1,6 @@
 @import "../styles/mixins";
 @import "../styles/design-mixins";
+@import "../styles/button";
 
 .article {
     @include fullHeight;
@@ -7,11 +8,22 @@
     align-items: center;
 
     .numberPanel {
+        @include metal;
+        position: relative;
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
 
-        span {
+        div {
             margin: 0 1rem;
+            display: flex;
+            align-items: center;
+
+            span {
+                @include lcd();
+                min-width: 4rem;
+                text-align: right;
+            }
         }
     }
 
@@ -74,22 +86,18 @@
 
         @include dialog(false);
         top: 25%;
-        background-color: cadetblue;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        color: cornsilk;
+        background-color: yellow;
+        padding: .5rem 1.5rem;
+        color: black;
+
+        border-top: 10px solid;
+        border-bottom: 10px solid;
+        border-image: repeating-linear-gradient(290deg, black 10px,black 15px, yellow 20px) 30 / 1 / 0 stretch;
 
         .button {
-            cursor: pointer;
-            text-align: center;
-            color: black;
-            padding: .2rem;
-            border: 3px outset cornsilk;
-            background-color: cornsilk;
-
-            &:hover {
-                border-style: inset;
-            }
+            background-color: forestgreen;
+            color: white;
+            @include button();
         }
     }
 
