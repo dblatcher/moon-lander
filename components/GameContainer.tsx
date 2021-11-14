@@ -3,7 +3,7 @@ import { World } from "physics-worlds";
 import styles from "./GameContainer.module.scss";
 import KeyReader from "./KeyReader";
 
-import { makeWorld, numberOfLevels } from "../modules/worldFactory";
+import { makeWorld, numberOfLevels } from "../modules/world-factory";
 import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
 import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
