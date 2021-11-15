@@ -21,7 +21,7 @@ export default function HighScoreEntry(props: {
         event.preventDefault()
         if (!name || isSubmitting) { return }
         setIsSubmitting(true);
-        requestAddScore({ score, name })
+        requestAddScore({ score, name, created: Date.now() })
             .then(() => {
                 exit()
             })
@@ -34,7 +34,7 @@ export default function HighScoreEntry(props: {
         }
     })
 
-    const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton,styles["greenButton--disabled"]].join(" ");
+    const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton, styles["greenButton--disabled"]].join(" ");
 
     return (
         <article className={styles.frame}>

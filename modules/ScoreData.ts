@@ -1,5 +1,5 @@
 interface Score {
-  name: string, score: number
+  name: string, score: number, created?: number | null
 }
 
 type ScoreData = {
@@ -12,7 +12,8 @@ function validateScore(score: any): boolean {
 
   if (
     typeof score.name !== 'string' ||
-    typeof score.score !== 'number'
+    typeof score.score !== 'number' ||
+    (typeof score.created !== 'undefined' && typeof score.created !== 'number' && score.created !== null)
   ) { return false }
 
   return true

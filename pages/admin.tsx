@@ -23,6 +23,7 @@ const NormalGame: NextPage = () => {
         const data = await requestGetScores();
 
         if (data) {
+            console.log(data)
             setHighScores(data);
         } else {
             setMessage("Could not get scores!")
@@ -30,7 +31,7 @@ const NormalGame: NextPage = () => {
     }
 
     const addTestScore = async () => {
-        const scoreInput: Score = { name: "TEST", score: Math.floor(Math.random() * 100) }
+        const scoreInput: Score = { name: "TEST", score: Math.floor(Math.random() * 100), created: Date.now() }
         const addScoreResult = await requestAddScore(scoreInput)
 
         if (addScoreResult) {
