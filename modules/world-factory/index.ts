@@ -1,12 +1,14 @@
 import { makeBlueMoonLevel } from "./blueMoonLevel";
 import { makeCityLevel } from "./cityLevel";
+import { makeDaylightCityLevel } from "./dayLightCityLevel";
 import { makeMountainsLevel } from "./mountainLevel";
 
 
 const levelFunctions = [
-    makeCityLevel,
+    makeDaylightCityLevel,
     makeMountainsLevel,
     makeBlueMoonLevel,
+    makeCityLevel,
 ]
 
 

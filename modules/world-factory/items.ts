@@ -1,4 +1,4 @@
-import { Geometry, shapes, RadialGradientFill } from "physics-worlds";
+import { Geometry, shapes, RadialGradientFill, AbstractGradientFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 import { SpaceShip, SpaceShipData } from "../world-things/SpaceShip";
 import { Terrain } from "../world-things/Terrain";
@@ -24,14 +24,14 @@ const mountainGradient = new RadialGradientFill({
 
         const f = Geometry.getXYVector(400, -heading);
         const gradient = ctx.createLinearGradient(
-            circle.x-f.x, circle.y-f.y, 
-            circle.x+f.x, circle.y+f.y
+            circle.x - f.x, circle.y - f.y,
+            circle.x + f.x, circle.y + f.y
         )
 
         gradient.addColorStop(1, 'brown')
         gradient.addColorStop(.1, 'white')
         gradient.addColorStop(0, 'white')
-        
+
         return gradient;
     }
 })
@@ -50,14 +50,19 @@ function makeMountain(fromLeft: number, size: number, worldDimensions: { height:
 }
 
 
-function makeBuilding(fromLeft: number, height: number, relativeWidth: number, worldDimensions: { width: number, height: number }) {
+function makeBuilding(fromLeft: number, height: number, relativeWidth: number, worldDimensions: { width: number, height: number },
+    config: {
+        fillColor?: string | AbstractGradientFill,
+        color?: string,
+    } = {}
+) {
     return new Terrain({
 
         x: worldDimensions.width * fromLeft,
         y: worldDimensions.height - (worldDimensions.width * height),
         size: worldDimensions.width * height,
-        fillColor: "gray",
-        color: 'white',
+        fillColor: config.fillColor || "gray",
+        color: config.color || 'white',
         shape: shapes.polygon,
         corners: [
             { x: -relativeWidth, y: -1 },
@@ -85,4 +90,4 @@ function makeShip(config: SpaceShipData) {
 }
 
 
-export {atmosphere, mountainGradient, makeMountain, makeShip, makeBuilding}
+export { atmosphere, mountainGradient, makeMountain, makeShip, makeBuilding }
