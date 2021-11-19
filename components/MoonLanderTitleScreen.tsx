@@ -18,7 +18,12 @@ export default function MoonLanderTitleScreen(props: {
             <p>press space to start</p>
         </div>
 
-        {scoreData && <HighScoreTable data={scoreData} />}
+
+        {scoreData && (
+            <section className={styles.tableWrapper}>
+                <HighScoreTable data={scoreData} />
+            </section>
+        )}
 
     </article>
 }

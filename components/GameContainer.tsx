@@ -42,7 +42,7 @@ export type { GameContainerState }
 
 export default class GameContainer extends React.Component {
     props!: {
-        title: string
+        title?: string
         scoreData?: ScoreData
     };
     state!: GameContainerState;
@@ -195,7 +195,7 @@ export default class GameContainer extends React.Component {
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
 
-                <h2>{title}</h2>
+                {title && <h2>{title}</h2>}
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={() => { this.startLevel() }}>restart</button>

@@ -37,7 +37,7 @@ const NormalGame: NextPage = () => {
                 <Link href="/" passHref={true}>homepage</Link>
 
                 <FullScreenWrapper>
-                    <GameContainer title="normal game" scoreData={data} />
+                    <GameContainer scoreData={data} />
                 </FullScreenWrapper>
             </main>
         </div>
