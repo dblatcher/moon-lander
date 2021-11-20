@@ -64,6 +64,8 @@ function makeBuilding(fromLeft: number, height: number, relativeWidth: number, w
         fillColor: config.fillColor || "gray",
         color: config.color || 'white',
         shape: shapes.polygon,
+        pattern: "BUILDING",
+        relativeWidth,
         corners: [
             { x: -relativeWidth, y: -1 },
             { x: relativeWidth, y: -1 },

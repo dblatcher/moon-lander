@@ -19,10 +19,10 @@ function makeDaylightCityLevel(): World {
         }),
 
         makeBuilding((2.5 / 12), (1 / 16), (4 / 4), worldDimensions),
-        makeBuilding((2 / 12), (1.5 / 16), (2 / 4), worldDimensions, { fillColor: 'DarkKhaki', color: 'black' }),
+        makeBuilding((2 / 12), (1.5 / 16), (2 / 4), worldDimensions, { fillColor: 'DarkKhaki', color: 'antiquewhite' }),
         makeBuilding((7 / 12), (3.75 / 16), (2 / 4), worldDimensions),
         makeBuilding((6 / 12), (2 / 16), (2 / 4), worldDimensions),
-        makeBuilding((9 / 12), (1.5 / 16), (3 / 4), worldDimensions, { fillColor: 'darkseagreen', color: 'black' }),
+        makeBuilding((9 / 12), (1.5 / 16), (3 / 4), worldDimensions, { fillColor: 'darkseagreen', color: 'antiquewhite' }),
         makeBuilding((11 / 12), (3 / 16), (1 / 4), worldDimensions),
 
         new LandingPad({
