@@ -41,6 +41,7 @@
         overflow: hidden;
         margin: 0;
         
+        border-bottom: 4px solid #a9a9a9;
         
         .panel {
             width: 100%;
@@ -51,7 +52,7 @@
             background-color: black;
             border-top-left-radius: 100%;
             border-top-right-radius: 100%;
-            border: 2px dashed lightskyblue;
+            border: 3px solid #555555;
         }
         
         .needle {
