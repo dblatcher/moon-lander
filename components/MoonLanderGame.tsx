@@ -8,7 +8,7 @@ import BarMeter from "./BarMeter";
 
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
-import { highlightLandingPad, makeTerrainWhite, spaceShipIsRedCircle } from "../modules/minimap";
+import { highlightLandingPad, makeTerrainGray, spaceShipIsRedCircle } from "../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
 
@@ -88,7 +88,7 @@ export default function MoonLanderGame(props: {
                     dontRenderBackground
                     dontRenderEffects
                     transformRules={[
-                        makeTerrainWhite,
+                        makeTerrainGray,
                         spaceShipIsRedCircle,
                         highlightLandingPad,
                     ]}
