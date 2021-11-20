@@ -2,16 +2,24 @@
 @import "../../styles/design-mixins";
 
 
+.figure {
+    margin: .2rem;
+    font-family: monospace;
+
+    figcaption {
+        text-align: center
+    }
+}
 
 .frame {
     @include lcd();
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: .25rem;
     font-size: 1.4rem;
 
     width: 3.5em;
+    margin-bottom: .1rem;
 }
 
 @keyframes glow {

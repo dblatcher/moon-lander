@@ -100,13 +100,16 @@ export default function MoonLanderGame(props: {
         <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
             <div className={styles.row}>
                 <BarMeter
+                    caption="THRUST"
                     world={world}
                     getValues={getPlayerThrust} />
                 <BarMeter
+                    caption="FUEL"
                     meterType="GAGE"
                     world={world}
                     getValues={getPlayerFuel} />
                 <DangerMeter
+                    caption="SPEED"
                     world={world}
                     getValues={getPlayerSpeed} />
             </div>

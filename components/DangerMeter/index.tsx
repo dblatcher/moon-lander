@@ -8,7 +8,7 @@ interface GetMeterValuesFunction {
     (world: World): { value: number, danger: number } | null
 }
 
-function renderNumber(value: number, dangerValue: number) {
+function renderNumber(value: number, dangerValue: number, caption?: string) {
 
 
     const threshold = dangerValue * (1 / 2);
@@ -27,8 +27,11 @@ function renderNumber(value: number, dangerValue: number) {
     const numberClassNames = value < dangerValue ? styles.number : [styles.number, styles.glowing].join(" ");
 
     return (
-        <figure className={styles.frame}>
-            <span className={numberClassNames} style={barStyle}>{displayValue}</span>
+        <figure className={styles.figure}>
+            <div className={styles.frame}>
+                <span className={numberClassNames} style={barStyle}>{displayValue}</span>
+            </div>
+            {caption && <figcaption>{caption}</figcaption>}
         </figure>
     )
 }
@@ -39,8 +42,9 @@ export default function DangerMeter(props: {
     world: World
     getValues: GetMeterValuesFunction
     meterType?: "NUMBER"
+    caption?: string
 }) {
-    const { world, getValues, meterType } = props;
+    const { world, getValues, meterType, caption } = props;
     let [value, setValue] = useState(0);
     let [dangerValue, setDangerValue] = useState(0);
 
@@ -62,7 +66,7 @@ export default function DangerMeter(props: {
     switch (meterType) {
         case "NUMBER":
         default:
-            return renderNumber(value, dangerValue);
+            return renderNumber(value, dangerValue, caption);
     }
 
 }
