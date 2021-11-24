@@ -1,4 +1,4 @@
-import { Geometry, shapes, RadialGradientFill, AbstractGradientFill } from "physics-worlds";
+import { Geometry, shapes, RadialGradientFill, AbstractGradientFill, LinearGradientFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 import { SpaceShip, SpaceShipData } from "../world-things/SpaceShip";
 import { Terrain } from "../world-things/Terrain";
@@ -36,6 +36,22 @@ const mountainGradient = new RadialGradientFill({
     }
 })
 
+
+const gloomyBackground = new LinearGradientFill({
+    fallbackColor:'black',
+    canvasFunction(ctx: CanvasRenderingContext2D, line:[Geometry.Point, Geometry.Point] ) {
+        const gradient = ctx.createLinearGradient(
+            line[0].x, line[0].y,line[1].x, line[1].y
+        )
+
+        gradient.addColorStop(1, 'brown')
+        gradient.addColorStop(.575, 'black')
+        gradient.addColorStop(.475, 'black')
+        gradient.addColorStop(0, 'brown')
+
+        return gradient;
+    }
+})
 
 function makeMountain(fromLeft: number, size: number, worldDimensions: { height: number, width: number }) {
     return new Terrain({
@@ -92,4 +108,4 @@ function makeShip(config: SpaceShipData) {
 }
 
 
-export { atmosphere, mountainGradient, makeMountain, makeShip, makeBuilding }
+export { atmosphere, mountainGradient,gloomyBackground, makeMountain, makeShip, makeBuilding }

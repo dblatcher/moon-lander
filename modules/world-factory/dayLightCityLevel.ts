@@ -1,7 +1,7 @@
-import { Force, World, shapes, StarField } from "physics-worlds";
+import { Force, World, shapes } from "physics-worlds";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { atmosphere, makeBuilding, makeShip } from "./items";
+import { makeBuilding, makeShip } from "./items";
 
 
 
