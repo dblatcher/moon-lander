@@ -12,6 +12,7 @@ export default async function handler(
   if (req.method === "GET") {
     const data = await getScores();
     res.status(200).json(data)
+    return;
   }
 
   if (req.method === "PUT") {
@@ -20,14 +21,15 @@ export default async function handler(
     if (!validateScore(score)) {
       res.status(400).send(null)
     }
-
+    
     const addScoreSucceeded = await addScore(score as Score);
-
+    
     if (addScoreSucceeded) {
       res.status(200).json(score)
     } else {
       res.status(500).send(null)
     }
+    return
   }
 
   res.status(405).send(null);

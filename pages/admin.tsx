@@ -11,12 +11,16 @@ import { useEffect, useState } from 'react';
 import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';
 
 
+// TO DO - add admin user logins :
+// https://nextjs.org/docs/authentication  
+// https://github.com/vercel/next.js/tree/canary/examples/with-iron-session
 
-const NormalGame: NextPage = () => {
+const AdminPage: NextPage = () => {
 
 
     const [highScores, setHighScores] = useState<ScoreData>()
     const [message, setMessage] = useState<string>("")
+    const [passwordEntry, setPasswordEntry] = useState<string>("");
 
 
     const fetchScores = async () => {
@@ -42,8 +46,8 @@ const NormalGame: NextPage = () => {
         }
     }
 
-    const resetDatabase = async (password?: string) => {
-        const res = await requestResetDbGetFullResponse(password)
+    const resetDatabase = async () => {
+        const res = await requestResetDbGetFullResponse(passwordEntry)
 
         if (res.status === 200) {
             setMessage("RESET DB!")
@@ -73,11 +77,14 @@ const NormalGame: NextPage = () => {
 
                 <section>
                     <h2>Scores:</h2>
-                    {highScores && <HighScoreTable data={highScores} displayErrors />}
+                    <div>
                     <button onClick={() => resetDatabase()}>RESET</button>
-
+                    <input type="text" value={passwordEntry} onChange={event => {setPasswordEntry(event.target.value)}} placeholder="enter reset password"/>
+                    </div>
                     <button onClick={addTestScore}>add test score</button>
                     <p> :: {message}</p>
+
+                    {highScores && <HighScoreTable data={highScores} displayErrors />}
                 </section>
 
             </main>
@@ -86,4 +93,4 @@ const NormalGame: NextPage = () => {
 
 }
 
-export default NormalGame
+export default AdminPage
