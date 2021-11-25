@@ -41,6 +41,13 @@ const spaceShipIsRedCircle = new RenderTransformationRule(
             shape: shapes.circle,
         })
         marker.renderOnCanvas(ctx, viewPort)
+
+
+        const circleRadius = 3 + Math.floor (Date.now() % 500 / 50);
+        RenderFunctions.renderCircle.onCanvas(ctx,
+            { x: body.data.x, y: body.data.y, radius: viewPort.visibleLineWidth * circleRadius },
+            { strokeColor:"white", lineWidth:viewPort.visibleLineWidth/4 },
+            viewPort);
     }
 )
 
