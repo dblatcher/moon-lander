@@ -28,9 +28,16 @@ async function requestGetScores(): Promise<null | ScoreData> {
     return scoreData
 }
 
-//TO DO - SECURE THIS END POINT!
 async function requestResetDbGetFullResponse(password?: string) {
-    return await fetch("/api/reset-db")
+    return await fetch("/api/reset-db",{
+        method:"post",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            password
+        })
+    })
 }
 
 

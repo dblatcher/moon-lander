@@ -4,10 +4,10 @@ import { open } from 'sqlite';
 import { Score, ScoreData } from "../modules/ScoreData";
 
 const initialScores: Score[] = [
-    { name: "linda", score: 200, created: 71979 },
-    { name: "linda", score: 170, created: 7979 },
-    { name: "bob", score: 100 },
-    { name: "Gene", score: 355 },
+    { name: "linda", score: 120, created: 324611200020 },
+    { name: "linda", score: 80, created: 324601202000 },
+    { name: "bob", score: 60, created: 324601500000 },
+    { name: "Gene", score: 100, created: 324631205030 },
 ]
 
 
