@@ -8,7 +8,7 @@ import BarMeter from "./BarMeter";
 
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
-import { highlightLandingPad, makeTerrainGray, spaceShipIsRedCircle } from "../modules/minimap";
+import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle } from "../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
 
@@ -80,21 +80,21 @@ export default function MoonLanderGame(props: {
             </div>
         </div>
 
-        <div className={[styles.panel, styles["panel--metal"]].join(" ")}>
+        <div className={styles.panel}>
 
-            <div className={styles.lcd}>
+            <div className={styles.floatingLcd}>
                 <FullCanvas
                     world={world}
                     dontRenderBackground
+                    backGroundOverride={'transparent'}
                     dontRenderEffects
                     transformRules={[
-                        makeTerrainGray,
+                        makeTerrainBlack,
                         spaceShipIsRedCircle,
                         highlightLandingPad,
                     ]}
                     magnify={.2} />
             </div>
-            <span className={styles["bottom-rivets"]}></span>
         </div>
 
         <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>

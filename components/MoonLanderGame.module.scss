@@ -55,9 +55,11 @@
         right: 0;
         max-height: inherit;
 
-        .lcd {
+        .floatingLcd {
             max-height: inherit;
-            @include lcdDark();
+            @include lcd();
+            @include withScanLines(15s);
+            border: none;
 
             canvas {
                 max-height: inherit;

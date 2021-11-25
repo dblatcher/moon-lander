@@ -1,12 +1,12 @@
 import { RenderTransformationRule, Body, ViewPort, shapes, RenderFunctions } from "physics-worlds"
 
-const makeTerrainGray = new RenderTransformationRule(
+const makeTerrainBlack = new RenderTransformationRule(
     body => body.typeId === 'Terrain',
     (body: Body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
         const duplicate: Body = body.duplicate();
 
-        duplicate.data.color = "gray";
-        duplicate.data.fillColor = "gray"
+        duplicate.data.color = "black";
+        duplicate.data.fillColor = "black"
         duplicate.renderOnCanvas(ctx, viewPort)
     }
 )
@@ -20,11 +20,11 @@ const highlightLandingPad = new RenderTransformationRule(
         duplicate.data.fillColor = "rgb(0,255,0)";
         duplicate.renderOnCanvas(ctx, viewPort)
 
-        const circleFill = Date.now()%1000 > 500 ? "rgb(0,255,0)" : undefined;
+        const circleFill = Date.now()%1000 > 500 ? "white" : undefined;
 
         RenderFunctions.renderCircle.onCanvas(ctx,
             { x: body.data.x, y: body.data.y, radius: viewPort.visibleLineWidth * 10 },
-            { strokeColor:circleFill, lineWidth:viewPort.visibleLineWidth },
+            { strokeColor:circleFill, lineWidth:viewPort.pointRadius },
             viewPort);
     }
 )
@@ -46,12 +46,12 @@ const spaceShipIsRedCircle = new RenderTransformationRule(
         const circleRadius = 3 + Math.floor (Date.now() % 500 / 50);
         RenderFunctions.renderCircle.onCanvas(ctx,
             { x: body.data.x, y: body.data.y, radius: viewPort.visibleLineWidth * circleRadius },
-            { strokeColor:"white", lineWidth:viewPort.visibleLineWidth/4 },
+            { strokeColor:"white", lineWidth:viewPort.pointRadius },
             viewPort);
     }
 )
 
 
 export {
-    makeTerrainGray, spaceShipIsRedCircle, highlightLandingPad
+    makeTerrainBlack, spaceShipIsRedCircle, highlightLandingPad
 }
