@@ -219,6 +219,7 @@ export default class GameContainer extends React.Component {
                         mode={mode}
                         lives={lives}
                         level={level}
+                        numberOfLevels={numberOfLevels}
                         isPaused={this.isPaused}
                         handleWorldStatus={this.handleWorldStatus}
                         addPoints={this.addPoints}

@@ -26,6 +26,7 @@ export default function MoonLanderGame(props: {
     score: number
     lives: number
     level: number
+    numberOfLevels: number
     mode: "TITLE" | "PLAY" | "HIGHSCORE"
     isPaused: boolean
     controls: { [index: string]: boolean }
@@ -38,17 +39,24 @@ export default function MoonLanderGame(props: {
 }) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode,
+        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode, numberOfLevels,
         handleWorldStatus, startLevel, addPoints, addLives, goToTitles, goToHighScore
     } = props
 
+    const onLastLevel = (level + 1 > numberOfLevels);
 
     async function advance() {
         const fuelLeft = getPlayerFuel(world)?.value;
-        const points = fuelLeft ? Math.floor(fuelLeft / 50) : 0;
+        const points = (fuelLeft ? Math.floor(fuelLeft / 50) : 0) + (onLastLevel ? 10 : 100);
+
         await addPoints(points)
         await sleep(1000);
-        await startLevel(level + 1)
+
+        if (onLastLevel) {
+            await endSession()
+        } else {
+            await startLevel(level + 1)
+        }
     }
 
     async function retry() {
@@ -119,7 +127,11 @@ export default function MoonLanderGame(props: {
         {(playerHasLanded && mode === "PLAY") && (
             <article className={styles.dialogue}>
                 <p>You have landed!</p>
-                <button className={styles.button} onClick={advance}>Go to next level!</button>
+                {onLastLevel && <p> Congratulations! That was the last level!</p>}
+
+                <button className={styles.button} onClick={advance}>
+                    {onLastLevel ? 'Finished...' : 'Go to next level!'}
+                </button>
             </article>
         )}
 
