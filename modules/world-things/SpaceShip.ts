@@ -62,7 +62,7 @@ class SpaceShip extends Body {
     get landingPadIsRestingOn(): LandingPad | undefined {
 
         if (!this.seemsStill) { return undefined }
-        const landingPads: LandingPad[] = this.world.bodies.filter(body => body.typeId === 'LandingPad');
+        const landingPads: LandingPad[] = this.world.bodies.filter(body => body instanceof LandingPad).map(body=> body as LandingPad);
 
         return landingPads.find(landingPad => {
             const edges = Geometry.getPolygonLineSegments(landingPad.polygonPoints)
