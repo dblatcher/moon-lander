@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 import styles from '../styles/Page.module.scss'
 
-import { ScoreData, Score } from "../modules/ScoreData";
+import { ScoreData, Score } from "../modules/data-access/ScoreData";
 import HighScoreTable from '../components/HighScoreTable';
 import { useEffect, useState } from 'react';
 import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';

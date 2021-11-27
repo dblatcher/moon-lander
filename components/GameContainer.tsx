@@ -7,7 +7,7 @@ import { makeWorld, numberOfLevels } from "../modules/world-factory";
 import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
 import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
-import { ScoreData } from "../modules/ScoreData";
+import { ScoreData } from "../modules/data-access/ScoreData";
 import HighScoreEntry from "./HighScoreEntry";
 
 const SPEED = 50;

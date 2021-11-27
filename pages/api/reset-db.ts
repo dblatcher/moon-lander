@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { resetDataBase } from '../../modules/database';
+import { resetDataBase } from '../../modules/data-access/local-database';
 
 
 

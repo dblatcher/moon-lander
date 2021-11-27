@@ -8,7 +8,9 @@ import useSWR from 'swr';
 
 import styles from '../../styles/Page.module.scss'
 
-import { ScoreData } from "../../modules/ScoreData";
+import { ScoreData } from "../../modules/data-access/ScoreData";
+import { ReactNode } from 'react'
+import { getStaticConfiguration, ConfigurationProp } from '../../modules/configuration'
 
 const fetcher = async (url: string) => {
     const res = await fetch(url)
@@ -21,7 +23,20 @@ const fetcher = async (url: string) => {
 }
 
 
-const NormalGame: NextPage = () => {
+interface NormalGameProps {
+    config?: ConfigurationProp
+    children?: ReactNode
+}
+
+
+export async function getStaticProps(context: any): Promise<{ props: NormalGameProps }> {
+    const config = getStaticConfiguration();
+    return {
+        props: { config },
+    }
+}
+
+const NormalGame: NextPage = (props: NormalGameProps) => {
 
     const { data, error } = useSWR('/api/scores', fetcher)
 

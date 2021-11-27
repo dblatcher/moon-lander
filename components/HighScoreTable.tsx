@@ -1,4 +1,4 @@
-import { ScoreData } from "../modules/ScoreData";
+import { ScoreData } from "../modules/data-access/ScoreData";
 
 
 function formatDate(dateValue: number | null | undefined, asTime = false): string {

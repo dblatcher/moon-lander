@@ -1,5 +1,5 @@
 
-import { ScoreData } from "../modules/ScoreData";
+import { ScoreData } from "../modules/data-access/ScoreData";
 import HighScoreTable from "./HighScoreTable";
 import styles from "./MoonLanderTitleScreen.module.scss";
 

@@ -1,4 +1,4 @@
-import { Score, ScoreData } from "../ScoreData";
+import { Score, ScoreData } from "./ScoreData";
 
 async function requestAddScoreGetFullResponse(score: Score) {
     return await fetch("/api/scores", {

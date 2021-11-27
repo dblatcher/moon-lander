@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-import { Score, ScoreData } from "../modules/ScoreData";
+import { Score, ScoreData } from "./ScoreData";
 
 const initialScores: Score[] = [
     { name: "linda", score: 120, created: 324611200020 },

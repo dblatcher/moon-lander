@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getScores, addScore } from '../../modules/database';
-import { Score, ScoreData, validateScore } from "../../modules/ScoreData";
+import { getScores, addScore } from '../../modules/data-access/local-database';
+import { Score, ScoreData, validateScore } from "../../modules/data-access/ScoreData";
 
 
 export default async function handler(
