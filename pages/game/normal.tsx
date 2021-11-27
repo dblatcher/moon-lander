@@ -9,9 +9,9 @@ import useSWR from 'swr';
 import styles from '../../styles/Page.module.scss'
 
 import { ScoreData } from "../../modules/data-access/ScoreData";
-import { getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
+import { ConfigurationProp, getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
 
-const fetcher = async (url: string) => {
+const fetcher = async (url: string): Promise<ScoreData> => {
     const res = await fetch(url)
     const data: ScoreData = await res.json()
 
@@ -21,6 +21,19 @@ const fetcher = async (url: string) => {
     return data
 }
 
+const dummyFetcher = async (url: string): Promise<ScoreData> => {
+    return {
+        message: "",
+        scores: []
+    }
+}
+
+const makeFetcher = (config: ConfigurationProp) => {
+    if (config.dataBaseType === 'LOCAL') {
+        return fetcher;
+    }
+    return dummyFetcher;
+}
 
 export async function getStaticProps(context: any): Promise<{ props: PropsWithChildrenAndConfig }> {
     return {
@@ -30,7 +43,9 @@ export async function getStaticProps(context: any): Promise<{ props: PropsWithCh
 
 const NormalGame: NextPage = (props: PropsWithChildrenAndConfig) => {
 
-    const { data, error } = useSWR('/api/scores', fetcher)
+    const { config = { dataBaseType: 'NONE' } } = props;
+
+    const { data, error } = useSWR('/api/scores', makeFetcher(config))
 
     return (
         <div className={styles["full-height-page"]}>
@@ -44,7 +59,7 @@ const NormalGame: NextPage = (props: PropsWithChildrenAndConfig) => {
                 <Link href="/" passHref={true}>homepage</Link>
 
                 <FullScreenWrapper>
-                    <GameContainer scoreData={data} />
+                    <GameContainer scoreData={data} isDataBase={config.dataBaseType !== 'NONE'}/>
                 </FullScreenWrapper>
             </main>
         </div>

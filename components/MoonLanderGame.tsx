@@ -34,13 +34,12 @@ export default function MoonLanderGame(props: {
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
     startLevel: { (level?: number): Promise<GameContainerState> }
-    goToTitles: { (): Promise<GameContainerState> }
-    goToHighScore: { (): Promise<GameContainerState> }
+    endPlaySession: { (): Promise<GameContainerState> }
 }) {
 
     const {
         world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode, numberOfLevels,
-        handleWorldStatus, startLevel, addPoints, addLives, goToTitles, goToHighScore
+        handleWorldStatus, startLevel, addPoints, addLives, endPlaySession
     } = props
 
     const onLastLevel = (level + 1 > numberOfLevels);
@@ -53,7 +52,7 @@ export default function MoonLanderGame(props: {
         await sleep(1000);
 
         if (onLastLevel) {
-            await endSession()
+            await endPlaySession()
         } else {
             await startLevel(level + 1)
         }
@@ -62,13 +61,6 @@ export default function MoonLanderGame(props: {
     async function retry() {
         await addLives(-1);
         await startLevel();
-    }
-
-    async function endSession() {
-        if (score > 0) {
-            return goToHighScore()
-        }
-        return goToTitles()
     }
 
     return <article className={styles.article}>
@@ -142,7 +134,7 @@ export default function MoonLanderGame(props: {
                 {lives > 0 ? (
                     <button className={styles.button} onClick={retry}>Try again....</button>
                 ) : (
-                    <button className={styles.button} onClick={() => { endSession() }}>Game Over!</button>
+                    <button className={styles.button} onClick={() => { endPlaySession() }}>Game Over!</button>
                 )}
             </article>
         )}

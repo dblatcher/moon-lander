@@ -44,6 +44,7 @@ export default class GameContainer extends React.Component {
     props!: {
         title?: string
         scoreData?: ScoreData
+        isDataBase: boolean
     };
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -68,15 +69,13 @@ export default class GameContainer extends React.Component {
         this.addPoints = this.addPoints.bind(this)
         this.addLives = this.addLives.bind(this)
         this.startLevel = this.startLevel.bind(this)
+        this.endPlaySession = this.endPlaySession.bind(this)
         this.goToTitles = this.goToTitles.bind(this)
-        this.goToHighScore = this.goToHighScore.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
     handleCommandPress(command: string) {
         const { mode, playerHasDied, playerHasLanded } = this.state;
-
-
         switch (command) {
             case "START":
                 if (mode !== "TITLE") { return }
@@ -96,7 +95,6 @@ export default class GameContainer extends React.Component {
                 this.togglePaused();
                 break;
         }
-
     }
 
     handleWorldStatus(status: WorldStatus): void {
@@ -144,6 +142,17 @@ export default class GameContainer extends React.Component {
         })
     }
 
+    endPlaySession(): Promise<GameContainerState> {
+        const { isDataBase } = this.props;
+        const { score } = this.state;
+
+        if (isDataBase && score > 0) {
+            return this.goToHighScore()
+        }
+
+        return this.goToTitles();
+    }
+
     goToHighScore(): Promise<GameContainerState> {
         return new Promise(resolve => {
             this.setState({
@@ -157,7 +166,6 @@ export default class GameContainer extends React.Component {
     }
 
     goToTitles(): Promise<GameContainerState> {
-
         return new Promise(resolve => {
             this.world?.stopTime();
             this.world = undefined;
@@ -172,7 +180,6 @@ export default class GameContainer extends React.Component {
                 resolve(this.state)
             })
         })
-
     }
 
     addPoints(amount: number): Promise<GameContainerState> {
@@ -188,7 +195,7 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        const { title, scoreData } = this.props;
+        const { title, scoreData, isDataBase } = this.props;
         const { controls, playerHasLanded, playerHasDied, score, lives, mode, level } = this.state;
         const { world } = this;
 
@@ -200,13 +207,12 @@ export default class GameContainer extends React.Component {
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={() => { this.startLevel() }}>restart</button>
                     <button onClick={() => { this.startLevel(level + 1) }}>skip</button>
-                    <button onClick={() => { this.goToTitles() }}>quit</button>
-                    <button onClick={() => { this.goToHighScore() }}>quit to highscores</button>
+                    <button onClick={() => { this.endPlaySession() }}>end session</button>
                 </div>
 
 
                 {(mode === "TITLE") &&
-                    <MoonLanderTitleScreen scoreData={scoreData} />
+                    <MoonLanderTitleScreen scoreData={scoreData} isDataBase={isDataBase} />
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE")) &&
@@ -225,8 +231,7 @@ export default class GameContainer extends React.Component {
                         addPoints={this.addPoints}
                         addLives={this.addLives}
                         startLevel={this.startLevel}
-                        goToTitles={this.goToTitles}
-                        goToHighScore={this.goToHighScore}
+                        endPlaySession={this.endPlaySession}
                     />
                 }
 

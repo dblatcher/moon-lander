@@ -26,6 +26,8 @@ export async function getStaticProps(context: any): Promise<{ props: PropsWithCh
 const AdminPage: NextPage = (props: PropsWithChildrenAndConfig) => {
 
     const { config } = props;
+    const isDatabase = !!props.config?.dataBaseType && props.config?.dataBaseType !== 'NONE';
+
     const [dataMessage, setDataMessage] = useState<string>("")
     const [highScores, setHighScores] = useState<ScoreData>()
     const [scoresMessage, setScoresMessage] = useState<string>("")
@@ -66,12 +68,12 @@ const AdminPage: NextPage = (props: PropsWithChildrenAndConfig) => {
     }
 
     useEffect(() => {
-        if (!highScores) { fetchScores() }
+        if (!highScores && isDatabase) { fetchScores() }
     })
 
 
     return (
-        <div className={styles["full-height-page"]}>
+        <div className={""}>
 
             <Head>
                 <title>Admin</title>
@@ -86,18 +88,18 @@ const AdminPage: NextPage = (props: PropsWithChildrenAndConfig) => {
                 <section>
                     <h2>App Configuration</h2>
                     {config && Object.keys(config).map(key => <p key={key}><b>{key}: </b>{config[key]}</p>)}
+                    {!config && <p>NO CONFIGURATION</p>}
                 </section>
 
-                <DataSection
-                    message={dataMessage}
-                    resetDatabase={resetDatabase}
-                />
-
-                <ScoreSection
-                    message={scoresMessage}
-                    addTestScore={addTestScore}
-                    highScores={highScores} />
-
+                {isDatabase && <>
+                    <DataSection
+                        message={dataMessage}
+                        resetDatabase={resetDatabase} />
+                    <ScoreSection
+                        message={scoresMessage}
+                        addTestScore={addTestScore}
+                        highScores={highScores} />
+                </>}
             </main>
         </div>
     )
