@@ -9,14 +9,22 @@ import { ScoreData, Score } from "../modules/data-access/ScoreData";
 import HighScoreTable from '../components/HighScoreTable';
 import { useEffect, useState } from 'react';
 import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';
+import { getStaticConfiguration, PropsWithChildrenAndConfig } from '../modules/configuration';
 
+
+export async function getStaticProps(context: any): Promise<{ props: PropsWithChildrenAndConfig }> {
+    return {
+        props: { config: getStaticConfiguration() },
+    }
+}
 
 // TO DO - add admin user logins :
 // https://nextjs.org/docs/authentication  
 // https://github.com/vercel/next.js/tree/canary/examples/with-iron-session
 
-const AdminPage: NextPage = () => {
+const AdminPage: NextPage = (props:PropsWithChildrenAndConfig) => {
 
+    const {config} = props;
 
     const [highScores, setHighScores] = useState<ScoreData>()
     const [message, setMessage] = useState<string>("")
@@ -74,6 +82,11 @@ const AdminPage: NextPage = () => {
                 <Link href="/" passHref={true}>homepage</Link>
 
                 <h1>admin page</h1>
+
+                <section>
+                    <h2>App Configuration</h2>
+                    {config && Object.keys(config).map(key => <p key={key}><b>{key}: </b>{config[key]}</p>)}
+                </section>
 
                 <section>
                     <h2>Scores:</h2>
