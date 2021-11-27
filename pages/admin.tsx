@@ -5,11 +5,12 @@ import Link from 'next/link'
 
 import styles from '../styles/Page.module.scss'
 
-import { ScoreData, Score } from "../modules/data-access/ScoreData";
-import HighScoreTable from '../components/HighScoreTable';
 import { useEffect, useState } from 'react';
 import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';
 import { getStaticConfiguration, PropsWithChildrenAndConfig } from '../modules/configuration';
+import ScoreSection from '../components/admin/ScoreSection';
+import { Score, ScoreData } from '../modules/data-access/ScoreData';
+import DataSection from '../components/admin/DataSection';
 
 
 export async function getStaticProps(context: any): Promise<{ props: PropsWithChildrenAndConfig }> {
@@ -22,14 +23,23 @@ export async function getStaticProps(context: any): Promise<{ props: PropsWithCh
 // https://nextjs.org/docs/authentication  
 // https://github.com/vercel/next.js/tree/canary/examples/with-iron-session
 
-const AdminPage: NextPage = (props:PropsWithChildrenAndConfig) => {
+const AdminPage: NextPage = (props: PropsWithChildrenAndConfig) => {
 
-    const {config} = props;
-
+    const { config } = props;
+    const [dataMessage, setDataMessage] = useState<string>("")
     const [highScores, setHighScores] = useState<ScoreData>()
-    const [message, setMessage] = useState<string>("")
-    const [passwordEntry, setPasswordEntry] = useState<string>("");
+    const [scoresMessage, setScoresMessage] = useState<string>("")
 
+    const resetDatabase = async (passwordEntry: string) => {
+        const res = await requestResetDbGetFullResponse(passwordEntry)
+
+        if (res.status === 200) {
+            setDataMessage("RESET DB!")
+            fetchScores()
+        } else {
+            setDataMessage("FAILED TO RESET DB!")
+        }
+    }
 
     const fetchScores = async () => {
         const data = await requestGetScores();
@@ -38,37 +48,27 @@ const AdminPage: NextPage = (props:PropsWithChildrenAndConfig) => {
             console.log(data)
             setHighScores(data);
         } else {
-            setMessage("Could not get scores!")
+            setScoresMessage("Could not get scores!")
         }
     }
+
 
     const addTestScore = async () => {
         const scoreInput: Score = { name: "TEST", score: Math.floor(Math.random() * 100), created: Date.now() }
         const addScoreResult = await requestAddScore(scoreInput)
 
         if (addScoreResult) {
-            setMessage("ADDED SCORE TO DB : " + `${addScoreResult.name} = ${addScoreResult.score}`)
+            setScoresMessage("ADDED SCORE TO DB : " + `${addScoreResult.name} = ${addScoreResult.score}`)
             fetchScores();
         } else {
-            setMessage("FAILED ADD SCORE TO DB!")
-        }
-    }
-
-    const resetDatabase = async () => {
-        const res = await requestResetDbGetFullResponse(passwordEntry)
-
-        if (res.status === 200) {
-            setMessage("RESET DB!")
-            fetchScores();
-        } else {
-            setMessage("FAILED TO RESET DB!")
-            fetchScores();
+            setScoresMessage("FAILED ADD SCORE TO DB!")
         }
     }
 
     useEffect(() => {
         if (!highScores) { fetchScores() }
     })
+
 
     return (
         <div className={styles["full-height-page"]}>
@@ -77,7 +77,7 @@ const AdminPage: NextPage = (props:PropsWithChildrenAndConfig) => {
                 <title>Admin</title>
             </Head>
 
-            <main className={styles["full-height-container"]}>
+            <main className={""}>
 
                 <Link href="/" passHref={true}>homepage</Link>
 
@@ -88,17 +88,15 @@ const AdminPage: NextPage = (props:PropsWithChildrenAndConfig) => {
                     {config && Object.keys(config).map(key => <p key={key}><b>{key}: </b>{config[key]}</p>)}
                 </section>
 
-                <section>
-                    <h2>Scores:</h2>
-                    <div>
-                    <button onClick={() => resetDatabase()}>RESET</button>
-                    <input type="text" value={passwordEntry} onChange={event => {setPasswordEntry(event.target.value)}} placeholder="enter reset password"/>
-                    </div>
-                    <button onClick={addTestScore}>add test score</button>
-                    <p> :: {message}</p>
+                <DataSection
+                    message={dataMessage}
+                    resetDatabase={resetDatabase}
+                />
 
-                    {highScores && <HighScoreTable data={highScores} displayErrors />}
-                </section>
+                <ScoreSection
+                    message={scoresMessage}
+                    addTestScore={addTestScore}
+                    highScores={highScores} />
 
             </main>
         </div>
