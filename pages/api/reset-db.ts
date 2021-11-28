@@ -1,7 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { resetDataBase } from '../../modules/data-access/local-database';
+import { getStaticConfiguration } from '../../modules/configuration';
+import { LocalDatabase } from '../../modules/data-access/LocalDataBase';
 
+
+// TO DO - add more implementations
+const config = getStaticConfiguration()
+const dbInstance = config.dataBaseType == 'LOCAL' 
+    ? new LocalDatabase()
+    : new LocalDatabase();
 
 
 export default async function handler(
@@ -12,7 +19,7 @@ export default async function handler(
     if (req.method === "POST") {
 
         const { body } = req;
-        console.log("RESET SCORES POST", body) ;
+        console.log("RESET SCORES POST", body);
 
 
         if (body.password !== process.env.SCORE_RESET_PASSWORD) {
@@ -20,8 +27,8 @@ export default async function handler(
             return;
         }
 
-        const successfullyReset = await resetDataBase();
-    
+        const successfullyReset = await dbInstance.resetDataBase();
+
         if (successfullyReset) {
             res.status(200).send({});
         } else {

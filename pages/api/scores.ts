@@ -1,7 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getScores, addScore } from '../../modules/data-access/local-database';
+import { getStaticConfiguration } from '../../modules/configuration';
+import { LocalDatabase } from '../../modules/data-access/LocalDataBase';
 import { Score, ScoreData, validateScore } from "../../modules/data-access/ScoreData";
+
+// TO DO - add more implementations
+const config = getStaticConfiguration()
+const dbInstance = config.dataBaseType == 'LOCAL' 
+    ? new LocalDatabase()
+    : new LocalDatabase();
 
 
 export default async function handler(
@@ -10,7 +17,7 @@ export default async function handler(
 ) {
 
   if (req.method === "GET") {
-    const data = await getScores();
+    const data = await dbInstance.getScores();
     res.status(200).json(data)
     return;
   }
@@ -22,7 +29,7 @@ export default async function handler(
       res.status(400).send(null)
     }
     
-    const addScoreSucceeded = await addScore(score as Score);
+    const addScoreSucceeded = await dbInstance.addScore(score as Score);
     
     if (addScoreSucceeded) {
       res.status(200).json(score)
