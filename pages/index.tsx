@@ -3,6 +3,8 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { gameModes } from '../modules/GameMode'
+
 
 const Home: NextPage = () => {
   return (
@@ -24,12 +26,13 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
 
-          <Link href="/game/normal" passHref={true}>
-            <div className={styles.card}>
-              <h2>Play &rarr;</h2>
-              <p>Normal game page</p>
-            </div>
-          </Link>
+          {Object.keys(gameModes).map(key => (
+            <Link href={`/game/${key}`} passHref={true}>
+              <div className={styles.card}>
+                <h2>{gameModes[key].title}</h2>
+              </div>
+            </Link>
+          ))}
 
         </div>
       </main>

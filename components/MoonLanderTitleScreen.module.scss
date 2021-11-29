@@ -14,11 +14,17 @@
         @include metal;
         position: relative;
         padding: 2rem;
-        font-size: 3rem;
-
+        
         h1 {
             @include engraved(regular);
             margin: 0;
+            font-size: 3rem;
+        }
+        
+        h2 {
+            @include engraved(regular);
+            margin: 0;
+            font-size: 1.5rem;
         }
     }
 

@@ -1,11 +1,13 @@
+
 import { PropsWithChildren } from "react";
 
+
 interface ConfigurationProp {
-    [index:string]:string
+    [index: string]: string
     dataBaseType: "LOCAL" | "NONE"
 }
 
-interface PropsWithChildrenAndConfig extends PropsWithChildren<{}>{
+interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
     config?: ConfigurationProp
 }
 
@@ -24,5 +26,7 @@ function getStaticConfiguration(): ConfigurationProp {
     }
 }
 
+
+
 export type { ConfigurationProp, PropsWithChildrenAndConfig }
-export { getStaticConfiguration }
+export { getStaticConfiguration}

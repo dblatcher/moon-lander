@@ -1,14 +1,15 @@
 import React from "react";
-import { World } from "physics-worlds";
-import styles from "./GameContainer.module.scss";
-import KeyReader from "./KeyReader";
-
-import { makeWorld, numberOfLevels } from "../modules/world-factory";
-import { WorldStatus } from "../modules/worldValues";
 import MoonLanderGame from "./MoonLanderGame";
 import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
-import { ScoreData } from "../modules/data-access/ScoreData";
 import HighScoreEntry from "./HighScoreEntry";
+import KeyReader from "./KeyReader";
+import styles from "./GameContainer.module.scss";
+
+import { World } from "physics-worlds";
+
+import { WorldStatus } from "../modules/worldValues";
+import { ScoreData } from "../modules/data-access/ScoreData";
+import { GameMode } from "../modules/configuration";
 
 const SPEED = 50;
 
@@ -42,9 +43,9 @@ export type { GameContainerState }
 
 export default class GameContainer extends React.Component {
     props!: {
-        title?: string
         scoreData?: ScoreData
         isDataBase: boolean
+        gameMode: GameMode
     };
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -122,6 +123,7 @@ export default class GameContainer extends React.Component {
     }
 
     startLevel(levelNumber?: number): Promise<GameContainerState> {
+        const { numberOfLevels, makeWorld } = this.props.gameMode;
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
@@ -195,14 +197,14 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        const { title, scoreData, isDataBase } = this.props;
+        const { scoreData, isDataBase } = this.props;
+        const { numberOfLevels, title } = this.props.gameMode;
         const { controls, playerHasLanded, playerHasDied, score, lives, mode, level } = this.state;
         const { world } = this;
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
 
-                {title && <h2>{title}</h2>}
                 <div>
                     <button onClick={this.togglePaused}>pause</button>
                     <button onClick={() => { this.startLevel() }}>restart</button>
@@ -212,7 +214,7 @@ export default class GameContainer extends React.Component {
 
 
                 {(mode === "TITLE") &&
-                    <MoonLanderTitleScreen scoreData={scoreData} isDataBase={isDataBase} />
+                    <MoonLanderTitleScreen scoreData={scoreData} isDataBase={isDataBase} title={title} />
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE")) &&

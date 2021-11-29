@@ -26,6 +26,25 @@ function makeWorld(levelNumber = 1) {
     return world
 }
 
+const tutorialLevelFunctions = [
+    makeCityLevel,
+]
+
+const numberOfTutorialLevels = tutorialLevelFunctions.length
+
+function makeTutorialWorld(levelNumber = 1) {
+    if (levelNumber > numberOfTutorialLevels || levelNumber < 1) {
+        levelNumber = 1;
+    }
+    const world = tutorialLevelFunctions[levelNumber - 1]();
+    world.name = "WORLD_" + Date.now().toString();
+    console.log("created:", world.name)
+    return world
+}
+
+// to do - define these within the gameModes
+
 export {
-    makeWorld, numberOfLevels
+    makeWorld, numberOfLevels,
+    makeTutorialWorld, numberOfTutorialLevels
 }
