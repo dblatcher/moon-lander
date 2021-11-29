@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.scss'
 import { gameModes } from '../modules/GameMode'
 
 
@@ -16,23 +16,25 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to Moon Lander!
-        </h1>
 
-        <p className={styles.description}>
-          It&apos;s a game.
-        </p>
+        <div className={styles.frame}>
 
-        <div className={styles.grid}>
+          <header>
+            <h1>MOON LANDER</h1>
+            <span className={styles["bottom-rivets"]}></span>
+          </header>
 
-          {Object.keys(gameModes).map(key => (
-            <Link key={key} href={`/game/${key}`} passHref={true}>
-              <div className={styles.card}>
-                <h2>{gameModes[key].title}</h2>
-              </div>
-            </Link>
+          <ul className={styles.gameModeList}>
+            {Object.keys(gameModes).map(key => (
+              <li key={key} >
+                <Link key={key} href={`/game/${key}`} passHref={true}>
+                <a>
+                  <h2>{gameModes[key].title}</h2>
+                </a>
+                </Link>
+              </li>
           ))}
+          </ul>
 
         </div>
       </main>

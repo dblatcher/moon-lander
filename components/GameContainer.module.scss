@@ -3,6 +3,6 @@
 
 .component {
     @include fullHeight;
-    background-image: repeating-linear-gradient(-45deg, black 10px,black 15px, yellow 20px);
+    @include yellowAndBlackStripes;
     padding: .25rem;
 }

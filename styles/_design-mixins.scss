@@ -27,7 +27,6 @@
 
 @mixin metal {
     background: linear-gradient(320deg, rgb(90, 98, 90), rgb(225, 225, 225));
-
     padding: 10px;
 
     &:after, &:before {
@@ -99,4 +98,8 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     animation-duration: $speed;
+}
+
+@mixin yellowAndBlackStripes() {
+    background-image: repeating-linear-gradient(-45deg, black 10px,black 15px, yellow 20px);
 }

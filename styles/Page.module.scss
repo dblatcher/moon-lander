@@ -1,9 +1,7 @@
 @import "./_mixins.scss";
 
 .full-height-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    @include noScrollPage;
 }
 
 .full-height-container {

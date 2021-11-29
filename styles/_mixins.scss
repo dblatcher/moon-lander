@@ -7,6 +7,16 @@
     overflow: hidden;
 }
 
+@mixin noScrollPage {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
 
 @mixin dialog($shadow) {
     position: absolute;
