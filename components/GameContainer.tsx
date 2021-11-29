@@ -9,11 +9,9 @@ import { World } from "physics-worlds";
 
 import { WorldStatus } from "../modules/worldValues";
 import { ScoreData } from "../modules/data-access/ScoreData";
-import { GameMode } from "../modules/configuration";
+import { GameMode } from "../modules/GameMode";
 
-const SPEED = 50;
 
-const STARTING_LIVES = 1;
 
 const controlMapping: { [index: string]: string } = {
     "w": "up",
@@ -58,7 +56,7 @@ export default class GameContainer extends React.Component {
         this.state = {
             level: 1,
             score: 0,
-            lives: STARTING_LIVES,
+            lives: props.gameMode.startingLives,
             controls: {},
             playerHasLanded: false,
             playerHasDied: false,
@@ -75,8 +73,13 @@ export default class GameContainer extends React.Component {
         this.handleCommandPress = this.handleCommandPress.bind(this)
     }
 
+    componentWillUnmount() {
+        this.world = undefined;
+    }
+
     handleCommandPress(command: string) {
         const { mode, playerHasDied, playerHasLanded } = this.state;
+        const { startingLives } = this.props.gameMode;
         switch (command) {
             case "START":
                 if (mode !== "TITLE") { return }
@@ -84,7 +87,7 @@ export default class GameContainer extends React.Component {
                 this.setState({
                     mode: "PLAY",
                     level: 1,
-                    lives: STARTING_LIVES,
+                    lives: startingLives,
                     score: 0,
                 }, () => {
                     this.startLevel();
@@ -114,8 +117,9 @@ export default class GameContainer extends React.Component {
     }
 
     togglePaused(): void {
+        const { speed } = this.props.gameMode;
         if (!this.world) { return }
-        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : SPEED
+        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : speed
     }
 
     get isPaused(): boolean {
@@ -124,13 +128,14 @@ export default class GameContainer extends React.Component {
 
     startLevel(levelNumber?: number): Promise<GameContainerState> {
         const { numberOfLevels, makeWorld } = this.props.gameMode;
+        const { speed } = this.props.gameMode;
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
         return new Promise(resolve => {
             this.world?.stopTime();
             const newWorld = makeWorld(levelNumber);
-            newWorld.ticksPerSecond = SPEED;
+            newWorld.ticksPerSecond = speed;
             this.world = newWorld;
 
             this.setState({
@@ -173,7 +178,7 @@ export default class GameContainer extends React.Component {
             this.world = undefined;
             this.setState({
                 level: 1,
-                lives: STARTING_LIVES,
+                lives: this.props.gameMode.startingLives,
                 playerHasLanded: false,
                 playerHasDied: false,
                 score: 0,
