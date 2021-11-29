@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         <div className={styles.grid}>
 
           {Object.keys(gameModes).map(key => (
-            <Link href={`/game/${key}`} passHref={true}>
+            <Link key={key} href={`/game/${key}`} passHref={true}>
               <div className={styles.card}>
                 <h2>{gameModes[key].title}</h2>
               </div>
