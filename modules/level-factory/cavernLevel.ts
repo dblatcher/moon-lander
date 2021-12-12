@@ -36,13 +36,13 @@ const rockShape = [
     { x: -1, y: -.6 },
 ]
 
-function makeCavernLevel(): World {
+function makeCavernLevel(): [World] {
     const worldDimensions = {
         width: 4000,
         height: 2000
     }
 
-    return new World([
+    const world = new World([
         makeShip({
             x: worldDimensions.width * (2 / 12),
             y: worldDimensions.height - (worldDimensions.width * (4 / 16)),
@@ -165,6 +165,8 @@ function makeCavernLevel(): World {
         fillColor: gloomyBackground,
         hasHardEdges: true,
     });
+
+    return [world];
 }
 
 export { makeCavernLevel }

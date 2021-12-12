@@ -127,14 +127,14 @@ export default class GameContainer extends React.Component {
     }
 
     startLevel(levelNumber?: number): Promise<GameContainerState> {
-        const { numberOfLevels, makeWorld } = this.props.gameMode;
+        const { numberOfLevels, makeLevel } = this.props.gameMode;
         const { speed } = this.props.gameMode;
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
         return new Promise(resolve => {
             this.world?.stopTime();
-            const newWorld = makeWorld(levelNumber);
+            const [newWorld] = makeLevel(levelNumber);
             newWorld.ticksPerSecond = speed;
             this.world = newWorld;
 

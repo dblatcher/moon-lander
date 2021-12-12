@@ -1,40 +1,34 @@
-import { Body, Force, World, shapes, StarField, Area } from "physics-worlds";
+import { Force, World, shapes, StarField } from "physics-worlds";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { atmosphere, makeMountain, makeShip } from "./items";
+import { makeBuilding, makeShip } from "./items";
 
 
-function makeMountainsLevel(): World {
+
+
+function makeCityLevel(): [World] {
     const worldDimensions = {
-        width: 1400,
-        height: 2600
+        width: 2800,
+        height: 5000
     }
 
-    return new World([
+    const world = new World([
         makeShip({
-            x: worldDimensions.width / 2,
-            y: 310,
+            x: worldDimensions.width * (2 / 12),
+            y: worldDimensions.height - (worldDimensions.width * (6 / 16)),
         }),
 
-        new Area({
-            x: worldDimensions.width / 2,
-            y: worldDimensions.height,
-            fillColor: atmosphere,
-            size: worldDimensions.width,
-            density: .2
-        }),
 
-        new Body({
-            x: 610,
-            y: 40,
-            size: 10,
-            elasticity: .75,
-            density: 5.01
-        }),
+        makeBuilding((3.5 / 12), (1.5 / 16), (1 / 1), worldDimensions),
+        makeBuilding((2 / 12), (3 / 16), (1 / 2), worldDimensions),
+        makeBuilding((6.5 / 12), (5 / 16), (1 / 4), worldDimensions),
+        makeBuilding((6 / 12), (2 / 16), (1 / 2), worldDimensions),
+        makeBuilding((11 / 12), (4 / 16), (1 / 4), worldDimensions),
+        makeBuilding((9 / 12), (1.5 / 16), (1 / 1), worldDimensions),
 
         new LandingPad({
-            x: worldDimensions.width * (9.25 / 16),
-            y: worldDimensions.height - 220,
+            x: worldDimensions.width * (9.25 / 12),
+            y: worldDimensions.height - worldDimensions.width * (3/16),
             size: 75,
             fillColor: 'green',
             shape: shapes.polygon,
@@ -59,18 +53,15 @@ function makeMountainsLevel(): World {
             corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
         }),
 
-        makeMountain(2 / 12, 3.5 / 12, worldDimensions),
-        makeMountain(10 / 12, 1 / 18, worldDimensions),
-        makeMountain(5.5 / 12, 1 / 12, worldDimensions),
-        makeMountain(8 / 12, 2 / 12, worldDimensions),
+
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
-        globalGravityForce: new Force(100, 0),
+        globalGravityForce: new Force(50, 0),
 
         backGrounds: [
             new StarField({
-                numberOfStars: 30,
+                numberOfStars: 80,
                 depth: 3,
                 ...worldDimensions
             }),
@@ -81,14 +72,10 @@ function makeMountainsLevel(): World {
             }),
         ],
 
-        edges: {
-            left: "WRAP",
-            right: "WRAP",
-            bottom: "HARD",
-            top: "HARD"
-        },
+        hasHardEdges: true,
 
     });
+    return [world];
 }
 
-export { makeMountainsLevel }
+export { makeCityLevel }

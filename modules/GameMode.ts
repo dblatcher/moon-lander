@@ -6,7 +6,7 @@ import {
     makeCityLevel,
     makeBlueMoonLevel,
     makeCavernLevel,
-} from "./world-factory";
+} from "./level-factory";
 
 
 interface GameModeInput {
@@ -28,7 +28,7 @@ class GameMode implements GameModeInput {
         this.title = input.title
         this.key = input.key
         this.levelFunctions = input.levelFunctions
-        this.makeWorld = this.makeWorld.bind(this)
+        this.makeLevel = this.makeLevel.bind(this)
         this.speed = input.speed || 50
         this.startingLives = input.startingLives || 2
     }
@@ -37,13 +37,15 @@ class GameMode implements GameModeInput {
         return this.levelFunctions.length
     }
 
-    makeWorld(levelNumber = 1): World {
+    makeLevel(levelNumber = 1): [World] {
         if (levelNumber > this.numberOfLevels || levelNumber < 1) {
             levelNumber = 1;
         }
-        const world = this.levelFunctions[levelNumber - 1]();
+
+        const level = this.levelFunctions[levelNumber - 1]()
+        const [world] = level;
         world.name = "WORLD_" + Date.now().toString();
-        return world
+        return level
     }
 }
 

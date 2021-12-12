@@ -6,7 +6,7 @@ import { makeDaylightCityLevel } from "./dayLightCityLevel";
 import { makeMountainsLevel } from "./mountainLevel";
 
 
-interface LevelFunction { (): World };
+interface LevelFunction { (): [World] };
 
 export type { LevelFunction }
 export {

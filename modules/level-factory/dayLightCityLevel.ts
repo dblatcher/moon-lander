@@ -1,4 +1,4 @@
-import { Force, World, shapes, StarField } from "physics-worlds";
+import { Force, World, shapes } from "physics-worlds";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 import { makeBuilding, makeShip } from "./items";
@@ -6,29 +6,28 @@ import { makeBuilding, makeShip } from "./items";
 
 
 
-function makeCityLevel(): World {
+function makeDaylightCityLevel(): [World] {
     const worldDimensions = {
         width: 2800,
         height: 5000
     }
 
-    return new World([
+    const world = new World([
         makeShip({
             x: worldDimensions.width * (2 / 12),
-            y: worldDimensions.height - (worldDimensions.width * (6 / 16)),
+            y: worldDimensions.height - (worldDimensions.width * (3 / 16)),
         }),
 
-
-        makeBuilding((3.5 / 12), (1.5 / 16), (1 / 1), worldDimensions),
-        makeBuilding((2 / 12), (3 / 16), (1 / 2), worldDimensions),
-        makeBuilding((6.5 / 12), (5 / 16), (1 / 4), worldDimensions),
-        makeBuilding((6 / 12), (2 / 16), (1 / 2), worldDimensions),
-        makeBuilding((11 / 12), (4 / 16), (1 / 4), worldDimensions),
-        makeBuilding((9 / 12), (1.5 / 16), (1 / 1), worldDimensions),
+        makeBuilding((2.5 / 12), (1 / 16), (4 / 4), worldDimensions),
+        makeBuilding((2 / 12), (1.5 / 16), (2 / 4), worldDimensions, { fillColor: 'DarkKhaki', color: 'antiquewhite' }),
+        makeBuilding((7 / 12), (3.75 / 16), (2 / 4), worldDimensions),
+        makeBuilding((6 / 12), (2 / 16), (2 / 4), worldDimensions),
+        makeBuilding((9 / 12), (1.5 / 16), (3 / 4), worldDimensions, { fillColor: 'darkseagreen', color: 'antiquewhite' }),
+        makeBuilding((11 / 12), (3 / 16), (1 / 4), worldDimensions),
 
         new LandingPad({
             x: worldDimensions.width * (9.25 / 12),
-            y: worldDimensions.height - worldDimensions.width * (3/16),
+            y: worldDimensions.height - worldDimensions.width * (3 / 16),
             size: 75,
             fillColor: 'green',
             shape: shapes.polygon,
@@ -57,24 +56,19 @@ function makeCityLevel(): World {
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
-        globalGravityForce: new Force(50, 0),
+        globalGravityForce: new Force(75, 0),
+        airDensity: .25,
 
         backGrounds: [
-            new StarField({
-                numberOfStars: 80,
-                depth: 3,
-                ...worldDimensions
-            }),
-            new StarField({
-                numberOfStars: 20,
-                depth: 6,
-                ...worldDimensions
-            }),
+
         ],
+
+        fillColor: 'skyblue',
 
         hasHardEdges: true,
 
     });
+    return [world];
 }
 
-export { makeCityLevel }
+export { makeDaylightCityLevel }

@@ -3,14 +3,14 @@ import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 import { atmosphere, makeShip } from "./items";
 
-function makeBlueMoonLevel(): World {
+function makeBlueMoonLevel(): [World] {
 
     const worldDimensions = {
         width: 4000,
         height: 4000,
     }
 
-    return new World([
+    const world = new World([
         makeShip({
             x: worldDimensions.width / 2,
             y: (worldDimensions.height / 2) - 1200,
@@ -58,7 +58,7 @@ function makeBlueMoonLevel(): World {
             }),
         ],
     })
-
+    return [world];
 }
 
 export { makeBlueMoonLevel }
