@@ -1,12 +1,11 @@
-import { World } from "physics-worlds";
 import {
-    LevelFunction,
     makeDaylightCityLevel,
     makeMountainsLevel,
     makeCityLevel,
     makeBlueMoonLevel,
     makeCavernLevel,
 } from "./level-factory";
+import { Level, LevelFunction } from "./Level";
 
 
 interface GameModeInput {
@@ -37,7 +36,7 @@ class GameMode implements GameModeInput {
         return this.levelFunctions.length
     }
 
-    makeLevel(levelNumber = 1): [World] {
+    makeLevel(levelNumber = 1): Level {
         if (levelNumber > this.numberOfLevels || levelNumber < 1) {
             levelNumber = 1;
         }

@@ -134,7 +134,12 @@ export default class GameContainer extends React.Component {
 
         return new Promise(resolve => {
             this.world?.stopTime();
-            const [newWorld] = makeLevel(levelNumber);
+            const [newWorld, levelIntro] = makeLevel(levelNumber);
+
+            if (levelIntro) {
+                console.log(levelIntro.message)
+            }
+
             newWorld.ticksPerSecond = speed;
             this.world = newWorld;
 
