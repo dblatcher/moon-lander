@@ -27,7 +27,7 @@ export default function MoonLanderGame(props: {
     lives: number
     level: number
     numberOfLevels: number
-    mode: "TITLE" | "PLAY" | "HIGHSCORE"
+    mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     isPaused: boolean
     controls: { [index: string]: boolean }
     handleWorldStatus: { (worldStatus: WorldStatus): void }

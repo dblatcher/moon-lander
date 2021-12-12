@@ -1,0 +1,11 @@
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+
+.article {
+    @include dialog(false);
+    text-align: center;
+    justify-content: flex-start;
+    background-color:black;
+    color: white;
+    padding: 2rem;
+}

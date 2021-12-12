@@ -1,8 +1,10 @@
 class LevelIntro {
 
-    message: string
+    title: string
+    message?: string[]
 
-    constructor(message: string) {
+    constructor(title: string, message: string[] = []) {
+        this.title = title
         this.message = message
     }
 

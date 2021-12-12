@@ -6,7 +6,7 @@ function createShipCloseUp() {
     const world = new World([
         new SpaceShip({
             x: 100, y: 100, size: 25,
-            fillColor: 'blue',
+            fillColor: 'white',
             heading: Geometry._deg * (135),
             thrust: 100, maxThrust: 200,
             immobile: true

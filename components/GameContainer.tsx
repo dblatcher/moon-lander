@@ -10,6 +10,8 @@ import { World } from "physics-worlds";
 import { WorldStatus } from "../modules/worldValues";
 import { ScoreData } from "../modules/data-access/ScoreData";
 import { GameMode } from "../modules/GameMode";
+import { LevelIntro } from "../modules/LevelIntro";
+import MoonLanderLevelIntro from "./MoonLanderLevelIntro";
 
 
 
@@ -34,7 +36,8 @@ interface GameContainerState {
     controls: { [index: string]: boolean }
     playerHasLanded: boolean
     playerHasDied: boolean
-    mode: "TITLE" | "PLAY" | "HIGHSCORE"
+    mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
+    levelIntro?: LevelIntro
 }
 
 export type { GameContainerState }
@@ -82,16 +85,22 @@ export default class GameContainer extends React.Component {
         const { startingLives } = this.props.gameMode;
         switch (command) {
             case "START":
-                if (mode !== "TITLE") { return }
+                if (mode == "TITLE") {
 
-                this.setState({
-                    mode: "PLAY",
-                    level: 1,
-                    lives: startingLives,
-                    score: 0,
-                }, () => {
-                    this.startLevel();
-                })
+                    this.setState({
+                        mode: "PLAY",
+                        level: 1,
+                        lives: startingLives,
+                        score: 0,
+                    }, () => {
+                        this.startLevel();
+                    })
+                } else if (mode == "INTRO") {
+                    if (this.isPaused) {this.togglePaused()}
+                    this.setState({
+                        mode: "PLAY"
+                    })
+                }
                 break;
 
             case "PAUSE":
@@ -136,19 +145,24 @@ export default class GameContainer extends React.Component {
             this.world?.stopTime();
             const [newWorld, levelIntro] = makeLevel(levelNumber);
 
-            if (levelIntro) {
-                console.log(levelIntro.message)
-            }
-
-            newWorld.ticksPerSecond = speed;
             this.world = newWorld;
+            this.world.tick()
 
             this.setState({
-                mode: "PLAY",
+                mode: levelIntro ? "INTRO" : "PLAY",
                 level: levelNumber,
+                levelIntro,
                 playerHasLanded: false,
                 playerHasDied: false,
             }, () => {
+
+                if (levelIntro) {
+                    console.log(levelIntro.title)
+                } else {
+                    newWorld.ticksPerSecond = speed;
+                }
+    
+
                 resolve(this.state)
             })
         })
@@ -209,7 +223,7 @@ export default class GameContainer extends React.Component {
     render() {
         const { scoreData, isDataBase } = this.props;
         const { numberOfLevels, title } = this.props.gameMode;
-        const { controls, playerHasLanded, playerHasDied, score, lives, mode, level } = this.state;
+        const { controls, playerHasLanded, playerHasDied, score, lives, mode, level, levelIntro } = this.state;
         const { world } = this;
 
         return (
@@ -227,7 +241,7 @@ export default class GameContainer extends React.Component {
                     <MoonLanderTitleScreen scoreData={scoreData} isDataBase={isDataBase} title={title} />
                 }
 
-                {(!!world && (mode === "PLAY" || mode === "HIGHSCORE")) &&
+                {(!!world && (mode === "PLAY" || mode === "HIGHSCORE" || mode === "INTRO")) &&
                     <MoonLanderGame key={world.name}
                         world={world}
                         playerHasDied={playerHasDied}
@@ -245,6 +259,10 @@ export default class GameContainer extends React.Component {
                         startLevel={this.startLevel}
                         endPlaySession={this.endPlaySession}
                     />
+                }
+
+                {(mode === "INTRO") &&
+                    <MoonLanderLevelIntro levelIntro={levelIntro} />
                 }
 
                 {(mode === "HIGHSCORE") &&

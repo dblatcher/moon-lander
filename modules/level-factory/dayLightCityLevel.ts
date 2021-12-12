@@ -7,7 +7,7 @@ import { makeBuilding, makeShip } from "./items";
 
 import { Level } from "../Level";
 
-const makeDaylightCityLevel: {():Level} = function () {
+const makeDaylightCityLevel: { (): Level } = function () {
     const worldDimensions = {
         width: 2800,
         height: 5000
@@ -71,7 +71,13 @@ const makeDaylightCityLevel: {():Level} = function () {
         }
     );
 
-    const levelIntro = new LevelIntro('hello daylight city world');
+    const levelIntro = new LevelIntro(
+        "Daylight City",
+        [
+            "There is a thick atmosphere here.", 
+            "It will take a lot of thrust to get off the ground, but it will slow your descent.",
+        ],
+    );
 
     return [world, levelIntro];
 }

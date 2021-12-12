@@ -22,8 +22,8 @@ export default function FullCanvas(props: {
             if (dontRenderBackground) { viewPort.current.dontRenderBackground = true }
             if (dontRenderEffects) { viewPort.current.dontRenderEffects = true }
             if (backGroundOverride) { viewPort.current.backGroundOverride = backGroundOverride }
+            viewPort.current.renderCanvas()
         }
-
     }, [world])
 
     return <canvas ref={canvas}></canvas>
