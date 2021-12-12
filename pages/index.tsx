@@ -4,6 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 import { gameModes } from '../modules/GameMode'
+import AnimationCanvas from '../components/AnimationCanvas'
+import { createShipCloseUp } from '../modules/animation-factory'
+
 
 
 const Home: NextPage = () => {
@@ -28,13 +31,22 @@ const Home: NextPage = () => {
             {Object.keys(gameModes).map(key => (
               <li key={key} >
                 <Link key={key} href={`/game/${key}`} passHref={true}>
-                <a>
-                  <h2>{gameModes[key].title}</h2>
-                </a>
+                  <a>
+                    <h2>{gameModes[key].title}</h2>
+                  </a>
                 </Link>
               </li>
-          ))}
+            ))}
           </ul>
+
+          <AnimationCanvas makeWorld={createShipCloseUp}
+            frameStyle={{
+              border: "2px solid yellow",
+              borderRadius: '50%',
+              overflow: 'clip',
+              textAlign: 'center',
+              alignSelf: 'center',
+            }} />
 
         </div>
       </main>
