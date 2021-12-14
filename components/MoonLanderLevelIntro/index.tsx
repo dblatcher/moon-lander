@@ -10,30 +10,35 @@ export default class MoonLanderLevelIntro extends React.Component {
     }>;
 
     state!: Readonly<{
-        htmlContent: string
+        htmlContent?: string
     }>;
 
     constructor(props: MoonLanderLevelIntro["props"]) {
         super(props)
         this.state = {
-            htmlContent: ""
+            htmlContent: undefined
         }
     }
 
     componentDidMount() {
+        this.loadBreifing()
+    }
+
+    loadBreifing() {
         const { levelIntro } = this.props
         if (!levelIntro) { return }
 
         levelIntro.loadContent()
             .then(htmlContent => {
-                this.setState({
-                    htmlContent
-                })
+                setTimeout(() => {
+                    this.setState({ htmlContent })
+                }, 100);
             })
     }
 
     render() {
         const { levelIntro } = this.props
+        const { htmlContent } = this.state
 
         if (!levelIntro) {
             return (
@@ -45,8 +50,29 @@ export default class MoonLanderLevelIntro extends React.Component {
 
         return (
             <article className={styles.article}>
-                <div dangerouslySetInnerHTML={{ __html: this.state.htmlContent }}>
-                </div>
+                <header className={styles.panelHeader}>
+                    <label>Misson Briefing</label>
+                </header>
+                <section className={styles.lcdScreen}>
+
+                    {htmlContent ? (
+                        <div
+                            className={styles.breifingContent}
+                            dangerouslySetInnerHTML={{ __html: htmlContent }}>
+                        </div>
+
+                    ) : (
+                        <div>
+                            <h4>Loading mission briefing<span className={styles.blinking}>...</span></h4>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    )}
+
+                    <p className={styles.blinking} style={{textAlign:'center'}}>PRESS SPACE TO BEGIN</p>
+                </section>
+
+                <span className={styles["bottom-rivets"]}></span>
             </article>
         )
     }
