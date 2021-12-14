@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import fs from 'fs';
 import { join } from 'path'
 
-const contentDirectory = join(process.cwd(), '_content')
+const contentDirectory = join(process.cwd(), 'public/content')
 
 type Data = {
   content?: string
