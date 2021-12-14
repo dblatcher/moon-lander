@@ -1,28 +1,26 @@
 /**
- * Fetch data from an api route and return the data's content string
- * @param path the path to fetch from - probably staring /api/content/
+ * Fetch a public file and return the file's content as string
+ * @param path the path to fetch from - probably staring /content/
  * @returns the content, or null if the request fails.
  */
 async function loadContent(path: string): Promise<string | null> {
 
-    const response = await fetch(path).catch(error => {
-        console.warn(error)
-        return null
-    });
+    const response = await fetch(path);
+    console.log({response})
 
-    if (!response) {
-        console.warn(`load content <${path}> failed: no response`);
+    if (!response.ok) {
+        console.warn(`load content <${path}> failed: ${response.statusText}`);
         return null
     }
 
-    const data = await response.json();
+    const body = await response.text()
 
-    if (!data.content || data.error) {
-        console.warn(`load content <${path}> failed:`, data);
+    if (!body) {
+        console.warn(`load content <${path}> failed:`);
         return null
     }
 
-    return data.content
+    return body
 }
 
 

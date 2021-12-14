@@ -13,7 +13,7 @@ class LevelIntro {
     }
 
     async loadContent() {
-        const content = await loadContent("/api/content/"+this.filename);
+        const content = await loadContent(`/content/${this.filename}.md`);
         if (!content) {return this.makeFallbackMarkUp()}
         return micromark(content);
     }
