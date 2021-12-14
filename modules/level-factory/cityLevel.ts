@@ -1,4 +1,6 @@
 import { Force, World, shapes, StarField } from "physics-worlds";
+import { Level } from "../Level";
+import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 import { makeBuilding, makeShip } from "./items";
@@ -6,7 +8,7 @@ import { makeBuilding, makeShip } from "./items";
 
 
 
-function makeCityLevel(): [World] {
+function makeCityLevel(): Level {
     const worldDimensions = {
         width: 2800,
         height: 5000
@@ -75,7 +77,10 @@ function makeCityLevel(): [World] {
         hasHardEdges: true,
 
     });
-    return [world];
+
+    const levelIntro = new LevelIntro("Moon Base","moon-base")
+
+    return [world,levelIntro];
 }
 
 export { makeCityLevel }

@@ -6,8 +6,7 @@ import { makeBuilding, makeShip } from "./items";
 
 
 import { Level } from "../Level";
-
-const makeDaylightCityLevel: { (): Level } = function () {
+function makeDaylightCityLevel(): Level {
     const worldDimensions = {
         width: 2800,
         height: 5000

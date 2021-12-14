@@ -1,9 +1,11 @@
 import { World, shapes, StarField, Area } from "physics-worlds";
+import { Level } from "../Level";
+import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 import { atmosphere, makeShip } from "./items";
 
-function makeBlueMoonLevel(): [World] {
+function makeBlueMoonLevel(): Level {
 
     const worldDimensions = {
         width: 4000,
@@ -58,7 +60,10 @@ function makeBlueMoonLevel(): [World] {
             }),
         ],
     })
-    return [world];
+
+    const levelIntro = new LevelIntro("Blue Moon", "blue-moon");
+
+    return [world, levelIntro];
 }
 
 export { makeBlueMoonLevel }

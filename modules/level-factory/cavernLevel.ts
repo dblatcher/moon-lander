@@ -1,4 +1,6 @@
 import { Force, World, shapes, Geometry } from "physics-worlds";
+import { Level } from "../Level";
+import { LevelIntro } from "../LevelIntro";
 
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
@@ -36,7 +38,7 @@ const rockShape = [
     { x: -1, y: -.6 },
 ]
 
-function makeCavernLevel(): [World] {
+function makeCavernLevel(): Level {
     const worldDimensions = {
         width: 4000,
         height: 2000
@@ -166,7 +168,9 @@ function makeCavernLevel(): [World] {
         hasHardEdges: true,
     });
 
-    return [world];
+    const levelIntro = new LevelIntro('Cavern', 'cavern') 
+
+    return [world, levelIntro];
 }
 
 export { makeCavernLevel }

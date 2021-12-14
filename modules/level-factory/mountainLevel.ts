@@ -1,10 +1,12 @@
 import { Body, Force, World, shapes, StarField, Area } from "physics-worlds";
+import { Level } from "../Level";
+import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 import { atmosphere, makeMountain, makeShip } from "./items";
 
 
-function makeMountainsLevel(): [World] {
+function makeMountainsLevel(): Level {
     const worldDimensions = {
         width: 1400,
         height: 2600
@@ -89,7 +91,10 @@ function makeMountainsLevel(): [World] {
         },
 
     });
-    return [world];
+
+    const levelIntro = new LevelIntro('Mountain Drop', 'mountain-drop');
+
+    return [world, levelIntro];
 }
 
 export { makeMountainsLevel }
