@@ -9,9 +9,27 @@ export default class MoonLanderLevelIntro extends React.Component {
         levelIntro?: LevelIntro
     }>;
 
+    state!: Readonly<{
+        htmlContent: string
+    }>;
+
     constructor(props: MoonLanderLevelIntro["props"]) {
         super(props)
+        this.state = {
+            htmlContent: ""
+        }
+    }
 
+    componentDidMount() {
+        const { levelIntro } = this.props
+        if (!levelIntro) { return }
+
+        levelIntro.loadContent()
+            .then(htmlContent => {
+                this.setState({
+                    htmlContent
+                })
+            })
     }
 
     render() {
@@ -27,8 +45,8 @@ export default class MoonLanderLevelIntro extends React.Component {
 
         return (
             <article className={styles.article}>
-                <h3>{levelIntro.title}</h3>
-                {levelIntro.message?.map(line => <p>{line}</p>)}
+                <div dangerouslySetInnerHTML={{ __html: this.state.htmlContent }}>
+                </div>
             </article>
         )
     }

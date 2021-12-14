@@ -72,11 +72,7 @@ const makeDaylightCityLevel: { (): Level } = function () {
     );
 
     const levelIntro = new LevelIntro(
-        "Daylight City",
-        [
-            "There is a thick atmosphere here.", 
-            "It will take a lot of thrust to get off the ground, but it will slow your descent.",
-        ],
+        "Daylight City", "daylight-city"
     );
 
     return [world, levelIntro];

@@ -1,13 +1,26 @@
+import { micromark } from 'micromark'
+import { loadContent } from '../lib/loadContent'
+
+
 class LevelIntro {
 
     title: string
-    message?: string[]
+    filename: string
 
-    constructor(title: string, message: string[] = []) {
+    constructor(title: string, filename: string) {
         this.title = title
-        this.message = message
+        this.filename = filename
     }
 
+    async loadContent() {
+        const content = await loadContent("/api/content/"+this.filename);
+        if (!content) {return this.makeFallbackMarkUp()}
+        return micromark(content);
+    }
+
+    makeFallbackMarkUp() {
+        return `<h3>${this.title}</h3><p><b>ERROR:</b> misson briefing not found!</p>`
+    }
 }
 
 export { LevelIntro }
