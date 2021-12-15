@@ -4,6 +4,9 @@ import {
     makeCityLevel,
     makeBlueMoonLevel,
     makeCavernLevel,
+    tutorial1,
+    tutorial2,
+    tutorial3,
 } from "./level-factory";
 import { Level, LevelFunction } from "./Level";
 
@@ -63,9 +66,11 @@ const gameModes: { [index: string]: GameMode } = {
     'tutorial': new GameMode({
         title: "tutorial",
         key: "tutorial",
-        speed: 75,
+        speed: 40,
         levelFunctions: [
-            makeCityLevel,
+            tutorial1,
+            tutorial2,
+            tutorial3,
         ]
     }),
 }
