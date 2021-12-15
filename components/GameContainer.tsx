@@ -156,12 +156,9 @@ export default class GameContainer extends React.Component {
                 playerHasDied: false,
             }, () => {
 
-                if (levelIntro) {
-                    console.log(levelIntro.title)
-                } else {
+                if (!levelIntro) {
                     newWorld.ticksPerSecond = speed;
                 }
-    
 
                 resolve(this.state)
             })

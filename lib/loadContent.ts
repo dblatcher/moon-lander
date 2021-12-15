@@ -6,7 +6,6 @@
 async function loadContent(path: string): Promise<string | null> {
 
     const response = await fetch(path);
-    console.log({response})
 
     if (!response.ok) {
         console.warn(`load content <${path}> failed: ${response.statusText}`);
