@@ -8,6 +8,7 @@ import BarMeter from "./BarMeter";
 import DangerMeter from "./DangerMeter";
 import NumberPanel from "./NumberPanel";
 import Dialogue from "./Dialogue";
+import PausedSymbol from "./PausedSymbol";
 
 import { GameContainerState } from "./GameContainer";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
@@ -118,7 +119,7 @@ export default function MoonLanderGame(props: Readonly<{
         </div>
 
         {(playerHasLanded && mode === "PLAY") && (
-            <Dialogue>
+            <Dialogue placement="TOP" design="YELLOW">
                 <p>You have landed!</p>
                 {onLastLevel && <p> Congratulations! That was the last level!</p>}
 
@@ -129,7 +130,7 @@ export default function MoonLanderGame(props: Readonly<{
         )}
 
         {(playerHasDied && mode === "PLAY") && (
-            <Dialogue>
+            <Dialogue placement="TOP" design="YELLOW">
                 <p>You have crashed.</p>
 
                 {lives > 0 ? (
@@ -141,9 +142,7 @@ export default function MoonLanderGame(props: Readonly<{
         )}
 
         {(isPaused && mode === "PLAY") && (
-            <Dialogue>
-                <p>PAUSED</p>
-            </Dialogue>
+            <PausedSymbol />
         )}
 
         <WorldInterface

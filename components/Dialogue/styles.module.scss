@@ -5,18 +5,33 @@
 .container {
 
     @include dialog(false);
-    top: 25%;
-    background-color: yellow;
-    padding: .5rem 1.5rem;
-    color: black;
 
-    border-top: 10px solid;
-    border-bottom: 10px solid;
-    border-image: repeating-linear-gradient(290deg, black 10px,black 15px, yellow 20px) 30 / 1 / 0 stretch;
-
-    .button {
-        background-color: forestgreen;
-        color: white;
-        @include button();
+    p {
+        margin: 0;
     }
+
+    &.yellow {
+        background-color: yellow;
+        padding: .5rem 1.5rem;
+        color: black;
+
+        border-top: 10px solid;
+        border-bottom: 10px solid;
+        border-image: repeating-linear-gradient(100deg, black 0px,black 5px, yellow 9px, yellow 10px) 30 / 1 / 0 stretch;
+    }
+
+    &.plain {
+        background-color: white;
+        padding: .5rem;
+    }
+
+    &.top {
+        top: 25%;
+    }
+}
+
+.button {
+    background-color: forestgreen;
+    color: white;
+    @include button();
 }
