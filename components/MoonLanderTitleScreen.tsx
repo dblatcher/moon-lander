@@ -5,11 +5,11 @@ import styles from "./MoonLanderTitleScreen.module.scss";
 
 export default function MoonLanderTitleScreen(props: {
     scoreData?: ScoreData
-    isDataBase: boolean
+    showHighScores: boolean
     title?: string
 }) {
 
-    const { scoreData, isDataBase, title } = props;
+    const { scoreData, showHighScores, title } = props;
 
     return <article className={styles.article}>
         <header>
@@ -22,7 +22,7 @@ export default function MoonLanderTitleScreen(props: {
         </div>
 
 
-        {(isDataBase && scoreData) && (
+        {(showHighScores && scoreData) && (
             <section className={styles.tableWrapper}>
                 <HighScoreTable data={scoreData} />
             </section>

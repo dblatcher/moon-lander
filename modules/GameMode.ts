@@ -17,14 +17,16 @@ interface GameModeInput {
     levelFunctions: LevelFunction[]
     speed?: number
     startingLives?: number
+    noScores?: boolean
 }
 
-class GameMode implements GameModeInput {
+class GameMode implements Required<GameModeInput> {
     title: string
     key: string
     levelFunctions: LevelFunction[]
     speed: number
     startingLives: number
+    noScores: boolean
 
     constructor(input: GameModeInput) {
         this.title = input.title
@@ -33,6 +35,7 @@ class GameMode implements GameModeInput {
         this.makeLevel = this.makeLevel.bind(this)
         this.speed = input.speed || 50
         this.startingLives = input.startingLives || 2
+        this.noScores = input.noScores || false
     }
 
     get numberOfLevels(): number {
@@ -66,7 +69,9 @@ const gameModes: { [index: string]: GameMode } = {
     'tutorial': new GameMode({
         title: "tutorial",
         key: "tutorial",
+        startingLives: Infinity,
         speed: 40,
+        noScores: true,
         levelFunctions: [
             tutorial1,
             tutorial2,

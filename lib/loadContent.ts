@@ -1,6 +1,6 @@
 /**
  * Fetch a public file and return the file's content as string
- * @param path the path to fetch from - probably staring /content/
+ * @param path the path to fetch from
  * @returns the content, or null if the request fails.
  */
 async function loadContent(path: string): Promise<string | null> {

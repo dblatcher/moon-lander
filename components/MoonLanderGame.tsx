@@ -14,19 +14,20 @@ import styles from "./MoonLanderGame.module.scss";
 
 import { GameContainerState } from "./GameContainer";
 import DangerMeter from "./DangerMeter";
+import { GameMode } from "../modules/GameMode";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export default function MoonLanderGame(props: {
-    world: World,
+export default function MoonLanderGame(props: Readonly<{
+    world: World
+    gameMode: GameMode
     playerHasLanded: boolean
     playerHasDied: boolean
     score: number
     lives: number
     level: number
-    numberOfLevels: number
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     isPaused: boolean
     controls: { [index: string]: boolean }
@@ -35,21 +36,21 @@ export default function MoonLanderGame(props: {
     addLives: { (points: number): Promise<GameContainerState> }
     startLevel: { (level?: number): Promise<GameContainerState> }
     endPlaySession: { (): Promise<GameContainerState> }
-}) {
+}>) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode, numberOfLevels,
+        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode, gameMode,
         handleWorldStatus, startLevel, addPoints, addLives, endPlaySession
     } = props
 
-    const onLastLevel = (level + 1 > numberOfLevels);
+    const onLastLevel = (level + 1 > gameMode.numberOfLevels);
 
     async function advance() {
         const fuelLeft = getPlayerFuel(world)?.value;
-        const points = (fuelLeft ? Math.floor(fuelLeft / 50) : 0) + (onLastLevel ? 10 : 100);
+        const points = (fuelLeft ? Math.floor(fuelLeft / 50) : 0) + (onLastLevel ? 100 : 50);
 
         await addPoints(points)
-        await sleep(1000);
+        await sleep(250);
 
         if (onLastLevel) {
             await endPlaySession()
@@ -66,8 +67,8 @@ export default function MoonLanderGame(props: {
     return <article className={styles.article}>
         <aside className={styles.numberPanel}>
             <div>level: <span>{level}</span></div>
-            <div>score: <span>{score}</span></div>
-            <div>lives: <span>{lives}</span></div>
+            {!gameMode.noScores && <div>score: <span>{score}</span></div>}
+            {isFinite(gameMode.startingLives) && <div>lives: <span>{lives}</span></div>}
             <span className={styles["bottom-rivets"]}></span>
         </aside>
         <div className={styles.mainScreen}>

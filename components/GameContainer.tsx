@@ -96,7 +96,7 @@ export default class GameContainer extends React.Component {
                         this.startLevel();
                     })
                 } else if (mode == "INTRO") {
-                    if (this.isPaused) {this.togglePaused()}
+                    if (this.isPaused) { this.togglePaused() }
                     this.setState({
                         mode: "PLAY"
                     })
@@ -166,10 +166,10 @@ export default class GameContainer extends React.Component {
     }
 
     endPlaySession(): Promise<GameContainerState> {
-        const { isDataBase } = this.props;
+        const { isDataBase, gameMode } = this.props;
         const { score } = this.state;
 
-        if (isDataBase && score > 0) {
+        if (!gameMode.noScores && isDataBase && score > 0) {
             return this.goToHighScore()
         }
 
@@ -206,6 +206,8 @@ export default class GameContainer extends React.Component {
     }
 
     addPoints(amount: number): Promise<GameContainerState> {
+        const { gameMode } = this.props;
+        if (gameMode.noScores) { return Promise.resolve(this.state) }
         return new Promise(resolve => {
             this.setState({ score: this.state.score + amount }, () => { resolve(this.state) })
         })
@@ -218,8 +220,7 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        const { scoreData, isDataBase } = this.props;
-        const { numberOfLevels, title } = this.props.gameMode;
+        const { scoreData, isDataBase, gameMode } = this.props;
         const { controls, playerHasLanded, playerHasDied, score, lives, mode, level, levelIntro } = this.state;
         const { world } = this;
 
@@ -235,12 +236,16 @@ export default class GameContainer extends React.Component {
 
 
                 {(mode === "TITLE") &&
-                    <MoonLanderTitleScreen scoreData={scoreData} isDataBase={isDataBase} title={title} />
+                    <MoonLanderTitleScreen
+                        showHighScores = {!gameMode.noScores && isDataBase}
+                        scoreData={scoreData}
+                        title={gameMode.title} />
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE" || mode === "INTRO")) &&
                     <MoonLanderGame key={world.name}
                         world={world}
+                        gameMode={gameMode}
                         playerHasDied={playerHasDied}
                         playerHasLanded={playerHasLanded}
                         controls={controls}
@@ -248,7 +253,6 @@ export default class GameContainer extends React.Component {
                         mode={mode}
                         lives={lives}
                         level={level}
-                        numberOfLevels={numberOfLevels}
                         isPaused={this.isPaused}
                         handleWorldStatus={this.handleWorldStatus}
                         addPoints={this.addPoints}
