@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEventHandler, useEffect, useRef, useState } from "react";
 import { requestAddScore } from "../../modules/data-access/requests";
+import Dialogue from "../Dialogue";
 import styles from "./styles.module.scss"
 
 
@@ -37,18 +38,18 @@ export default function HighScoreEntry(props: {
     const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton, styles["greenButton--disabled"]].join(" ");
 
     return (
-        <article className={styles.frame}>
+        <Dialogue design="METAL">
 
-            <header>
+            <header className={styles.header}>
                 <h2>High Score</h2>
             </header>
 
             <p>You got {score} points!</p>
-            <form onSubmit={handleSubmit}>
+            <form className="scoreForm" onSubmit={handleSubmit}>
                 <div>
                     <label>Name:</label>
                     <div className={styles["input-frame"]}>
-                        <input ref={inputRef} type="text" value={name} onChange={handleChange} />
+                        <input className={styles["input"]} ref={inputRef} type="text" value={name} onChange={handleChange} />
                     </div>
                 </div>
                 <div>
@@ -57,7 +58,7 @@ export default function HighScoreEntry(props: {
                 </div>
             </form>
             <span className={styles["bottom-rivets"]}></span>
-        </article>
+        </Dialogue>
     )
 
 }

@@ -1,13 +1,6 @@
 @import "../../styles/mixins";
 @import "../../styles/design-mixins";
 
-.article {
-    @include dialog(false);
-    @include metal();
-    padding: 1rem;
-    max-width: 100%;
-}
-
 .panelHeader {
     font-size: 1.25rem;
     font-weight: 700;

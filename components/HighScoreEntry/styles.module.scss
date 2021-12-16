@@ -3,21 +3,17 @@
 @import "../../styles/button";
 
 
-.frame {
-    @include dialog(true);
-    @include metal();
-    text-align: center;
-    padding: 2rem 3rem;
+.header {
+    font-size: 1.5rem;
 
-    header {
-        font-size: 1.5rem;
-
-        h2 {
-            @include engraved(regular);
-        }
+    h2 {
+        @include engraved(regular);
+        margin: 0;
     }
+}
 
-    form > div {
+.scoreForm {
+    &> div {
         padding: 0 0 1rem 0;
         display: flex;
         min-width: 14rem;
@@ -25,32 +21,35 @@
         align-items: center;
     }
 
-    form label {
+    label {
         margin-right: .5rem;
     }
-
-    form input[type=text] {
-        color: inherit;
-        font-family: monospace;
-        font-size: 150%;
-        background: none;
-        border: none;
-        outline: none;
-    }
-
-    .input-frame {
-        @include lcd;
-        @include withScanLines(45s);
-    }
-
-    .orangeButton {
-        background-color: darkorange;
-        color: white;
-        @include button();
-    }
-    .greenButton {
-        background-color: forestgreen;
-        color: white;
-        @include button();
-    }
 }
+
+.input[type=text] {
+    color: inherit;
+    font-family: monospace;
+    font-size: 150%;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+
+.input-frame {
+    @include lcd;
+    @include withScanLines(45s);
+}
+
+.orangeButton {
+    background-color: darkorange;
+    color: white;
+    @include button();
+}
+
+.greenButton {
+    background-color: forestgreen;
+    color: white;
+    @include button();
+}
+

@@ -25,6 +25,11 @@
         padding: .5rem;
     }
 
+    &.metal {
+        @include metal();
+        padding: 1rem;
+    }
+
     &.top {
         top: 25%;
     }

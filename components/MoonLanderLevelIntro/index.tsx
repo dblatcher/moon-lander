@@ -1,5 +1,6 @@
 import React from "react";
 import { LevelIntro } from "../../modules/LevelIntro";
+import Dialogue from "../Dialogue";
 
 import styles from "./style.module.scss";
 
@@ -49,7 +50,7 @@ export default class MoonLanderLevelIntro extends React.Component {
         }
 
         return (
-            <article className={styles.article}>
+            <Dialogue design="METAL">
                 <header className={styles.panelHeader}>
                     <label>Misson Briefing</label>
                 </header>
@@ -71,9 +72,7 @@ export default class MoonLanderLevelIntro extends React.Component {
 
                     <p className={styles.blinking} style={{textAlign:'center'}}>PRESS SPACE TO BEGIN</p>
                 </section>
-
-                <span className={styles["bottom-rivets"]}></span>
-            </article>
+            </Dialogue>
         )
     }
 }
