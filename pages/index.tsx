@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           </header>
 
           <ul className={styles.gameModeList}>
-            {Object.keys(gameModes).map(key => (
+            {Object.keys(gameModes).filter(key => !gameModes[key].hidden).map(key => (
               <li key={key} >
                 <Link key={key} href={`/game/${key}`} passHref={true}>
                   <a>
