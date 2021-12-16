@@ -1,0 +1,22 @@
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+
+.numberPanel {
+    @include metal;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    div {
+        margin: 0 1rem;
+        display: flex;
+        align-items: center;
+
+        span {
+            @include lcd();
+            min-width: 4rem;
+            text-align: right;
+        }
+    }
+}

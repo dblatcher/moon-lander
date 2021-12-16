@@ -5,16 +5,19 @@ import FullCanvas from "./FullCanvas";
 import WorldInterface from "./WorldInterface";
 import FollowBodyCanvas from "./FollowBodyCanvas";
 import BarMeter from "./BarMeter";
+import DangerMeter from "./DangerMeter";
+import NumberPanel from "./NumberPanel";
+import Dialogue from "./Dialogue";
 
+import { GameContainerState } from "./GameContainer";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
+import { GameMode } from "../modules/GameMode";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle } from "../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
+import dialogueStyles from "./Dialogue/styles.module.scss";
 
-import { GameContainerState } from "./GameContainer";
-import DangerMeter from "./DangerMeter";
-import { GameMode } from "../modules/GameMode";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -65,12 +68,9 @@ export default function MoonLanderGame(props: Readonly<{
     }
 
     return <article className={styles.article}>
-        <aside className={styles.numberPanel}>
-            <div>level: <span>{level}</span></div>
-            {!gameMode.noScores && <div>score: <span>{score}</span></div>}
-            {isFinite(gameMode.startingLives) && <div>lives: <span>{lives}</span></div>}
-            <span className={styles["bottom-rivets"]}></span>
-        </aside>
+
+        <NumberPanel gameMode={gameMode} score={score} level={level} lives={lives} />
+
         <div className={styles.mainScreen}>
             <div>
                 <FollowBodyCanvas
@@ -118,32 +118,32 @@ export default function MoonLanderGame(props: Readonly<{
         </div>
 
         {(playerHasLanded && mode === "PLAY") && (
-            <article className={styles.dialogue}>
+            <Dialogue>
                 <p>You have landed!</p>
                 {onLastLevel && <p> Congratulations! That was the last level!</p>}
 
-                <button className={styles.button} onClick={advance}>
+                <button className={dialogueStyles.button} onClick={advance}>
                     {onLastLevel ? 'Finished...' : 'Go to next level!'}
                 </button>
-            </article>
+            </Dialogue>
         )}
 
         {(playerHasDied && mode === "PLAY") && (
-            <article className={styles.dialogue}>
+            <Dialogue>
                 <p>You have crashed.</p>
 
                 {lives > 0 ? (
-                    <button className={styles.button} onClick={retry}>Try again....</button>
+                    <button className={dialogueStyles.button} onClick={retry}>Try again....</button>
                 ) : (
-                    <button className={styles.button} onClick={() => { endPlaySession() }}>Game Over!</button>
+                    <button className={dialogueStyles.button} onClick={() => { endPlaySession() }}>Game Over!</button>
                 )}
-            </article>
+            </Dialogue>
         )}
 
         {(isPaused && mode === "PLAY") && (
-            <article className={styles.dialogue}>
+            <Dialogue>
                 <p>PAUSED</p>
-            </article>
+            </Dialogue>
         )}
 
         <WorldInterface

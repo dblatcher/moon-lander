@@ -1,31 +1,10 @@
 @import "../styles/mixins";
 @import "../styles/design-mixins";
-@import "../styles/button";
 
 .article {
     @include fullHeight;
     justify-content: stretch;
     align-items: center;
-
-    .numberPanel {
-        @include metal;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        div {
-            margin: 0 1rem;
-            display: flex;
-            align-items: center;
-
-            span {
-                @include lcd();
-                min-width: 4rem;
-                text-align: right;
-            }
-        }
-    }
 
     .mainScreen {
         @include fullHeight;
@@ -82,24 +61,4 @@
         align-items: flex-end;
         justify-content: center;
     }
-
-    .dialogue {
-
-        @include dialog(false);
-        top: 25%;
-        background-color: yellow;
-        padding: .5rem 1.5rem;
-        color: black;
-
-        border-top: 10px solid;
-        border-bottom: 10px solid;
-        border-image: repeating-linear-gradient(290deg, black 10px,black 15px, yellow 20px) 30 / 1 / 0 stretch;
-
-        .button {
-            background-color: forestgreen;
-            color: white;
-            @include button();
-        }
-    }
-
 }
