@@ -18,7 +18,9 @@ interface GameModeInput {
     speed?: number
     startingLives?: number
     noScores?: boolean
-    hidden?:boolean
+    hidden?: boolean
+    allowSkip?: boolean
+    allowRestart?: boolean
 }
 
 class GameMode implements Required<GameModeInput> {
@@ -29,6 +31,8 @@ class GameMode implements Required<GameModeInput> {
     startingLives: number
     noScores: boolean
     hidden: boolean
+    allowSkip: boolean
+    allowRestart: boolean
 
     constructor(input: GameModeInput) {
         this.title = input.title
@@ -39,6 +43,8 @@ class GameMode implements Required<GameModeInput> {
         this.startingLives = input.startingLives || 2
         this.noScores = input.noScores || false
         this.hidden = input.hidden || false
+        this.allowRestart = input.allowRestart || false
+        this.allowSkip = input.allowSkip || false
     }
 
     get numberOfLevels(): number {
@@ -72,9 +78,11 @@ const gameModes: { [index: string]: GameMode } = {
     'trainer': new GameMode({
         title: "arcade mode(trainer)",
         key: "trainer",
-        startingLives:Infinity,
-        noScores:true,
-        hidden:true,
+        startingLives: Infinity,
+        noScores: true,
+        hidden: true,
+        allowSkip:true,
+        allowRestart:true,
         levelFunctions: [
             makeDaylightCityLevel,
             makeMountainsLevel,
@@ -89,6 +97,8 @@ const gameModes: { [index: string]: GameMode } = {
         startingLives: Infinity,
         speed: 40,
         noScores: true,
+        allowSkip:true,
+        allowRestart:true,
         levelFunctions: [
             tutorial1,
             tutorial2,

@@ -83,8 +83,8 @@ export default class GameContainer extends React.Component {
     }
 
     handleCommandPress(command: string) {
-        const { mode, playerHasDied, playerIsStranded, playerHasLanded } = this.state;
-        const { startingLives } = this.props.gameMode;
+        const { mode } = this.state;
+        const { startingLives, speed } = this.props.gameMode;
         switch (command) {
             case "START":
                 if (mode == "TITLE") {
@@ -98,7 +98,9 @@ export default class GameContainer extends React.Component {
                         this.startLevel();
                     })
                 } else if (mode == "INTRO") {
-                    if (this.isPaused) { this.togglePaused() }
+                    if (this.world) {
+                        this.world.ticksPerSecond = speed;
+                    }
                     this.setState({
                         mode: "PLAY"
                     })
@@ -106,7 +108,6 @@ export default class GameContainer extends React.Component {
                 break;
 
             case "PAUSE":
-                if (mode !== "PLAY" || playerHasDied || playerHasLanded || playerIsStranded) { return }
                 this.togglePaused();
                 break;
         }
@@ -132,9 +133,13 @@ export default class GameContainer extends React.Component {
     }
 
     togglePaused(): void {
-        const { speed } = this.props.gameMode;
         if (!this.world) { return }
-        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : speed
+        const { mode, playerHasDied, playerHasLanded, playerIsStranded } = this.state
+        const { speed } = this.props.gameMode;
+        if (mode !== "PLAY" || playerHasDied || playerHasLanded || playerIsStranded) { return }
+
+        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : speed;
+        this.forceUpdate();
     }
 
     get isPaused(): boolean {
@@ -236,14 +241,6 @@ export default class GameContainer extends React.Component {
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
 
-                <div>
-                    <button onClick={this.togglePaused}>pause</button>
-                    <button onClick={() => { this.startLevel() }}>restart</button>
-                    <button onClick={() => { this.startLevel(level + 1) }}>skip</button>
-                    <button onClick={() => { this.endPlaySession() }}>end session</button>
-                </div>
-
-
                 {(mode === "TITLE") &&
                     <MoonLanderTitleScreen
                         showHighScores={!gameMode.noScores && isDataBase}
@@ -284,6 +281,15 @@ export default class GameContainer extends React.Component {
                     report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
                     reportPress={(command: string) => { this.handleCommandPress(command) }}
                     controlMapping={controlMapping} />
+
+                {(mode !== "TITLE") &&
+                    <div className={styles.menuBar}>
+                        <button onClick={this.togglePaused}>Pause</button>
+                        {gameMode.allowRestart && <button onClick={() => { this.startLevel() }}>Restart Level</button>}
+                        {gameMode.allowSkip && <button onClick={() => { this.startLevel(level + 1) }}>Skip Level</button>}
+                        <button onClick={() => { this.endPlaySession() }}>Quit</button>
+                    </div>
+                }
             </main>
         )
     }
