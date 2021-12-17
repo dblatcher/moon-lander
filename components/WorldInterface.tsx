@@ -1,14 +1,7 @@
 import { World } from "physics-worlds";
 import React, { useEffect } from "react";
+import { WorldStatus } from "../modules/worldValues";
 
-
-interface ControlFunction {
-    (world: World, key: string): void
-}
-
-interface WorldStatusFunction {
-    (world: World): any
-}
 
 /**
  * Component that executes a control function on a World,
@@ -19,9 +12,9 @@ interface WorldStatusFunction {
 export default function WorldInterface(props: {
     controls: { [index: string]: boolean }
     displayInput?: boolean
-    controlFunction: ControlFunction
+    controlFunction: { (world: World, key: string): void }
     reportWorldStatus: Function
-    getWorldStatus: WorldStatusFunction
+    getWorldStatus: { (world: World): WorldStatus }
     world: World
 }) {
 

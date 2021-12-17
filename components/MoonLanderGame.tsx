@@ -29,6 +29,7 @@ export default function MoonLanderGame(props: Readonly<{
     gameMode: GameMode
     playerHasLanded: boolean
     playerHasDied: boolean
+    playerIsStranded: boolean
     score: number
     lives: number
     level: number
@@ -43,7 +44,7 @@ export default function MoonLanderGame(props: Readonly<{
 }>) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied, isPaused, mode, gameMode,
+        world, playerHasLanded, level, score, lives, controls, playerHasDied,playerIsStranded, isPaused, mode, gameMode,
         handleWorldStatus, startLevel, addPoints, addLives, endPlaySession
     } = props
 
@@ -132,6 +133,18 @@ export default function MoonLanderGame(props: Readonly<{
         {(playerHasDied && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
                 <p>You have crashed.</p>
+
+                {lives > 0 ? (
+                    <button className={dialogueStyles.button} onClick={retry}>Try again....</button>
+                ) : (
+                    <button className={dialogueStyles.button} onClick={() => { endPlaySession() }}>Game Over!</button>
+                )}
+            </Dialogue>
+        )}
+
+        {(playerIsStranded && mode === "PLAY") && (
+            <Dialogue placement="TOP" design="YELLOW">
+                <p>You have ran out of fuel.</p>
 
                 {lives > 0 ? (
                     <button className={dialogueStyles.button} onClick={retry}>Try again....</button>

@@ -39,15 +39,17 @@ const getPlayerSpeed = (world: World) => {
 interface WorldStatus {
     playerDead?: boolean
     landingPadPlayerIsOn?: LandingPad
+    playerStranded?: boolean
 }
 
 
-const getWorldStatus = (world: World) => {
+const getWorldStatus = (world: World): WorldStatus => {
     const player = getPlayerSpaceship(world)
 
     return {
         playerDead: !player,
-        landingPadPlayerIsOn: player?.landingPadIsRestingOn
+        landingPadPlayerIsOn: player?.landingPadIsRestingOn,
+        playerStranded: player?.isStranded
     }
 }
 

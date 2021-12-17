@@ -31,6 +31,7 @@ interface SpaceShipData extends BodyData {
 
 class SpaceShip extends Body {
     data: SpaceShipData
+    ticksBeenStrandedFor: number
 
     constructor(config: SpaceShipData, momentum: Force = Force.none) {
         super(config, momentum);
@@ -44,6 +45,8 @@ class SpaceShip extends Body {
 
         this.data.shootCooldownCurrent = 0
         this.data.shootCooldownDuration = config.shootCooldownDuration || 20
+
+        this.ticksBeenStrandedFor = 0;
     }
 
     get typeId() { return 'SpaceShip' }
@@ -59,10 +62,20 @@ class SpaceShip extends Body {
         return true
     }
 
+    get seemsStranded(): boolean {
+        const { seemsStill } = this;
+        const { fuel } = this.data;
+        return seemsStill && fuel === 0;
+    }
+
+    get isStranded(): boolean {
+        return this.ticksBeenStrandedFor > 10
+    }
+
     get landingPadIsRestingOn(): LandingPad | undefined {
 
         if (!this.seemsStill) { return undefined }
-        const landingPads: LandingPad[] = this.world.bodies.filter(body => body instanceof LandingPad).map(body=> body as LandingPad);
+        const landingPads: LandingPad[] = this.world.bodies.filter(body => body instanceof LandingPad).map(body => body as LandingPad);
 
         return landingPads.find(landingPad => {
             const edges = Geometry.getPolygonLineSegments(landingPad.polygonPoints)
@@ -88,6 +101,9 @@ class SpaceShip extends Body {
                 this.data.thrust = 0;
             }
         }
+
+        if (this.seemsStranded) { this.ticksBeenStrandedFor++ }
+        else { this.ticksBeenStrandedFor = 0 }
     }
 
     renderFlame(ctx: CanvasRenderingContext2D, viewPort: ViewPort, leftBoosterCorner: Geometry.Point, rightBoosterCorner: Geometry.Point) {
@@ -153,12 +169,12 @@ class SpaceShip extends Body {
 
         RenderFunctions.renderWedge.onCanvas(ctx, chasis, { fillColor: fillColor, lineWidth: 1 / 2 }, viewPort);
         RenderFunctions.renderWedge.onCanvas(ctx, cockpit, { fillColor: color, lineWidth: 1 / 2 }, viewPort);
-        RenderFunctions.renderPolygon.onCanvas(ctx, leftLeg, { strokeColor: color, fillColor:"gray" }, viewPort)
-        RenderFunctions.renderPolygon.onCanvas(ctx, rightLeg, { strokeColor: color, fillColor:"gray" }, viewPort)
+        RenderFunctions.renderPolygon.onCanvas(ctx, leftLeg, { strokeColor: color, fillColor: "gray" }, viewPort)
+        RenderFunctions.renderPolygon.onCanvas(ctx, rightLeg, { strokeColor: color, fillColor: "gray" }, viewPort)
 
         if (thrust > 0) {
-            this.renderFlame(ctx,viewPort,leftBackPoint,leftBackRightPoint);
-            this.renderFlame(ctx,viewPort,rightBackPoint,rightBackLeftPoint);
+            this.renderFlame(ctx, viewPort, leftBackPoint, leftBackRightPoint);
+            this.renderFlame(ctx, viewPort, rightBackPoint, rightBackLeftPoint);
         }
     }
 

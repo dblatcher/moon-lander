@@ -34,7 +34,8 @@ interface GameContainerState {
     score: number
     lives: number,
     controls: { [index: string]: boolean }
-    playerHasLanded: boolean
+    playerHasLanded: boolean  // should wrap these properies into a WorldStatus prop to 
+    playerIsStranded: boolean // the generalise and simplify this component
     playerHasDied: boolean
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     levelIntro?: LevelIntro
@@ -63,6 +64,7 @@ export default class GameContainer extends React.Component {
             controls: {},
             playerHasLanded: false,
             playerHasDied: false,
+            playerIsStranded: false,
             mode: "TITLE",
         }
 
@@ -81,7 +83,7 @@ export default class GameContainer extends React.Component {
     }
 
     handleCommandPress(command: string) {
-        const { mode, playerHasDied, playerHasLanded } = this.state;
+        const { mode, playerHasDied, playerIsStranded, playerHasLanded } = this.state;
         const { startingLives } = this.props.gameMode;
         switch (command) {
             case "START":
@@ -104,14 +106,14 @@ export default class GameContainer extends React.Component {
                 break;
 
             case "PAUSE":
-                if (mode !== "PLAY" || playerHasDied || playerHasLanded) { return }
+                if (mode !== "PLAY" || playerHasDied || playerHasLanded || playerIsStranded) { return }
                 this.togglePaused();
                 break;
         }
     }
 
     handleWorldStatus(status: WorldStatus): void {
-        const { landingPadPlayerIsOn, playerDead } = status;
+        const { landingPadPlayerIsOn, playerDead, playerStranded } = status;
         const modification: any = {}
 
         if (!this.state.playerHasDied && playerDead) {
@@ -120,6 +122,10 @@ export default class GameContainer extends React.Component {
 
         if (!this.state.playerHasLanded && landingPadPlayerIsOn) {
             modification.playerHasLanded = true
+        }
+
+        if (!this.state.playerIsStranded && playerStranded) {
+            modification.playerIsStranded = true
         }
 
         this.setState(modification)
@@ -154,6 +160,7 @@ export default class GameContainer extends React.Component {
                 levelIntro,
                 playerHasLanded: false,
                 playerHasDied: false,
+                playerIsStranded: false,
             }, () => {
 
                 if (!levelIntro) {
@@ -182,6 +189,7 @@ export default class GameContainer extends React.Component {
                 mode: "HIGHSCORE",
                 playerHasLanded: false,
                 playerHasDied: false,
+                playerIsStranded: false,
             }, () => {
                 resolve(this.state)
             })
@@ -197,6 +205,7 @@ export default class GameContainer extends React.Component {
                 lives: this.props.gameMode.startingLives,
                 playerHasLanded: false,
                 playerHasDied: false,
+                playerIsStranded: false,
                 score: 0,
                 mode: "TITLE"
             }, () => {
@@ -221,7 +230,7 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { controls, playerHasLanded, playerHasDied, score, lives, mode, level, levelIntro } = this.state;
+        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro } = this.state;
         const { world } = this;
 
         return (
@@ -237,7 +246,7 @@ export default class GameContainer extends React.Component {
 
                 {(mode === "TITLE") &&
                     <MoonLanderTitleScreen
-                        showHighScores = {!gameMode.noScores && isDataBase}
+                        showHighScores={!gameMode.noScores && isDataBase}
                         scoreData={scoreData}
                         title={gameMode.title} />
                 }
@@ -247,6 +256,7 @@ export default class GameContainer extends React.Component {
                         world={world}
                         gameMode={gameMode}
                         playerHasDied={playerHasDied}
+                        playerIsStranded={playerIsStranded}
                         playerHasLanded={playerHasLanded}
                         controls={controls}
                         score={score}
