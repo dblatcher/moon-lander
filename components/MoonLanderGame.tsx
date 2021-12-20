@@ -14,7 +14,7 @@ import { GameContainerState } from "./GameContainer";
 import { controlSpaceShip } from "../modules/controlSpaceShip";
 import { GameMode } from "../modules/GameMode";
 import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
-import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle } from "../modules/minimap";
+import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas } from "../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
 import dialogueStyles from "./Dialogue/styles.module.scss";
@@ -95,6 +95,7 @@ export default function MoonLanderGame(props: Readonly<{
                         makeTerrainBlack,
                         spaceShipIsRedCircle,
                         highlightLandingPad,
+                        noAreas,
                     ]}
                     magnify={.2} />
             </div>

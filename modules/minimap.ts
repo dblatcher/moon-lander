@@ -1,9 +1,10 @@
-import { RenderTransformationRule, Body, ViewPort, shapes, RenderFunctions } from "physics-worlds"
+import { RenderTransformationRule, Body, ViewPort, shapes, RenderFunctions, Area } from "physics-worlds"
+
 
 const makeTerrainBlack = new RenderTransformationRule(
-    body => body.typeId === 'Terrain',
-    (body: Body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
-        const duplicate: Body = body.duplicate();
+    thing => (thing as Body|Area).typeId === 'Terrain',
+    (thing, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
+        const duplicate: Body = thing.duplicate();
 
         duplicate.data.color = "black";
         duplicate.data.fillColor = "black"
@@ -12,8 +13,8 @@ const makeTerrainBlack = new RenderTransformationRule(
 )
 
 const highlightLandingPad = new RenderTransformationRule(
-    body => body.typeId === 'LandingPad',
-    (body: Body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
+    thing => (thing as Body|Area).typeId ==='LandingPad',
+    (body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
         const duplicate: Body = body.duplicate();
 
         duplicate.data.color = "rgb(0,255,0)";
@@ -30,8 +31,8 @@ const highlightLandingPad = new RenderTransformationRule(
 )
 
 const spaceShipIsRedCircle = new RenderTransformationRule(
-    body => body.typeId === 'SpaceShip',
-    (body: Body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
+    thing => (thing as Body|Area).typeId === 'SpaceShip',
+    (body, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
 
         const marker = new Body({
             x: body.data.x,
@@ -51,7 +52,13 @@ const spaceShipIsRedCircle = new RenderTransformationRule(
     }
 )
 
+const noAreas = new RenderTransformationRule(
+    thing => thing instanceof(Area),
+    (area, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
+
+    }
+)
 
 export {
-    makeTerrainBlack, spaceShipIsRedCircle, highlightLandingPad
+    makeTerrainBlack, spaceShipIsRedCircle, highlightLandingPad, noAreas
 }
