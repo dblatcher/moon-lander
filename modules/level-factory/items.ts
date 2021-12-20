@@ -1,4 +1,4 @@
-import { Geometry, shapes, RadialGradientFill, AbstractGradientFill, LinearGradientFill } from "physics-worlds";
+import { Geometry, shapes, RadialGradientFill, AbstractFill, LinearGradientFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 import { SpaceShip, SpaceShipData } from "../world-things/SpaceShip";
 import { Terrain } from "../world-things/Terrain";
@@ -68,7 +68,7 @@ function makeMountain(fromLeft: number, size: number, worldDimensions: { height:
 
 function makeBuilding(fromLeft: number, height: number, relativeWidth: number, worldDimensions: { width: number, height: number },
     config: {
-        fillColor?: string | AbstractGradientFill,
+        fillColor?: string | AbstractFill,
         color?: string,
     } = {}
 ) {

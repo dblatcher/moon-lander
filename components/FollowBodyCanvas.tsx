@@ -1,4 +1,4 @@
-import { AbstractGradientFill, CameraFollowInstruction, ViewPort, World } from "physics-worlds";
+import { AbstractFill, CameraFollowInstruction, ViewPort, World } from "physics-worlds";
 import React, { useEffect, useRef } from "react";
 import { getPlayerSpaceship } from "../modules/worldValues";
 
@@ -7,7 +7,7 @@ export default function FollowBodyCanvas(props: {
     magnify?: number
     width?: number
     height?: number,
-    framefill?: string | AbstractGradientFill
+    framefill?: string | AbstractFill
 }) {
     const { world, magnify = 1, width = 400, height = 400, framefill } = props
     const canvas = useRef<HTMLCanvasElement | null>(null)

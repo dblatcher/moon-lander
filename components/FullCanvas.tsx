@@ -1,4 +1,4 @@
-import { AbstractGradientFill, RenderTransformationRule, ViewPort, World, } from "physics-worlds";
+import { AbstractFill, RenderTransformationRule, ViewPort, World, } from "physics-worlds";
 import React, { useEffect, useRef } from "react";
 
 export default function FullCanvas(props: {
@@ -7,8 +7,8 @@ export default function FullCanvas(props: {
     transformRules?: RenderTransformationRule[]
     dontRenderBackground?: boolean
     dontRenderEffects?: boolean
-    framefill?: string | AbstractGradientFill
-    backGroundOverride?: string | AbstractGradientFill
+    framefill?: string | AbstractFill
+    backGroundOverride?: string | AbstractFill
 }) {
     const { world, magnify = 1, transformRules = [], dontRenderBackground, dontRenderEffects, framefill, backGroundOverride } = props
     const canvas = useRef<HTMLCanvasElement | null>(null)
