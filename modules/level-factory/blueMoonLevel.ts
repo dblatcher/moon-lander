@@ -3,7 +3,8 @@ import { Level } from "../Level";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { atmosphere, makeShip } from "./items";
+import { atmosphere, neptune } from "./fills";
+import { makeShip } from "./items";
 
 function makeBlueMoonLevel(): Level {
 
@@ -12,31 +13,35 @@ function makeBlueMoonLevel(): Level {
         height: 4000,
     }
 
+    const planetRadius = 350;
+    const atmosphereThickness = 400;
+
     const world = new World([
         makeShip({
-            x: worldDimensions.width / 2,
-            y: (worldDimensions.height / 2) - 1200,
+            x: worldDimensions.width * (3 / 8),
+            y: (worldDimensions.height * (1 / 2)) - planetRadius * 3,
         }),
 
         new Terrain({
-            x: worldDimensions.width / 2,
-            y: worldDimensions.height / 2,
-            size: 300,
+            x: worldDimensions.width * (1 / 2),
+            y: worldDimensions.height * (1 / 2),
+            size: planetRadius,
             density: .20,
-            fillColor: 'blue',
+            fillColor: neptune,
+            color: 'transparent',
         }),
 
         new Area({
-            x: worldDimensions.width / 2,
-            y: worldDimensions.height / 2,
-            size: 700,
+            x: worldDimensions.width * (1 / 2),
+            y: worldDimensions.height * (1 / 2),
+            size: planetRadius + atmosphereThickness,
             density: .5,
             fillColor: atmosphere,
         }),
 
         new LandingPad({
-            x: 300 + worldDimensions.width / 2,
-            y: worldDimensions.height / 2,
+            x: worldDimensions.width * (1 / 2) + planetRadius,
+            y: worldDimensions.height * (1 / 2),
             size: 40,
             fillColor: 'green',
             shape: shapes.polygon,

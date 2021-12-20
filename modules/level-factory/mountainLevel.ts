@@ -3,7 +3,8 @@ import { Level } from "../Level";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { atmosphere, makeMountain, makeShip } from "./items";
+import { atmosphere } from "./fills";
+import { makeMountain, makeShip } from "./items";
 
 
 function makeMountainsLevel(): Level {

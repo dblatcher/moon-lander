@@ -1,11 +1,17 @@
-import { Force, World, shapes } from "physics-worlds";
+import { Force, World, shapes, ImageFill } from "physics-worlds";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { makeBuilding, makeShip } from "./items";
 
+import { makeBuilding, makeShip } from "./items";
+import { soil } from "./fills";
 
 import { Level } from "../Level";
+
+
+
+
+
 function makeDaylightCityLevel(): Level {
     const worldDimensions = {
         width: 2800,
@@ -38,7 +44,7 @@ function makeDaylightCityLevel(): Level {
             new Terrain({
                 x: worldDimensions.width * (3 / 4), y: worldDimensions.height,
                 size: worldDimensions.width / 4,
-                fillColor: 'brown',
+                fillColor: soil,
                 color: 'brown',
                 shape: shapes.polygon,
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
@@ -47,7 +53,7 @@ function makeDaylightCityLevel(): Level {
             new Terrain({
                 x: worldDimensions.width * (1 / 4), y: worldDimensions.height,
                 size: worldDimensions.width / 4,
-                fillColor: 'brown',
+                fillColor: soil,
                 color: 'brown',
                 shape: shapes.polygon,
                 corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]

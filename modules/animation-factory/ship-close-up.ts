@@ -1,5 +1,5 @@
-import { Area, Body, Geometry, StarField, World } from "physics-worlds"
-import { atmosphere } from "../level-factory/items"
+import { Area, Geometry, StarField, World } from "physics-worlds"
+import { atmosphere } from "../level-factory/fills"
 import { SpaceShip } from "../world-things/SpaceShip"
 
 function createShipCloseUp() {

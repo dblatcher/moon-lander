@@ -4,7 +4,8 @@ import { LevelIntro } from "../LevelIntro";
 
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { gloomyBackground, makeBuilding, makeShip } from "./items";
+import { gloomyBackground, soil } from "./fills";
+import { makeBuilding, makeShip } from "./items";
 
 
 
@@ -66,13 +67,13 @@ function makeCavernLevel(): Level {
 
         new Terrain({
             x: worldDimensions.width*(.5/12), y: worldDimensions.height-350, size: 400,
-            fillColor: 'lightskyblue', color: 'black', shape: shapes.polygon, heading: -Geometry._deg*50,
+            fillColor: soil, color: 'black', shape: shapes.polygon, heading: -Geometry._deg*50,
             corners:rockShape
         }),
 
         new Terrain({
             x: worldDimensions.width * (3 / 12), y: worldDimensions.height, size: 200,
-            fillColor: 'brown', color: 'black', shape: shapes.circle,
+            fillColor: soil, color: 'black', shape: shapes.circle,
         }),
         new Terrain({
             x: worldDimensions.width * (1 / 12), y: worldDimensions.height, size: 250,
@@ -84,7 +85,7 @@ function makeCavernLevel(): Level {
         }),
         new Terrain({
             x: 2000, y: worldDimensions.height - 100, size: 300, heading: Geometry._deg * 45,
-            fillColor: 'brown', color: 'black', shape: shapes.polygon, corners: jaggedRockWallShape,
+            fillColor: soil, color: 'black', shape: shapes.polygon, corners: jaggedRockWallShape,
         }),
         new Terrain({
             x: worldDimensions.width, y: worldDimensions.height, size: 450,
@@ -102,12 +103,12 @@ function makeCavernLevel(): Level {
         }),
         new Terrain({
             x: worldDimensions.width*(4/12), y: -150, size: 875, heading:Geometry._deg*160,
-            fillColor: 'antiquewhite', color: 'black', shape: shapes.polygon,
+            fillColor: soil, color: 'black', shape: shapes.polygon,
             corners:jaggedRockWallShape
         }),
         new Terrain({
             x: worldDimensions.width*(8.5/12), y: 0, size: 200,
-            fillColor: 'antiquewhite', color: 'black', shape: shapes.polygon, heading: -Geometry._deg*124,
+            fillColor: soil, color: 'black', shape: shapes.polygon, heading: -Geometry._deg*124,
             corners:rockShape
         }),
         new Terrain({
