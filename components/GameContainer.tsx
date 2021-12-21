@@ -76,10 +76,17 @@ export default class GameContainer extends React.Component {
         this.endPlaySession = this.endPlaySession.bind(this)
         this.goToTitles = this.goToTitles.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
+        this.asyncSetState = this.asyncSetState.bind(this)
     }
 
     componentWillUnmount() {
         this.world = undefined;
+    }
+
+    async asyncSetState(modification: Partial<GameContainerState>): Promise<GameContainerState> {
+        return new Promise(resolve => {
+            this.setState(modification, () => { resolve(this.state) })
+        })
     }
 
     handleCommandPress(command: string) {
@@ -146,38 +153,33 @@ export default class GameContainer extends React.Component {
         return this.world ? this.world.ticksPerSecond === 0 : false;
     }
 
-    startLevel(levelNumber?: number): Promise<GameContainerState> {
-        const { numberOfLevels, makeLevel } = this.props.gameMode;
-        const { speed } = this.props.gameMode;
+    async startLevel(levelNumber?: number): Promise<GameContainerState> {
+        const { numberOfLevels, makeLevel, speed } = this.props.gameMode;
+
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
-        return new Promise(resolve => {
-            this.world?.stopTime();
-            const [newWorld, levelIntro] = makeLevel(levelNumber);
+        this.world?.stopTime();
+        const [newWorld, levelIntro] = makeLevel(levelNumber);
+        this.world = newWorld;
 
-            this.world = newWorld;
-            this.world.tick()
-
-            this.setState({
-                mode: levelIntro ? "INTRO" : "PLAY",
-                level: levelNumber,
-                levelIntro,
-                playerHasLanded: false,
-                playerHasDied: false,
-                playerIsStranded: false,
-            }, () => {
-
-                if (!levelIntro) {
-                    newWorld.ticksPerSecond = speed;
-                }
-
-                resolve(this.state)
-            })
+        await this.asyncSetState({
+            mode: levelIntro ? "INTRO" : "PLAY",
+            level: levelNumber,
+            levelIntro,
+            playerHasLanded: false,
+            playerHasDied: false,
+            playerIsStranded: false,
         })
+
+        if (!levelIntro) {
+            newWorld.ticksPerSecond = speed;
+        }
+
+        return this.state
     }
 
-    endPlaySession(): Promise<GameContainerState> {
+    async endPlaySession(): Promise<GameContainerState> {
         const { isDataBase, gameMode } = this.props;
         const { score } = this.state;
 
@@ -188,49 +190,49 @@ export default class GameContainer extends React.Component {
         return this.goToTitles();
     }
 
-    goToHighScore(): Promise<GameContainerState> {
-        return new Promise(resolve => {
-            this.setState({
-                mode: "HIGHSCORE",
-                playerHasLanded: false,
-                playerHasDied: false,
-                playerIsStranded: false,
-            }, () => {
-                resolve(this.state)
-            })
+    async goToHighScore(): Promise<GameContainerState> {
+        await this.asyncSetState({
+            mode: "HIGHSCORE",
+            playerHasLanded: false,
+            playerHasDied: false,
+            playerIsStranded: false,
         })
+
+        return this.state
     }
 
-    goToTitles(): Promise<GameContainerState> {
-        return new Promise(resolve => {
-            this.world?.stopTime();
-            this.world = undefined;
-            this.setState({
-                level: 1,
-                lives: this.props.gameMode.startingLives,
-                playerHasLanded: false,
-                playerHasDied: false,
-                playerIsStranded: false,
-                score: 0,
-                mode: "TITLE"
-            }, () => {
-                resolve(this.state)
-            })
+    async goToTitles(): Promise<GameContainerState> {
+        this.world?.stopTime();
+        this.world = undefined;
+
+        await this.asyncSetState({
+            level: 1,
+            lives: this.props.gameMode.startingLives,
+            playerHasLanded: false,
+            playerHasDied: false,
+            playerIsStranded: false,
+            score: 0,
+            mode: "TITLE"
         })
+
+        return this.state;
     }
 
-    addPoints(amount: number): Promise<GameContainerState> {
+    async addPoints(amount: number): Promise<GameContainerState> {
         const { gameMode } = this.props;
-        if (gameMode.noScores) { return Promise.resolve(this.state) }
-        return new Promise(resolve => {
-            this.setState({ score: this.state.score + amount }, () => { resolve(this.state) })
+        if (gameMode.noScores) { return this.state }
+
+        await this.asyncSetState({
+            score: this.state.score + amount
         })
+        return this.state
     }
 
-    addLives(amount: number): Promise<GameContainerState> {
-        return new Promise(resolve => {
-            this.setState({ lives: this.state.lives + amount }, () => { resolve(this.state) })
+    async addLives(amount: number): Promise<GameContainerState> {
+        await this.asyncSetState({
+            lives: this.state.lives + amount
         })
+        return this.state
     }
 
     render() {
