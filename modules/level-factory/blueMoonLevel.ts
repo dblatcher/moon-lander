@@ -3,7 +3,7 @@ import { Level } from "../Level";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { neptune } from "./imageFills";
+import { createImageFill } from "./imageFills";
 import { atmosphere } from "./gradientFills";
 import { makeShip } from "./items";
 
@@ -28,7 +28,7 @@ function makeBlueMoonLevel(): Level {
             y: worldDimensions.height * (1 / 2),
             size: planetRadius,
             density: .20,
-            fillColor: neptune,
+            fillColor: createImageFill('neptune'),
             color: 'transparent',
         }),
 

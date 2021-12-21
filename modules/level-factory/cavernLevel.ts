@@ -4,7 +4,7 @@ import { LevelIntro } from "../LevelIntro";
 
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { soil } from "./imageFills";
+import { createImageFill } from "./imageFills";
 import { gloomyBackground, } from "./gradientFills";
 import { makeBuilding, makeShip } from "./items";
 
@@ -45,6 +45,8 @@ function makeCavernLevel(): Level {
         width: 4000,
         height: 2000
     }
+
+    const soil = createImageFill('soil');
 
     const world = new World([
         makeShip({

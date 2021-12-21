@@ -4,7 +4,7 @@ import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 
 import { makeBuilding, makeShip } from "./items";
-import { soil } from "./imageFills";
+import { createImageFill } from "./imageFills";
 
 import { Level } from "../Level";
 
@@ -17,7 +17,7 @@ function makeDaylightCityLevel(): Level {
         width: 2800,
         height: 5000
     }
-
+    const soil = createImageFill('soil');
     const world = new World(
         [
             makeShip({
