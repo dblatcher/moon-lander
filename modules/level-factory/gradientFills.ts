@@ -1,14 +1,6 @@
 import { Geometry, RadialGradientFill, LinearGradientFill, ImageFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 
-import soilImage from "../../image/soil.jpg";
-const soil = ImageFill.fromSrc(soilImage.src, 'brown', { rotate: 30 });
-
-import jupiterImage from "../../image/jupiter.jpg";
-const jupiter = ImageFill.fromSrc(jupiterImage.src, 'orange', {scale:10});
-
-import neptuneImage from "../../image/neptune.jpg";
-const neptune = ImageFill.fromSrc(neptuneImage.src, 'blue', {scale:3});
 
 const atmosphere = new RadialGradientFill({
     fallbackColor: 'rgba(100,100,200,.5)',
@@ -59,6 +51,5 @@ const mountainGradient = new RadialGradientFill({
 })
 
 export {
-    soil, jupiter, neptune,
     atmosphere, mountainGradient, gloomyBackground
 }

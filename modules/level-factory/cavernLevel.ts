@@ -4,7 +4,8 @@ import { LevelIntro } from "../LevelIntro";
 
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { gloomyBackground, soil } from "./fills";
+import { soil } from "./imageFills";
+import { gloomyBackground, } from "./gradientFills";
 import { makeBuilding, makeShip } from "./items";
 
 

@@ -3,7 +3,8 @@ import { Level } from "../Level";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { atmosphere, neptune } from "./fills";
+import { neptune } from "./imageFills";
+import { atmosphere } from "./gradientFills";
 import { makeShip } from "./items";
 
 function makeBlueMoonLevel(): Level {
