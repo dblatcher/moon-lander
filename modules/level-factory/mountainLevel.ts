@@ -7,7 +7,7 @@ import { atmosphere } from "./gradientFills";
 import { makeMountain, makeShip } from "./items";
 
 
-function makeMountainsLevel(): Level {
+async function makeMountainsLevel(): Promise<Level> {
     const worldDimensions = {
         width: 1400,
         height: 2600

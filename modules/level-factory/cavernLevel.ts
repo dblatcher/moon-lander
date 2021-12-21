@@ -4,7 +4,7 @@ import { LevelIntro } from "../LevelIntro";
 
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
-import { createImageFill } from "./imageFills";
+import { asyncCreateImageFill } from "./imageFills";
 import { gloomyBackground, } from "./gradientFills";
 import { makeBuilding, makeShip } from "./items";
 
@@ -40,13 +40,13 @@ const rockShape = [
     { x: -1, y: -.6 },
 ]
 
-function makeCavernLevel(): Level {
+async function makeCavernLevel(): Promise<Level> {
     const worldDimensions = {
         width: 4000,
         height: 2000
     }
 
-    const soil = createImageFill('soil');
+    const soil = await asyncCreateImageFill('soil');
 
     const world = new World([
         makeShip({

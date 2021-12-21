@@ -5,7 +5,7 @@ import HighScoreEntry from "./HighScoreEntry";
 import KeyReader from "./KeyReader";
 import styles from "./GameContainer.module.scss";
 
-import { World } from "physics-worlds";
+import { ImageFill, World } from "physics-worlds";
 
 import { WorldStatus } from "../modules/worldValues";
 import { ScoreData } from "../modules/data-access/ScoreData";
@@ -13,7 +13,9 @@ import { GameMode } from "../modules/GameMode";
 import { LevelIntro } from "../modules/LevelIntro";
 import MoonLanderLevelIntro from "./MoonLanderLevelIntro";
 
-
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const controlMapping: { [index: string]: string } = {
     "w": "up",
@@ -160,7 +162,7 @@ export default class GameContainer extends React.Component {
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
 
         this.world?.stopTime();
-        const [newWorld, levelIntro] = makeLevel(levelNumber);
+        const [newWorld, levelIntro] = await makeLevel(levelNumber);
         this.world = newWorld;
 
         await this.asyncSetState({

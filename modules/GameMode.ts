@@ -51,12 +51,12 @@ class GameMode implements Required<GameModeInput> {
         return this.levelFunctions.length
     }
 
-    makeLevel(levelNumber = 1): Level {
+    async makeLevel(levelNumber = 1): Promise<Level> {
         if (levelNumber > this.numberOfLevels || levelNumber < 1) {
             levelNumber = 1;
         }
 
-        const level = this.levelFunctions[levelNumber - 1]()
+        const level = await this.levelFunctions[levelNumber - 1]()
         const [world] = level;
         world.name = "WORLD_" + Date.now().toString();
         return level

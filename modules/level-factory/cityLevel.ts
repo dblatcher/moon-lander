@@ -8,7 +8,7 @@ import { makeBuilding, makeShip } from "./items";
 
 
 
-function makeCityLevel(): Level {
+async function makeCityLevel(): Promise<Level> {
     const worldDimensions = {
         width: 2800,
         height: 5000

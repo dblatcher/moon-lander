@@ -20,6 +20,26 @@ function createImageFill(key: string): ImageFill {
     return ImageFill.fromSrc(...data['soil']);
 }
 
+async function asyncCreateImageFill(key: string): Promise<ImageFill> {
+
+    if (!data[key]) { key = 'neptune' }
+    const params = data[key]
+
+    const image = new Image();
+    image.src = params[0];
+
+    await new Promise(resolve => {
+        image.onload = resolve;
+        image.onerror = resolve;
+    })
+
+    return new ImageFill({
+        image,
+        fallbackColor: params[1], 
+        transforms: params[2]
+    });
+}
+
 export {
-    createImageFill
+    createImageFill, asyncCreateImageFill
 }

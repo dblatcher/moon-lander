@@ -1,10 +1,10 @@
-import { Force, World, shapes, ImageFill } from "physics-worlds";
+import { Force, World, shapes } from "physics-worlds";
 import { LevelIntro } from "../LevelIntro";
 import { LandingPad } from "../world-things/LandingPad";
 import { Terrain } from "../world-things/Terrain";
 
 import { makeBuilding, makeShip } from "./items";
-import { createImageFill } from "./imageFills";
+import { asyncCreateImageFill } from "./imageFills";
 
 import { Level } from "../Level";
 
@@ -12,12 +12,12 @@ import { Level } from "../Level";
 
 
 
-function makeDaylightCityLevel(): Level {
+async function makeDaylightCityLevel(): Promise<Level> {
     const worldDimensions = {
         width: 2800,
         height: 5000
     }
-    const soil = createImageFill('soil');
+    const soil = await asyncCreateImageFill('soil');
     const world = new World(
         [
             makeShip({

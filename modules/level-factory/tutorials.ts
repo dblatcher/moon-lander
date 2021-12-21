@@ -66,7 +66,7 @@ function makeTutorialBackground(worldDimensions = { width: 1400, height: 1400 })
     ];
 }
 
-export function tutorial1(): Level {
+export async function tutorial1(): Promise<Level> {
 
     const worldDimensions = {
         width: 1400,
@@ -97,7 +97,7 @@ export function tutorial1(): Level {
     return [world, levelIntro];
 }
 
-export function tutorial2(): Level {
+export async function tutorial2(): Promise<Level> {
 
     const worldDimensions = {
         width: 2800,
@@ -130,7 +130,7 @@ export function tutorial2(): Level {
     return [world, levelIntro];
 }
 
-export function tutorial3(): Level {
+export async function tutorial3(): Promise<Level> {
 
     const worldDimensions = {
         width: 2800,
