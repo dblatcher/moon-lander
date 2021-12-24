@@ -12,7 +12,7 @@ const data: { [index: string]: [string, string, any] } = {
     jupiter: [jupiterImage.src, 'orange', { scale: 10 }],
     neptune: [neptuneImage.src, 'blue', { scale: 3 }],
     brick: [brickImage.src, 'red', { scale: .5 }],
-    sky: [skyImage.src, 'skyblue', { scale: 20 }]
+    sky: [skyImage.src, 'skyblue', { scale: 10, parallax: 4 }]
 }
 
 // needs to be in a function so Next.js doesn't create the Image fills server-side when importing the module
