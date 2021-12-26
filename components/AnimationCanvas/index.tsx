@@ -18,11 +18,12 @@ function createTestWorld() {
 
 export default class AnimationCanvas extends react.Component {
     world?: World;
-    props!: Readonly<{ 
-        children?: react.ReactNode; 
-        makeWorld?: { (): World } 
+    props!: Readonly<{
+        children?: react.ReactNode;
+        makeWorld?: { (): World }
         frameClass?: string
         frameStyle?: react.CSSProperties
+        magnify?: number
     }>;
 
 
@@ -44,13 +45,13 @@ export default class AnimationCanvas extends react.Component {
 
     render(): react.ReactNode {
         const { world } = this;
-        const { frameClass, frameStyle={} } = this.props;
+        const { frameClass, frameStyle = {}, magnify = 1 } = this.props;
 
         return (
             <div className={frameClass} style={frameStyle}>
                 {world ? (
-                    <FullCanvas world={world} />
-                ):(
+                    <FullCanvas world={world} magnify={magnify} />
+                ) : (
                     null
                 )}
             </div>

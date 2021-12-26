@@ -50,12 +50,12 @@ const GamePage: NextPage = (props: GamePageProps) => {
         <div className={styles["full-height-page"]}>
 
             <Head>
-                <title>{gameMode.title}</title>
+                <title>Moon Lander - {gameMode.title}</title>
             </Head>
 
             <main className={styles["full-height-container"]}>
 
-                <Link href="/" passHref={true}>homepage</Link>
+                <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
 
                 <FullScreenWrapper>
                     <GameContainer
