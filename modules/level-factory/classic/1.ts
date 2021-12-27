@@ -1,10 +1,11 @@
-import { shapes, StarField, World } from "physics-worlds";
+import { Force, StarField, World } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { asyncCreateImageFill } from "../imageFills";
 import { makeShip } from "../items";
+import { makeRectangleProperties } from "../utility";
 
 async function level1(): Promise<Level> {
 
@@ -26,21 +27,20 @@ async function level1(): Promise<Level> {
         new Terrain({ x: 500, y: 4950, size: 2550, fillColor: jupiter, color: 'transparent', density: .01 }),
 
         new LandingPad({
-            x: 500, y: 2400, size: 50, shape: shapes.polygon, fillColor: 'green',
-            corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
+            x: 500, y: 2400,  fillColor: 'green',
+            ...makeRectangleProperties(75,5)
         })
 
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
         airDensity: 0.1,
-
+        globalGravityForce: new Force(100,0),
         hasHardEdges: true,
         backGrounds: [
             new StarField({ numberOfStars: 100, depth: 4, ...worldDimensions }),
             new StarField({ numberOfStars: 100, depth: 10, ...worldDimensions }),
         ],
-        bodiesExertGravity: true
     });
 
     const levelIntro = new LevelIntro("moonbase alpha", "classic/1");

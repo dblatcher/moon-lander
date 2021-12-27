@@ -6,6 +6,7 @@ import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { asyncCreateImageFill } from "../imageFills";
 import { makeShip } from "../items";
+import { makeRectangleProperties } from "../utility";
 
 async function level2(): Promise<Level> {
 
@@ -30,7 +31,7 @@ async function level2(): Promise<Level> {
         width: 1000,
         height: 2500,
     }
-
+    
     const world = new World([
         makeShip({ x:150,y:worldDimensions.height-1200,
             color:'purple',
@@ -39,9 +40,8 @@ async function level2(): Promise<Level> {
         new Terrain({ x: 500, y: 4950, size: 2550, shape:shapes.square, fillColor: soil, color: 'transparent', density: .01 }),
 
         new LandingPad({
-            x:500,y:2400,size:150,
-            shape: shapes.polygon, fillColor: 'green',
-            corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
+            x:500,y:2400, fillColor: 'green',
+            ...makeRectangleProperties(150,15)
         }),
 
         new Area({
