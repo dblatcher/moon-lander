@@ -10,6 +10,7 @@ import {
 } from "./level-factory";
 import { Level, LevelFunction } from "./Level";
 
+import * as classics from "./level-factory/classic";
 
 interface GameModeInput {
     title: string
@@ -105,6 +106,19 @@ const gameModes: { [index: string]: GameMode } = {
             tutorial3,
         ]
     }),
+
+    'classic': new GameMode({
+        title:"Classic levels",
+        key:"classic",
+        hidden:true,
+        allowRestart:true,
+        allowSkip:true,
+        startingLives: 3,
+        levelFunctions: [
+            classics.level2,
+            classics.level1,
+        ]
+    })
 }
 
 export type { GameMode }
