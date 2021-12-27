@@ -103,10 +103,12 @@ const gameModes: { [index: string]: GameMode } = {
         title:"Classic levels",
         key:"classic",
         hidden:true,
+        noScores: true,
         allowRestart:true,
         allowSkip:true,
         startingLives: 3,
         levelFunctions: [
+            classics.level3,
             classics.level2,
             classics.level1,
         ]
