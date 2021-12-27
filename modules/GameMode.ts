@@ -1,15 +1,7 @@
-import {
-    makeDaylightCityLevel,
-    makeMountainsLevel,
-    makeCityLevel,
-    makeBlueMoonLevel,
-    makeCavernLevel,
-    tutorial1,
-    tutorial2,
-    tutorial3,
-} from "./level-factory";
 import { Level, LevelFunction } from "./Level";
 
+import * as tutorials from "./level-factory/tutorials";
+import * as arcade from "./level-factory/arcade";
 import * as classics from "./level-factory/classic";
 
 interface GameModeInput {
@@ -69,11 +61,11 @@ const gameModes: { [index: string]: GameMode } = {
         title: "arcade mode",
         key: "normal",
         levelFunctions: [
-            makeDaylightCityLevel,
-            makeMountainsLevel,
-            makeCityLevel,
-            makeBlueMoonLevel,
-            makeCavernLevel,
+            arcade.makeDaylightCityLevel,
+            arcade.makeMountainsLevel,
+            arcade.makeCityLevel,
+            arcade.makeBlueMoonLevel,
+            arcade.makeCavernLevel,
         ]
     }),
     'trainer': new GameMode({
@@ -85,11 +77,11 @@ const gameModes: { [index: string]: GameMode } = {
         allowSkip:true,
         allowRestart:true,
         levelFunctions: [
-            makeDaylightCityLevel,
-            makeMountainsLevel,
-            makeCityLevel,
-            makeBlueMoonLevel,
-            makeCavernLevel,
+            arcade.makeDaylightCityLevel,
+            arcade.makeMountainsLevel,
+            arcade.makeCityLevel,
+            arcade.makeBlueMoonLevel,
+            arcade.makeCavernLevel,
         ]
     }),
     'tutorial': new GameMode({
@@ -101,9 +93,9 @@ const gameModes: { [index: string]: GameMode } = {
         allowSkip:true,
         allowRestart:true,
         levelFunctions: [
-            tutorial1,
-            tutorial2,
-            tutorial3,
+            tutorials.tutorial1,
+            tutorials.tutorial2,
+            tutorials.tutorial3,
         ]
     }),
 

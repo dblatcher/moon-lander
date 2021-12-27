@@ -1,10 +1,10 @@
 import { World, Area, Body, shapes, Force, StarField } from "physics-worlds";
-import { Level } from "../Level";
-import { LevelIntro } from "../LevelIntro";
-import { LandingPad } from "../world-things/LandingPad";
-import { Terrain } from "../world-things/Terrain";
-import { atmosphere } from "./gradientFills";
-import { makeShip } from "./items";
+import { Level } from "../../Level";
+import { LevelIntro } from "../../LevelIntro";
+import { LandingPad } from "../../world-things/LandingPad";
+import { Terrain } from "../../world-things/Terrain";
+import { atmosphere } from "../gradientFills";
+import { makeShip } from "../items";
 
 
 
