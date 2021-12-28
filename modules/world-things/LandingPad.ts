@@ -27,7 +27,10 @@ class RefuelPad extends LandingPad {
 
     constructor(data: LandingPadData) {
         super(data)
+        const elasticity = data.elasticity || LandingPad.DEFAULT_ELASTICITY;
         this.data = data
+        this.data.immobile = true
+        this.data.elasticity = elasticity;
     }
 
     get typeId() { return "RefuelPad" }
