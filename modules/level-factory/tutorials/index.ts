@@ -1,10 +1,11 @@
 import { World, Area, Body, shapes, Force, StarField } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
-import { LandingPad } from "../../world-things/LandingPad";
+import { LandingPad, RefuelPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { atmosphere } from "../gradientFills";
 import { makeShip } from "../items";
+import { makeRectangleProperties } from "../utility";
 
 
 
@@ -13,10 +14,8 @@ function makeTutorialWorldContents(worldDimensions = { width: 1400, height: 1400
         new LandingPad({
             x: worldDimensions.width * padPlacement,
             y: worldDimensions.height - (worldDimensions.width / 40),
-            size: 150,
             fillColor: 'green',
-            shape: shapes.polygon,
-            corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
+            ...makeRectangleProperties(150,15),
         }),
 
         new Terrain({

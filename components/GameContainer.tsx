@@ -130,7 +130,7 @@ export default class GameContainer extends React.Component {
             modification.playerHasDied = true
         }
 
-        if (!this.state.playerHasLanded && landingPadPlayerIsOn) {
+        if (!this.state.playerHasLanded && landingPadPlayerIsOn && landingPadPlayerIsOn.typeId=="LandingPad") {
             modification.playerHasLanded = true
         }
 

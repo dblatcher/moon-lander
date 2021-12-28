@@ -1,7 +1,7 @@
 import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
-import { LandingPad } from './LandingPad'
+import { LandingPad, RefuelPad } from './LandingPad'
 import { Terrain } from './Terrain'
 
 const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
@@ -91,7 +91,8 @@ class SpaceShip extends Body {
     }
 
     tick() {
-        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1 } = this.data;
+        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1, maxFuel=1 } = this.data;
+        const  {landingPadIsRestingOn} = this
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
 
         if (thrust > 0) {
@@ -104,6 +105,10 @@ class SpaceShip extends Body {
 
         if (this.seemsStranded) { this.ticksBeenStrandedFor++ }
         else { this.ticksBeenStrandedFor = 0 }
+
+        if (landingPadIsRestingOn && landingPadIsRestingOn instanceof RefuelPad) {
+            (landingPadIsRestingOn as RefuelPad).refuel(this);
+        }
     }
 
     renderFlame(ctx: CanvasRenderingContext2D, viewPort: ViewPort, leftBoosterCorner: Geometry.Point, rightBoosterCorner: Geometry.Point) {
