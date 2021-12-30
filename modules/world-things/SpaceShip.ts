@@ -91,8 +91,8 @@ class SpaceShip extends Body {
     }
 
     tick() {
-        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1, maxFuel=1 } = this.data;
-        const  {landingPadIsRestingOn} = this
+        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
+        const { landingPadIsRestingOn } = this
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
 
         if (thrust > 0) {
@@ -194,7 +194,6 @@ class SpaceShip extends Body {
         driftBiasX?: number
         driftBiasY?: number
     } = {}) {
-
         const { size = 1, color = 'red' } = this.data;
         const { driftBiasX = 0, driftBiasY = 0 } = config
 
@@ -236,7 +235,7 @@ class SpaceShip extends Body {
             colors: ['white', color, color]
         }).enterWorld(this.world)
 
-        this.world.emitter.emit('SFX', { soundName: 'shipExploding', source: this });
+        this.world.emitter.emit("SFX", { soundName: 'die' })
     }
 
     handleCollision(report: CollisionDetection.CollisionReport) {
@@ -247,7 +246,6 @@ class SpaceShip extends Body {
             const otherThing = report.item1 === this ? report.item2 : report.item1
 
             if (otherThing instanceof Terrain) {
-
                 const elasticityAdjustment = 1 - (otherThing.data.elasticity || 1);
                 const adjustedImpactSpeed = impactSpeed * elasticityAdjustment;
 

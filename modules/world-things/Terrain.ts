@@ -1,5 +1,7 @@
 import { Body, BodyData, Force, RenderFunctions, ViewPort } from "physics-worlds";
+import { CollisionReport } from "physics-worlds/dist/src/collisionDetection";
 import { Point } from "physics-worlds/dist/src/geometry";
+import { SpaceShip } from "./SpaceShip";
 
 interface TerrainData extends BodyData {
     pattern?: "BUILDING"
@@ -68,8 +70,18 @@ class Terrain extends Body {
         if (this.windows) {
             const { color = 'white' } = this.data;
             this.windows.forEach(window => {
-                RenderFunctions.renderPolygon.onCanvas(ctx, window, { strokeColor: color, fillColor: 'black', lineWidth:2 }, viewPort);
+                RenderFunctions.renderPolygon.onCanvas(ctx, window, { strokeColor: color, fillColor: 'black', lineWidth: 2 }, viewPort);
             })
+        }
+    }
+
+    respondToImpact(report: CollisionReport) {
+
+        const otherThing = report.item1 === this ? report.item2 : report.item1
+        const { magnitude: impactSpeed } = otherThing.momentum;
+
+        if (otherThing instanceof SpaceShip &&  impactSpeed > .1) {
+            this.world.emitter.emit("SFX", { soundName: 'bang', options: { volume: .5 } })
         }
     }
 }
