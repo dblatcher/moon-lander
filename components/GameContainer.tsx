@@ -12,7 +12,7 @@ import { ScoreData } from "../modules/data-access/ScoreData";
 import { GameMode } from "../modules/GameMode";
 import { LevelIntro } from "../modules/LevelIntro";
 import MoonLanderLevelIntro from "./MoonLanderLevelIntro";
-import { makeSoundDeck } from "../audio";
+import { makeSoundDeck, playFailSong, playVictorySong } from "../audio";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -121,7 +121,6 @@ export default class GameContainer extends React.Component {
         switch (command) {
             case "START":
                 if (mode == "TITLE") {
-
                     this.setState({
                         mode: "PLAY",
                         level: 1,
@@ -152,10 +151,12 @@ export default class GameContainer extends React.Component {
 
         if (!this.state.playerHasDied && playerDead) {
             modification.playerHasDied = true
+            playFailSong(this.world?.soundDeck)
         }
 
         if (!this.state.playerHasLanded && landingPadPlayerIsOn && landingPadPlayerIsOn.typeId == "LandingPad") {
-            modification.playerHasLanded = true
+            modification.playerHasLanded = true;
+            playVictorySong(this.world?.soundDeck)
         }
 
         if (!this.state.playerIsStranded && playerStranded) {
@@ -197,7 +198,6 @@ export default class GameContainer extends React.Component {
         this.world = newWorld;
         this.world.soundDeck = makeSoundDeck()
 
-        console.log('setting sond', this.state.soundEnabled)
         await this.setSoundEnabled(this.state.soundEnabled, true);
 
         await this.asyncSetState({
