@@ -1,5 +1,5 @@
-import { World } from "physics-worlds";
-import { useEffect, useState } from "react";
+import { SoundControl, World } from "physics-worlds";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "./styles.module.scss";
 
@@ -37,22 +37,36 @@ function renderNumber(value: number, dangerValue: number, caption?: string) {
 }
 
 
-
 export default function DangerMeter(props: {
     world: World
     getValues: GetMeterValuesFunction
     meterType?: "NUMBER"
     caption?: string
+    sampleName?: string
 }) {
-    const { world, getValues, meterType, caption } = props;
+    const { world, getValues, meterType, caption, sampleName } = props;
     let [value, setValue] = useState(0);
     let [dangerValue, setDangerValue] = useState(0);
+    const sound = useRef<SoundControl | null>(null);
+
+    if (!sound.current && world.soundDeck && sampleName) {
+        sound.current = world.soundDeck.playSample(sampleName, { volume: 0, loop: true })
+    }
 
     function getValueAndMaxFromWorld() {
         const valueAndMax = getValues(world);
-        if (!valueAndMax) { return }
+        if (!valueAndMax) {
+            if (sound.current) {
+                sound.current.volume = 0
+            }
+            return
+        }
         setValue(valueAndMax.value);
         setDangerValue(valueAndMax.danger);
+
+        if (sound.current) {
+            sound.current.volume = (dangerValue > 0 && value >= dangerValue) ? .2 : 0
+        }
     }
 
     useEffect(() => {
@@ -61,7 +75,6 @@ export default function DangerMeter(props: {
             world.emitter.off('tick', getValueAndMaxFromWorld)
         }
     })
-
 
     switch (meterType) {
         case "NUMBER":

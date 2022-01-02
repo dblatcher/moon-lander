@@ -44,7 +44,7 @@ export default function MoonLanderGame(props: Readonly<{
 }>) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied,playerIsStranded, isPaused, mode, gameMode,
+        world, playerHasLanded, level, score, lives, controls, playerHasDied, playerIsStranded, isPaused, mode, gameMode,
         handleWorldStatus, startLevel, addPoints, addLives, endPlaySession
     } = props
 
