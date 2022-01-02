@@ -42,6 +42,7 @@ interface GameContainerState {
     playerHasDied: boolean
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     levelIntro?: LevelIntro
+    soundEnabled: boolean
 }
 
 export type { GameContainerState }
@@ -70,6 +71,7 @@ export default class GameContainer extends React.Component {
             playerHasDied: false,
             playerIsStranded: false,
             mode: "TITLE",
+            soundEnabled: true,
         }
 
         this.togglePaused = this.togglePaused.bind(this)
@@ -81,6 +83,7 @@ export default class GameContainer extends React.Component {
         this.goToTitles = this.goToTitles.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
         this.asyncSetState = this.asyncSetState.bind(this)
+        this.setSoundEnabled = this.setSoundEnabled.bind(this)
     }
 
     componentWillUnmount() {
@@ -92,6 +95,18 @@ export default class GameContainer extends React.Component {
         this.world?.soundDeck?.mute()
         this.world = undefined;
         this.soundPlayer = undefined;
+    }
+
+    setSoundEnabled(value: boolean, ignorePauseState=false): Promise<GameContainerState> {
+        return this.asyncSetState({ soundEnabled: value }).then(state => {
+            if (this.world?.soundDeck) {
+                this.world.soundDeck.masterVolume = state.soundEnabled ? 1 : 0;
+                if (this.isPaused && !ignorePauseState) {
+                    this.world.soundDeck.mute()
+                }
+            }
+            return state
+        })
     }
 
     async asyncSetState(modification: Partial<GameContainerState>): Promise<GameContainerState> {
@@ -156,7 +171,14 @@ export default class GameContainer extends React.Component {
         const { speed } = this.props.gameMode;
         if (mode !== "PLAY" || playerHasDied || playerHasLanded || playerIsStranded) { return }
 
-        this.world.ticksPerSecond = this.world.ticksPerSecond ? 0 : speed;
+        if (this.isPaused) {
+            this.world.ticksPerSecond = speed;
+            if (this.state.soundEnabled) {this.world.soundDeck?.unmute()}
+        } else {
+            this.world.ticksPerSecond = 0;
+            this.world.soundDeck?.mute()
+        }
+
         this.forceUpdate();
     }
 
@@ -174,6 +196,9 @@ export default class GameContainer extends React.Component {
         const [newWorld, levelIntro] = await makeLevel(levelNumber);
         this.world = newWorld;
         this.world.soundDeck = makeSoundDeck()
+
+        console.log('setting sond', this.state.soundEnabled)
+        await this.setSoundEnabled(this.state.soundEnabled, true);
 
         await this.asyncSetState({
             mode: levelIntro ? "INTRO" : "PLAY",
@@ -248,10 +273,9 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro } = this.state;
+        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro, soundEnabled } = this.state;
         const { world } = this;
 
-        const soundEnabled = world?.soundDeck?.isEnabled;
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
@@ -301,9 +325,9 @@ export default class GameContainer extends React.Component {
                     <div className={styles.menuBar}>
                         <button onClick={this.togglePaused}>Pause</button>
 
-                        <button disabled={true}
-                            onClick={() => {  }}
-                        >{soundEnabled ? 'sound is on' : 'sound is off'}</button>
+                        <button
+                            onClick={() => { this.setSoundEnabled(!soundEnabled) }}
+                        >{soundEnabled ? 'sound = on' : 'sound = off'}</button>
 
                         {gameMode.allowRestart && <button onClick={() => { this.startLevel() }}>Restart Level</button>}
                         {gameMode.allowSkip && <button onClick={() => { this.startLevel(level + 1) }}>Skip Level</button>}
