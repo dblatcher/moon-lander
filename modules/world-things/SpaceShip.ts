@@ -100,7 +100,7 @@ class SpaceShip extends Body {
             this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 75, duration: 3 }, { loop: true, volume: 0 })
         }
         if (this.thrustNoise) {
-            this.thrustNoise.volume = (thrust / maxThrust) * 2
+            this.thrustNoise.volume = thrust > 0 ? .5 + (1.5 * thrust / maxThrust) : 0
         }
 
         if (thrust > 0) {

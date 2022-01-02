@@ -79,9 +79,8 @@ class Terrain extends Body {
 
         const otherThing = report.item1 === this ? report.item2 : report.item1
         const { magnitude: impactSpeed } = otherThing.momentum;
-
-        if (otherThing instanceof SpaceShip && impactSpeed > .1) {
-            this.world.soundDeck?.playSample('bang', { volume: Math.min(impactSpeed * 5, 1) })
+        if (otherThing instanceof SpaceShip && impactSpeed > SpaceShip.negligableSpeed/2) {
+            this.world.soundDeck?.playSample('bang', { volume:1 })
         }
     }
 }
