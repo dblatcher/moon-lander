@@ -97,10 +97,10 @@ class SpaceShip extends Body {
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
 
         if (this.world.soundDeck && !this.thrustNoise) {
-            this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 100, duration: 3 }, { loop: true, volume: 0 })
+            this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 75, duration: 3 }, { loop: true, volume: 0 })
         }
         if (this.thrustNoise) {
-            this.thrustNoise.volume = thrust / maxThrust
+            this.thrustNoise.volume = (thrust / maxThrust) * 2
         }
 
         if (thrust > 0) {
