@@ -143,7 +143,7 @@ export default function MoonLanderGame(props: Readonly<{
             </Dialogue>
         )}
 
-        {(playerIsStranded && mode === "PLAY") && (
+        {(playerIsStranded && !playerHasLanded && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
                 <p>You have ran out of fuel.</p>
 
