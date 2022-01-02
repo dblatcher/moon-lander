@@ -1,4 +1,4 @@
-import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing } from 'physics-worlds'
+import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, SoundControl } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 import { LandingPad, RefuelPad } from './LandingPad'
@@ -32,6 +32,7 @@ interface SpaceShipData extends BodyData {
 class SpaceShip extends Body {
     data: SpaceShipData
     ticksBeenStrandedFor: number
+    thrustNoise?: SoundControl | null
 
     constructor(config: SpaceShipData, momentum: Force = Force.none) {
         super(config, momentum);
@@ -91,9 +92,16 @@ class SpaceShip extends Body {
     }
 
     tick() {
-        const { shootCooldownCurrent = 0, thrust = 0, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
+        const { shootCooldownCurrent = 0, thrust = 0, maxThrust=1, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
         const { landingPadIsRestingOn } = this
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
+
+        if (this.world.soundDeck && !this.thrustNoise) {
+            this.thrustNoise = this.world.soundDeck.playNoise({frequency:100},{loop:true, volume:0})
+        }
+        if (this.thrustNoise) {
+            this.thrustNoise.volume = thrust / maxThrust
+        }
 
         if (thrust > 0) {
             this.data.fuel = currentFuel - (thrust / 1000);
@@ -235,7 +243,7 @@ class SpaceShip extends Body {
             colors: ['white', color, color]
         }).enterWorld(this.world)
 
-        this.world.emitter.emit("SFX", { soundName: 'die' })
+        this.world.soundDeck?.playSample('die')
     }
 
     handleCollision(report: CollisionDetection.CollisionReport) {
@@ -285,7 +293,6 @@ class SpaceShip extends Body {
         }, new Force(10, heading))
 
         bullet.enterWorld(this.world)
-        this.world.emitter.emit('SFX', { soundName: 'laser', source: this });
     }
 
     steer(direction: "LEFT" | "RIGHT") {
@@ -310,6 +317,11 @@ class SpaceShip extends Body {
         if (newAmount < 0) { newAmount = 0 }
         if (newAmount > maxThrust) { newAmount = maxThrust }
         this.data.thrust = newAmount
+    }
+
+    leaveWorld(): void {
+        Body.prototype.leaveWorld.apply(this,[])
+        this.thrustNoise?.stop()
     }
 
 }

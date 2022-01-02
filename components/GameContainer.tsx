@@ -12,7 +12,7 @@ import { ScoreData } from "../modules/data-access/ScoreData";
 import { GameMode } from "../modules/GameMode";
 import { LevelIntro } from "../modules/LevelIntro";
 import MoonLanderLevelIntro from "./MoonLanderLevelIntro";
-import { makeSoundPlayer, SfxPayload } from "../audio";
+import { makeSoundDeck } from "../audio";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,7 +42,6 @@ interface GameContainerState {
     playerHasDied: boolean
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     levelIntro?: LevelIntro
-    soundEnabled: boolean
 }
 
 export type { GameContainerState }
@@ -71,7 +70,6 @@ export default class GameContainer extends React.Component {
             playerHasDied: false,
             playerIsStranded: false,
             mode: "TITLE",
-            soundEnabled: false
         }
 
         this.togglePaused = this.togglePaused.bind(this)
@@ -83,8 +81,6 @@ export default class GameContainer extends React.Component {
         this.goToTitles = this.goToTitles.bind(this)
         this.handleCommandPress = this.handleCommandPress.bind(this)
         this.asyncSetState = this.asyncSetState.bind(this)
-        this.playSound = this.playSound.bind(this)
-        this.playTone = this.playTone.bind(this)
     }
 
     componentWillUnmount() {
@@ -93,22 +89,9 @@ export default class GameContainer extends React.Component {
 
     tearDownWorld() {
         this.world?.stopTime();
-        this.world?.emitter.off('SFX');
-        this.world?.emitter.off('TONE');
+        this.world?.soundDeck?.mute()
         this.world = undefined;
         this.soundPlayer = undefined;
-    }
-
-    playSound(payload: SfxPayload) {
-        if (this.state.soundEnabled && this.soundPlayer) {
-            this.soundPlayer.play(payload.soundName, payload.options)
-        }
-    }
-
-    playTone(toneName: string) {
-        if (this.state.soundEnabled && this.soundPlayer) {
-            this.soundPlayer.playTone(toneName)
-        }
     }
 
     async asyncSetState(modification: Partial<GameContainerState>): Promise<GameContainerState> {
@@ -190,7 +173,7 @@ export default class GameContainer extends React.Component {
         this.tearDownWorld();
         const [newWorld, levelIntro] = await makeLevel(levelNumber);
         this.world = newWorld;
-        this.soundPlayer = makeSoundPlayer(this)
+        this.world.soundDeck = makeSoundDeck()
 
         await this.asyncSetState({
             mode: levelIntro ? "INTRO" : "PLAY",
@@ -231,8 +214,7 @@ export default class GameContainer extends React.Component {
     }
 
     async goToTitles(): Promise<GameContainerState> {
-        this.world?.stopTime();
-        this.world = undefined;
+        this.tearDownWorld()
 
         await this.asyncSetState({
             level: 1,
@@ -266,8 +248,10 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro, soundEnabled } = this.state;
+        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro } = this.state;
         const { world } = this;
+
+        const soundEnabled = world?.soundDeck?.isEnabled;
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
@@ -317,9 +301,9 @@ export default class GameContainer extends React.Component {
                     <div className={styles.menuBar}>
                         <button onClick={this.togglePaused}>Pause</button>
 
-                        <button
-                            onClick={() => { this.setState({ soundEnabled: !soundEnabled }) }}
-                        >{soundEnabled ? 'sound on' : 'sound off'}</button>
+                        <button disabled={true}
+                            onClick={() => {  }}
+                        >{soundEnabled ? 'sound is on' : 'sound is off'}</button>
 
                         {gameMode.allowRestart && <button onClick={() => { this.startLevel() }}>Restart Level</button>}
                         {gameMode.allowSkip && <button onClick={() => { this.startLevel(level + 1) }}>Skip Level</button>}

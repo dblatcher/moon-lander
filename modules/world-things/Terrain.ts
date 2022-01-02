@@ -80,8 +80,8 @@ class Terrain extends Body {
         const otherThing = report.item1 === this ? report.item2 : report.item1
         const { magnitude: impactSpeed } = otherThing.momentum;
 
-        if (otherThing instanceof SpaceShip &&  impactSpeed > .1) {
-            this.world.emitter.emit("SFX", { soundName: 'bang', options: { volume: .5 } })
+        if (otherThing instanceof SpaceShip && impactSpeed > .1) {
+            this.world.soundDeck?.playSample('bang', { volume: Math.min(impactSpeed * 5, 1) })
         }
     }
 }
