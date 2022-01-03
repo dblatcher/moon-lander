@@ -96,6 +96,7 @@ const gameModes: { [index: string]: GameMode } = {
             tutorials.tutorial1,
             tutorials.tutorial2,
             tutorials.tutorial3,
+            tutorials.tutorial4,
         ]
     }),
 

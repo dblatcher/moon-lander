@@ -1,69 +1,14 @@
-import { World, Area, Body, shapes, Force, StarField } from "physics-worlds";
+import { World, Force } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
-import { LandingPad, RefuelPad } from "../../world-things/LandingPad";
+import { RefuelPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { atmosphere } from "../gradientFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
 
+import { makeTutorialWorldContents, makeTutorialAtmo, makeTutorialBackground } from './generics';
 
-function makeTutorialWorldContents(worldDimensions = { width: 1400, height: 1400 }, padPlacement = (1 / 2)) {
-    const contents: (Body | Area)[] = [
-        new LandingPad({
-            x: worldDimensions.width * padPlacement,
-            y: worldDimensions.height - (worldDimensions.width / 40),
-            fillColor: 'green',
-            ...makeRectangleProperties(150,15),
-        }),
-
-        new Terrain({
-            x: worldDimensions.width * (3 / 4), y: worldDimensions.height,
-            size: worldDimensions.width / 4,
-            fillColor: 'brown',
-            color: 'brown',
-            shape: shapes.polygon,
-            corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
-        }),
-
-        new Terrain({
-            x: worldDimensions.width * (1 / 4), y: worldDimensions.height,
-            size: worldDimensions.width / 4,
-            fillColor: 'brown',
-            color: 'brown',
-            shape: shapes.polygon,
-            corners: [{ x: -1, y: -.1 }, { x: 1, y: -.1 }, { x: 1, y: .1 }, { x: -1, y: .1 },]
-        }),
-    ]
-
-    return contents;
-}
-
-function makeTutorialAtmo(worldDimensions = { width: 1400, height: 1400 }) {
-    return new Area({
-        x: worldDimensions.width / 2,
-        y: worldDimensions.height,
-        fillColor: atmosphere,
-        size: worldDimensions.width,
-        density: .2
-    })
-}
-
-function makeTutorialBackground(worldDimensions = { width: 1400, height: 1400 }) {
-    return [
-        new StarField({
-            numberOfStars: 20,
-            depth: 3,
-            ...worldDimensions
-        }),
-        new StarField({
-            numberOfStars: 50,
-            depth: 6,
-            ...worldDimensions
-        }),
-    ];
-}
 
 export async function tutorial1(): Promise<Level> {
 
@@ -159,4 +104,56 @@ export async function tutorial3(): Promise<Level> {
 
     const levelIntro = new LevelIntro('Tutorial three', 'tutorial-3');
     return [world, levelIntro];
+}
+
+export async function tutorial4(): Promise<Level> {
+
+    const worldDimensions = {
+        width: 2800,
+        height: 1200
+    }
+
+
+
+    const world = new World([
+        makeShip({
+            x: worldDimensions.width * (1 / 4),
+            y: worldDimensions.height - 50,
+            fuel: 1000,
+        }),
+        ...makeTutorialWorldContents(worldDimensions, (12 / 16)),
+        makeTutorialAtmo(worldDimensions),
+
+
+        new Terrain({
+            x: worldDimensions.width * (7 / 16),
+            y: worldDimensions.height - 50 - (worldDimensions.width / 40),
+            fillColor: 'grey',
+            ...makeRectangleProperties(120, 50),
+        }),
+
+        new RefuelPad({
+            x: worldDimensions.width * (7 / 16),
+            y: worldDimensions.height - 50 - 50 - 10 - (worldDimensions.width / 40),
+            fillColor: 'red',
+            ...makeRectangleProperties(75, 10),
+            fuel: 2000, maxFuel: 2500, renderIndicator: true
+        }),
+    ], {
+        ...worldDimensions,
+        gravitationalConstant: .001,
+        globalGravityForce: new Force(100, 0),
+        backGrounds: makeTutorialBackground(worldDimensions),
+
+        edges: {
+            left: "WRAP",
+            right: "WRAP",
+            bottom: "HARD",
+            top: "HARD"
+        },
+
+    });
+
+    const levelIntro = new LevelIntro('Tutorial Four', 'tutorial-4');
+    return [world,levelIntro];
 }

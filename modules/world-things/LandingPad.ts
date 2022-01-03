@@ -1,4 +1,4 @@
-import { BodyData, RenderFunctions, shapes, ViewPort } from "physics-worlds";
+import { BodyData, RenderFunctions, shapes, SoundControl, ViewPort } from "physics-worlds";
 import { SpaceShip } from "./SpaceShip";
 import { Terrain } from "./Terrain";
 
@@ -24,6 +24,7 @@ interface LandingPadData extends BodyData {
 
 class RefuelPad extends LandingPad {
     data: LandingPadData;
+    noise?: SoundControl | null
 
     constructor(data: LandingPadData) {
         super(data)
@@ -44,6 +45,23 @@ class RefuelPad extends LandingPad {
             const amount = Math.min(this.refuelRate, fuel, shipMax - shipFuel);
             this.data.fuel = fuel - amount;
             ship.data.fuel = shipFuel + amount;
+            this.playRefuelSound();
+        }
+    }
+
+    playRefuelSound() {
+        if (this.world.soundDeck) {
+            if (!this.noise) {
+                this.noise = this.world.soundDeck.playTone({
+                    frequency: 125,
+                    endFrequency: 150,
+                    duration: .5,
+                    type: 'square'
+                }, { volume: .05 })
+                this.noise?.whenEnded.then(() => {
+                    this.noise = undefined
+                })
+            }
         }
     }
 
