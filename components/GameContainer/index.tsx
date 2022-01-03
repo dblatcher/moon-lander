@@ -1,18 +1,18 @@
 import React from "react";
-import MoonLanderGame from "./MoonLanderGame";
-import MoonLanderTitleScreen from "./MoonLanderTitleScreen";
-import HighScoreEntry from "./HighScoreEntry";
-import KeyReader from "./KeyReader";
+import MoonLanderGame from "../MoonLanderGame";
+import MoonLanderTitleScreen from "../MoonLanderTitleScreen";
+import HighScoreEntry from "../HighScoreEntry";
+import KeyReader from "../KeyReader";
 import styles from "./GameContainer.module.scss";
 
-import { SoundPlayer, World } from "physics-worlds";
+import { World } from "physics-worlds";
 
-import { WorldStatus } from "../modules/worldValues";
-import { ScoreData } from "../modules/data-access/ScoreData";
-import { GameMode } from "../modules/GameMode";
-import { LevelIntro } from "../modules/LevelIntro";
-import MoonLanderLevelIntro from "./MoonLanderLevelIntro";
-import { makeSoundDeck, playFailSong, playVictorySong } from "../audio";
+import { WorldStatus } from "../../modules/worldValues";
+import { ScoreData } from "../../modules/data-access/ScoreData";
+import { GameMode } from "../../modules/GameMode";
+import { LevelIntro } from "../../modules/LevelIntro";
+import MoonLanderLevelIntro from "../MoonLanderLevelIntro";
+import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -56,7 +56,6 @@ export default class GameContainer extends React.Component {
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
     world?: World
-    soundPlayer?: SoundPlayer
 
     constructor(props: GameContainer["props"]) {
         super(props);
@@ -94,7 +93,6 @@ export default class GameContainer extends React.Component {
         this.world?.stopTime();
         this.world?.soundDeck?.mute()
         this.world = undefined;
-        this.soundPlayer = undefined;
     }
 
     setSoundEnabled(value: boolean, ignorePauseState=false): Promise<GameContainerState> {

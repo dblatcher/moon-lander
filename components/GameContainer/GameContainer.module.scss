@@ -1,6 +1,6 @@
-@import "../styles/mixins";
-@import "../styles/design-mixins";
-@import "../styles/button";
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+@import "../../styles/button";
 
 .component {
     @include fullHeight;
