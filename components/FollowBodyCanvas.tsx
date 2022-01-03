@@ -29,7 +29,7 @@ export default function FollowBodyCanvas(props: {
                 framefill,
             })
             viewPort.current.cameraInstruction = new CameraFollowInstruction({
-                body: player, followHeading: false, magnify, leadDistance: 0
+                body: player, followHeading: false, magnify, leadDistance: 0, staywithinWorldEdge: true
             })
             viewPort.current.renderCanvas()
         }

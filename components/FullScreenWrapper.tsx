@@ -2,11 +2,11 @@ import { CSSProperties, ReactChild, ReactChildren, useEffect, useRef, useState }
 
 import styles from '../styles/Page.module.scss'
 
-const buttonStyle:CSSProperties = {
-    position:'absolute',
-    top:0,
-    right:0,
-    margin:'.5rem',
+const buttonStyle: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    margin: '.5rem',
 }
 
 export default function FullScreenWrapper(props: {
@@ -19,13 +19,13 @@ export default function FullScreenWrapper(props: {
         wrapper.current?.requestFullscreen()
     }
 
-    function handleFullScreenChange(event:Event) {
+    function handleFullScreenChange(event: Event) {
         setIsFullScreen(document.fullscreenElement === wrapper.current)
     }
 
-    useEffect( () => {
-        const {current:element} = wrapper;
-        if (!element) {return}
+    useEffect(() => {
+        const { current: element } = wrapper;
+        if (!element) { return }
 
         element.addEventListener('fullscreenchange', handleFullScreenChange)
         return () => {
@@ -36,9 +36,9 @@ export default function FullScreenWrapper(props: {
     return <div ref={wrapper} className={styles["full-height-container"]}>
         {props.children}
         {!isFullScreen && (
-            <button 
-            style = {buttonStyle}
-            onClick={requestFullScreen}>full screen</button>
+            <button
+                style={buttonStyle}
+                onClick={requestFullScreen}>full screen</button>
         )}
     </div>
 }
