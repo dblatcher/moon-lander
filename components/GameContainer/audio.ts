@@ -39,13 +39,13 @@ async function playCord(deck: SoundDeck, notes: number | number[], duration: num
 async function playVictorySong(deck?: SoundDeck) {
 
     if (!deck) { return false }
-    await playCord(deck, notes.c4, .5, .3)
+    await playCord(deck, notes.c4, .5, .075)
     await sleep(10);
-    await playCord(deck, [notes.d4, notes.g4], .75, .4)
+    await playCord(deck, [notes.d4, notes.g4], .75, .1)
     await sleep(10);
-    await playCord(deck, [notes.a3, notes.e4, notes.e4], .5, .3)
+    await playCord(deck, [notes.a3, notes.e4, notes.e4], .5, .1)
     await sleep(10);
-    await playCord(deck, [notes.e4, notes.g4, notes.c4], .5, .5)
+    await playCord(deck, [notes.e4, notes.g4, notes.c4], .5, .15)
     return true
 }
 
@@ -53,11 +53,11 @@ async function playFailSong(deck?: SoundDeck) {
 
     if (!deck) { return false }
     await sleep(500);
-    await playCord(deck, notes.e4f, .75, .3)
+    await playCord(deck, notes.e4f, .75, .075)
     await sleep(10);
-    await playCord(deck, [notes.g4], .75, .4)
+    await playCord(deck, [notes.g4], .75, .1)
     await sleep(10);
-    await playCord(deck, [notes.c4], .5, .5)
+    await playCord(deck, [notes.c4], .5, .1)
     return true
 }
 
