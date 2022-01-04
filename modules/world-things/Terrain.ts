@@ -1,4 +1,4 @@
-import { Body, BodyData, Force, RenderFunctions, ViewPort } from "physics-worlds";
+import { Body, BodyData, Force, LinearGradientFill, RenderFunctions, ViewPort } from "physics-worlds";
 import { CollisionReport } from "physics-worlds/dist/src/collisionDetection";
 import { Point } from "physics-worlds/dist/src/geometry";
 import { SpaceShip } from "./SpaceShip";
@@ -8,9 +8,21 @@ interface TerrainData extends BodyData {
     relativeWidth?: number
 }
 
+const windowFill = new LinearGradientFill({
+    fallbackColor: 'skyblue',
+    canvasFunction: (ctx: CanvasRenderingContext2D, line: [Point, Point]) => {
+        const gradient = ctx.createLinearGradient(line[0].x, line[0].y, line[1].x, line[1].y);
+        gradient.addColorStop(0, 'skyblue');
+        gradient.addColorStop(0.1, 'skyblue');
+        gradient.addColorStop(.9, 'white');
+        gradient.addColorStop(1, 'black');
+        return gradient
+    }
+})
+
 class Terrain extends Body {
     data: TerrainData
-    windows?: Point[][]
+    imageSource?: CanvasImageSource
 
     constructor(data: TerrainData) {
         const elasticity = data.elasticity || Terrain.DEFAULT_ELASTICITY;
@@ -20,7 +32,7 @@ class Terrain extends Body {
         this.data.elasticity = elasticity;
 
         if (this.data.pattern === "BUILDING") {
-            this.windows = this.createWindows()
+            this.preRenderWindows()
         }
 
     }
@@ -33,45 +45,60 @@ class Terrain extends Body {
         return new myPrototype.constructor(Object.assign({}, this.data, { pattern: undefined }), new Force(this.momentum.magnitude, this.momentum.direction))
     }
 
-    createWindows(): Point[][] {
-        const { x, y, size = 10, relativeWidth = 1 } = this.data
-        const windowSize = 30;
+    createWindows(windowSize: number): Point[][] {
+        const { boundingRectangle } = this
+        const buildingWidth = boundingRectangle.right - boundingRectangle.left
+        const buildingHeight = boundingRectangle.bottom - boundingRectangle.top
 
-        const buildingHeight = size;
-        const buildingWidth = size * relativeWidth;
-        const area = (buildingHeight * buildingWidth)
-
-        const numberOfWindows = Math.min(35, Math.floor(area / 2500));
-
-        const rows = Math.floor(buildingHeight / windowSize) - 1;
-        const cols = Math.floor(buildingWidth / windowSize) - 1;
+        const rows = Math.floor(buildingHeight / windowSize) - 3;
+        const cols = Math.floor(buildingWidth / windowSize) - 2;
+        const numberOfWindows = Math.min(25, rows * cols / 2);
 
         const windows = []
-
         for (let i = 0; i < numberOfWindows; i++) {
-            let wy = windowSize * (Math.floor(Math.random() * rows) * (Math.random() > .5 ? 1 : -1));
-            let wx = windowSize * (Math.floor(Math.random() * cols) * (Math.random() > .5 ? 1 : -1));
-
+            let wy = windowSize * (1 + Math.floor(Math.random() * rows));
+            let wx = windowSize * (1 + Math.floor(Math.random() * cols));
             windows.push([
-                { x: x + wx, y: y + wy },
-                { x: x + wx + windowSize, y: y + wy },
-                { x: x + wx + windowSize, y: y + wy + windowSize },
-                { x: x + wx, y: y + wy + windowSize }
+                { x: wx, y: wy },
+                { x: wx + windowSize, y: wy },
+                { x: wx + windowSize, y: wy + windowSize },
+                { x: wx, y: wy + windowSize }
             ])
-
         }
 
         return windows;
     }
 
+    preRenderWindows() {
+
+        const { boundingRectangle } = this
+        const width = boundingRectangle.right - boundingRectangle.left
+        const height = boundingRectangle.bottom - boundingRectangle.top
+
+        const pad = document.createElement('canvas');
+        pad.width = width
+        pad.height = height
+        const ctx = pad.getContext('2d')
+        if (!ctx) { return }
+
+        const viewPort = new ViewPort({ canvas: pad, width, height, x: width / 2, y: height / 2 })
+
+        const windows = this.createWindows(50)
+        windows.forEach(window => {
+            RenderFunctions.renderPolygon.onCanvas(ctx, window, { strokeColor: 'black', fillColor: windowFill }, viewPort)
+        })
+
+        this.imageSource = pad
+    }
+
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
         Body.prototype.renderOnCanvas.apply(this, [ctx, viewPort]);
 
-        if (this.windows) {
-            const { color = 'white' } = this.data;
-            this.windows.forEach(window => {
-                RenderFunctions.renderPolygon.onCanvas(ctx, window, { strokeColor: color, fillColor: 'black', lineWidth: 2 }, viewPort);
-            })
+        if (this.imageSource) {
+            const leftEdge = Math.min(...this.polygonPoints.map(point => point.x));
+            const topEdge = Math.min(...this.polygonPoints.map(point => point.y));
+            let topLeft = viewPort.mapPoint({ x: leftEdge, y: topEdge })
+            ctx.drawImage(this.imageSource, topLeft.x, topLeft.y)
         }
     }
 
@@ -79,8 +106,8 @@ class Terrain extends Body {
 
         const otherThing = report.item1 === this ? report.item2 : report.item1
         const { magnitude: impactSpeed } = otherThing.momentum;
-        if (otherThing instanceof SpaceShip && impactSpeed > SpaceShip.negligableSpeed/2) {
-            this.world.soundDeck?.playSample('bang', { volume:1 })
+        if (otherThing instanceof SpaceShip && impactSpeed > SpaceShip.negligableSpeed / 2) {
+            this.world.soundDeck?.playSample('bang', { volume: 1 })
         }
     }
 }
