@@ -34,7 +34,6 @@ class Terrain extends Body {
         if (this.data.pattern === "BUILDING") {
             this.preRenderWindows()
         }
-
     }
 
     static DEFAULT_ELASTICITY = .1
@@ -91,7 +90,25 @@ class Terrain extends Body {
         this.imageSource = pad
     }
 
+    renderShadow(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
+
+        const { boundingRectangle } = this
+        const shadowDepth = (boundingRectangle.right-boundingRectangle.left)/5
+
+        const points: Point[] = [
+            { x: boundingRectangle.right, y: boundingRectangle.top },
+            { x: boundingRectangle.right + shadowDepth, y: boundingRectangle.top + shadowDepth*.75 },
+            { x: boundingRectangle.right + shadowDepth, y: boundingRectangle.bottom },
+            { x: boundingRectangle.right, y: boundingRectangle.bottom },
+        ]
+
+        RenderFunctions.renderPolygon.onCanvas(ctx, points, { fillColor: 'rgba(0,0,0,.5)' }, viewPort);
+    }
+
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
+        if (this.data.pattern === 'BUILDING') {
+            this.renderShadow(ctx, viewPort)
+        }
         Body.prototype.renderOnCanvas.apply(this, [ctx, viewPort]);
 
         if (this.imageSource) {
