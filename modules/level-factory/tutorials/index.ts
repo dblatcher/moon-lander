@@ -1,8 +1,10 @@
 import { World, Force } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
+import { DistantPlanet } from "../../world-things/DistantPlanet";
 import { RefuelPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
+import { asyncCreateImageFill } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
@@ -28,7 +30,9 @@ export async function tutorial1(): Promise<Level> {
         ...worldDimensions,
         gravitationalConstant: .001,
         globalGravityForce: new Force(100, 0),
-        backGrounds: makeTutorialBackground(worldDimensions),
+        backGrounds: [
+            ...makeTutorialBackground(worldDimensions),
+        ],
         edges: {
             left: "WRAP",
             right: "WRAP",
@@ -76,6 +80,7 @@ export async function tutorial2(): Promise<Level> {
 
 export async function tutorial3(): Promise<Level> {
 
+    const jupiterFill = await asyncCreateImageFill('jupiter5');
     const worldDimensions = {
         width: 2800,
         height: 1200
@@ -91,7 +96,10 @@ export async function tutorial3(): Promise<Level> {
         ...worldDimensions,
         gravitationalConstant: .001,
         globalGravityForce: new Force(70, 0),
-        backGrounds: makeTutorialBackground(worldDimensions),
+        backGrounds: [
+            ...makeTutorialBackground(worldDimensions),
+            new DistantPlanet({ y: 200, x: 300, radius:1600, parallax:5, fillColor: jupiterFill }),
+        ],
 
         edges: {
             left: "WRAP",
@@ -155,5 +163,5 @@ export async function tutorial4(): Promise<Level> {
     });
 
     const levelIntro = new LevelIntro('Tutorial Four', 'tutorial-4');
-    return [world,levelIntro];
+    return [world, levelIntro];
 }

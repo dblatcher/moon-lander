@@ -49,12 +49,12 @@ function makeTutorialBackground(worldDimensions = { width: 1400, height: 1400 })
     return [
         new StarField({
             numberOfStars: 20,
-            depth: 3,
+            depth: 10,
             ...worldDimensions
         }),
         new StarField({
             numberOfStars: 50,
-            depth: 6,
+            depth: 15,
             ...worldDimensions
         }),
     ];

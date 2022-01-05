@@ -1,4 +1,4 @@
-import { ImageFill } from "physics-worlds";
+import { ImageFill, Geometry } from "physics-worlds";
 
 import soilImage from "../../image/soil.jpg";
 import jupiterImage from "../../image/jupiter.jpg";
@@ -7,9 +7,17 @@ import brickImage from "../../image/brick.png";
 import skyImage from "../../image/clouds.png";
 
 
-const data: { [index: string]: [string, string, any] } = {
+interface ImageFillTransforms {
+    scale?: number
+    rotate?: number
+    parallax?: number
+    offset?: Geometry.Vector
+}
+
+const data: { [index: string]: [string, string, ImageFillTransforms] } = {
     soil: [soilImage.src, 'brown', { scale: 1, rotate: 30 }],
     jupiter: [jupiterImage.src, 'orange', { scale: 10 }],
+    jupiter5: [jupiterImage.src, 'orange', { scale: 3.5, parallax: 5 }],
     neptune: [neptuneImage.src, 'blue', { scale: 3 }],
     brick: [brickImage.src, 'red', { scale: .5 }],
     sky: [skyImage.src, 'skyblue', { scale: 10, parallax: 4 }]
