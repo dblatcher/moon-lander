@@ -27,6 +27,7 @@ interface SpaceShipData extends BodyData {
 
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
+    instanceId?: string
 }
 
 class SpaceShip extends Body {
@@ -54,6 +55,7 @@ class SpaceShip extends Body {
 
     static negligableSpeed = 0.2
     static MAX_IMPACT_SPEED = 3
+    static PLAYER_INSTANCE_ID = 'player'
 
     get seemsStill(): boolean {
         const { thrust = 0 } = this.data
@@ -61,6 +63,10 @@ class SpaceShip extends Body {
         if (thrust > 0) { return false }
         if (momentum.magnitude > SpaceShip.negligableSpeed) { return false }
         return true
+    }
+
+    get isPlayer() {
+        return this.data.instanceId === SpaceShip.PLAYER_INSTANCE_ID;
     }
 
     get seemsStranded(): boolean {
@@ -96,7 +102,7 @@ class SpaceShip extends Body {
         const { landingPadIsRestingOn } = this
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
 
-        if (this.world.soundDeck && !this.thrustNoise) {
+        if (this.isPlayer && this.world.soundDeck && !this.thrustNoise) {
             this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 75, duration: 3 }, { loop: true, volume: 0 })
         }
         if (this.thrustNoise) {
@@ -249,29 +255,33 @@ class SpaceShip extends Body {
     handleCollision(report: CollisionDetection.CollisionReport) {
 
         const { magnitude: impactSpeed } = this.momentum;
+        const otherThing = report.item1 === this ? report.item2 : report.item1
+        if (otherThing instanceof Terrain) {
+            const elasticityAdjustment = 1 - (otherThing.data.elasticity || 1);
+            const adjustedImpactSpeed = impactSpeed * elasticityAdjustment;
 
-        if (report) {
-            const otherThing = report.item1 === this ? report.item2 : report.item1
-
-            if (otherThing instanceof Terrain) {
-                const elasticityAdjustment = 1 - (otherThing.data.elasticity || 1);
-                const adjustedImpactSpeed = impactSpeed * elasticityAdjustment;
-
-                if (adjustedImpactSpeed > SpaceShip.MAX_IMPACT_SPEED) {
-                    this.explode({
-                        driftBiasX: -this.momentum.vectorX / this.momentum.magnitude * 2,
-                        driftBiasY: -this.momentum.vectorY / this.momentum.magnitude * 2
-                    })
-                }
+            if (adjustedImpactSpeed > SpaceShip.MAX_IMPACT_SPEED) {
+                this.explode({
+                    driftBiasX: -this.momentum.vectorX / this.momentum.magnitude * 2,
+                    driftBiasY: -this.momentum.vectorY / this.momentum.magnitude * 2
+                })
             }
         }
 
+        if (otherThing instanceof SpaceShip) {
+            this.explode();
+            (otherThing as SpaceShip).explode();
+        }
         Body.prototype.handleCollision(report)
     }
 
 
     respondToImpact(report: CollisionDetection.CollisionReport) {
-        switch (report.item1.typeId) {
+
+        const otherThing = report.item1 === this ? report.item2 : report.item1
+        if (otherThing instanceof SpaceShip) {
+            this.explode();
+            (otherThing as SpaceShip).explode();
         }
     }
 

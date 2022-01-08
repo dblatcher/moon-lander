@@ -4,7 +4,7 @@ import { SpaceShip } from "./world-things/SpaceShip";
 
 
 function getPlayerSpaceship(world: World): SpaceShip | null {
-    const playerBody: Body | undefined = world.bodies.find(body => body.typeId == "SpaceShip")
+    const playerBody: Body | undefined = world.bodies.find(body => body instanceof SpaceShip && (body as SpaceShip).isPlayer)
     if (!playerBody) { return null }
     return playerBody as SpaceShip;
 }

@@ -20,12 +20,27 @@ async function level(): Promise<Level> {
 
     const world = new World([
         makeShip({
-            x: 150, y: 500,
-            color: 'purple',
+            x: 150, y: 500, color: 'red',
         }),
-        // makeShip({ x:350,y:800,
-        //     color:'black', thrust:2500, maxThrust:3000, fuel:Infinity, heading: Geometry._deg*190
-        // }),
+        makeShip({ x:450,y:850,
+            instanceId:'passing ship',
+            size:35,
+            color:'black', thrust:20000, maxThrust:30000, fuel:Infinity, heading: Geometry._deg*195
+        }),
+        makeShip({ x:650,y:worldDimensions.height - 700,
+            instanceId:'passing ship',
+            size:35,
+            color:'black', thrust:20000, maxThrust:30000, fuel:Infinity, heading: Geometry._deg*180
+        }),
+        makeShip({ x:100,y:worldDimensions.height - 1500,
+            instanceId:'passing ship',
+            size:35,
+            color:'black', thrust:10000, maxThrust:30000, fuel:Infinity, heading: Geometry._deg*180
+        }),
+        makeShip({ x:510,y:worldDimensions.height - 650,
+            instanceId:'still ship',
+            color:'black', 
+        }),
 
         new Terrain({ pattern: 'BUILDING', x: 600, y: worldDimensions.height - 210, ...makeRectangleProperties(350, 75), fillColor: 'darkkhaki', color: 'black' }),
         new Terrain({ pattern: 'BUILDING', x: 550, y: worldDimensions.height - 400, ...makeRectangleProperties(100, 250), fillColor: 'darkkhaki', color: 'brown' }),

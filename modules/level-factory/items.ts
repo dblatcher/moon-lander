@@ -53,7 +53,8 @@ function makeShip(config: SpaceShipData) {
             maxThrust: 6000,
             maxImpact: 50000,
             maxFuel: 4000,
-            heading: Geometry._360deg / 2
+            heading: Geometry._360deg / 2,
+            instanceId: SpaceShip.PLAYER_INSTANCE_ID
         }, config)
 
     return new SpaceShip(finalConfig)
