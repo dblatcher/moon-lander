@@ -70,14 +70,6 @@ export default function MoonLanderGame(props: Readonly<{
 
     return <article className={styles.article}>
 
-        <section className={styles.panelRow}>
-            <NumberPanel gameMode={gameMode}
-                score={score}
-                level={level}
-                lives={lives} />
-            <DashboardPanel world={world} />
-        </section>
-
         <section className={styles.screensRow}>
             <div className={styles.mainScreen}>
                 <div>
@@ -103,6 +95,14 @@ export default function MoonLanderGame(props: Readonly<{
                     ]}
                     magnify={.2} />
             </div>
+        </section>
+
+        <section className={styles.panelRow}>
+            <NumberPanel gameMode={gameMode}
+                score={score}
+                level={level}
+                lives={lives} />
+            <DashboardPanel world={world} />
         </section>
 
         {(playerHasLanded && mode === "PLAY") && (

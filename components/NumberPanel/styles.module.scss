@@ -9,14 +9,15 @@
     flex-wrap: wrap;
 
     div {
-        margin: 0 1rem;
+        margin: 0 .5rem;
         display: flex;
         align-items: center;
 
         span {
             @include lcd();
-            min-width: 4rem;
+            min-width: 3rem;
             text-align: right;
+            font-size: 80%;
         }
     }
 }

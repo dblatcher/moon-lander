@@ -12,6 +12,7 @@ export default function FollowBodyCanvas(props: {
     const { world, magnify = 1, width = 400, height = 400, framefill } = props
     const canvas = useRef<HTMLCanvasElement | null>(null)
     const viewPort = useRef<ViewPort | null>(null)
+    const effectiveWidth = Math.min(width, world.width * magnify);
 
     useEffect(() => {
         if (canvas.current && !viewPort.current) {
@@ -23,7 +24,7 @@ export default function FollowBodyCanvas(props: {
 
             viewPort.current = new ViewPort({
                 world, canvas: canvas.current,
-                width, height,
+                width: effectiveWidth, height,
                 x: player.data.x, y: player.data.y,
                 magnify,
                 framefill,
