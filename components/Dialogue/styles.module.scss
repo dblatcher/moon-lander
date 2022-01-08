@@ -3,7 +3,6 @@
 @import "../../styles/button";
 
 .container {
-
     @include dialog(false);
 
     p {
@@ -14,7 +13,6 @@
         background-color: yellow;
         padding: .5rem 1.5rem;
         color: black;
-
         border-top: 10px solid;
         border-bottom: 10px solid;
         border-image: repeating-linear-gradient(100deg, black 0px,black 5px, yellow 9px, yellow 10px) 30 / 1 / 0 stretch;
@@ -31,7 +29,7 @@
     }
 
     &.top {
-        top: 25%;
+        top: 35%;
     }
 }
 

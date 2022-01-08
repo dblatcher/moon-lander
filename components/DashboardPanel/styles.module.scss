@@ -1,0 +1,13 @@
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+
+.panel {
+    @include metal;
+    position: relative;
+}
+
+.row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}

@@ -4,16 +4,15 @@ import { World } from "physics-worlds";
 import FullCanvas from "../FullCanvas";
 import WorldInterface from "../WorldInterface";
 import FollowBodyCanvas from "../FollowBodyCanvas";
-import BarMeter from "../BarMeter";
-import DangerMeter from "../DangerMeter";
 import NumberPanel from "../NumberPanel";
 import Dialogue from "../Dialogue";
 import PausedSymbol from "../PausedSymbol";
+import DashboardPanel from "../DashboardPanel";
 
 import { GameContainerState } from "../GameContainer";
 import { controlSpaceShip } from "../../modules/controlSpaceShip";
 import { GameMode } from "../../modules/GameMode";
-import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../../modules/worldValues";
+import { getPlayerFuel, WorldStatus, getWorldStatus } from "../../modules/worldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
@@ -71,21 +70,25 @@ export default function MoonLanderGame(props: Readonly<{
 
     return <article className={styles.article}>
 
-        <NumberPanel gameMode={gameMode} score={score} level={level} lives={lives} />
+        <section className={styles.panelRow}>
+            <NumberPanel gameMode={gameMode}
+                score={score}
+                level={level}
+                lives={lives} />
+            <DashboardPanel world={world} />
+        </section>
 
-        <div className={styles.mainScreen}>
-            <div>
-                <FollowBodyCanvas
-                    world={world}
-                    magnify={1}
-                    height={1200} width={1200}
-                    framefill={'gray'} />
+        <section className={styles.screensRow}>
+            <div className={styles.mainScreen}>
+                <div>
+                    <FollowBodyCanvas
+                        world={world}
+                        magnify={1}
+                        height={1200} width={1200}
+                        framefill={'gray'} />
+                </div>
             </div>
-        </div>
-
-        <div className={styles.panel}>
-
-            <div className={styles.floatingLcd}>
+            <div className={styles.scannerScreen}>
                 <FullCanvas
                     world={world}
                     dontRenderBackground
@@ -100,26 +103,7 @@ export default function MoonLanderGame(props: Readonly<{
                     ]}
                     magnify={.2} />
             </div>
-        </div>
-
-        <div className={[styles.panel, styles["panel--left"], styles["panel--metal"]].join(" ")}>
-            <div className={styles.row}>
-                <BarMeter
-                    caption="THRUST"
-                    world={world}
-                    getValues={getPlayerThrust} />
-                <BarMeter
-                    caption="FUEL"
-                    meterType="GAGE"
-                    world={world}
-                    getValues={getPlayerFuel} />
-                <DangerMeter
-                    caption="SPEED"
-                    world={world}
-                    getValues={getPlayerSpeed} />
-            </div>
-            <span className={styles["bottom-rivets"]}></span>
-        </div>
+        </section>
 
         {(playerHasLanded && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
