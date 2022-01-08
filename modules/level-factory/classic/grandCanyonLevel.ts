@@ -1,5 +1,4 @@
-import { Area, Force, RadialGradientFill, shapes, StarField, World } from "physics-worlds";
-import { Circle } from "physics-worlds/dist/src/geometry";
+import { Force, World } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
@@ -8,7 +7,7 @@ import { asyncCreateImageFill } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
-async function level3(): Promise<Level> {
+async function level(): Promise<Level> {
 
     const soil = await asyncCreateImageFill('soil');
 
@@ -47,4 +46,4 @@ async function level3(): Promise<Level> {
     return [world, levelIntro]
 }
 
-export { level3 }
+export { level }

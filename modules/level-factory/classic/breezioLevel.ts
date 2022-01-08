@@ -8,7 +8,7 @@ import { asyncCreateImageFill } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
-async function level2(): Promise<Level> {
+async function level(): Promise<Level> {
 
     const soil = await asyncCreateImageFill('soil');
 
@@ -62,4 +62,4 @@ async function level2(): Promise<Level> {
     return [world, levelIntro]
 }
 
-export { level2 }
+export { level }

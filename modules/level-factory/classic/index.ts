@@ -1,7 +1,7 @@
-import { level1 } from "./1";
-import { level2 } from "./2";
-import { level3 } from "./3";
+import { level as moonbaseAlpha } from "./moonbaseAlphaLevel";
+import { level as breezio } from "./breezioLevel";
+import { level as grandCanyon } from "./grandCanyonLevel";
 
 export {
-    level1, level2, level3,
+    moonbaseAlpha, breezio, grandCanyon,
 }
