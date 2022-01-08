@@ -1,23 +1,23 @@
 import React from "react";
 import { World } from "physics-worlds";
 
-import FullCanvas from "./FullCanvas";
-import WorldInterface from "./WorldInterface";
-import FollowBodyCanvas from "./FollowBodyCanvas";
-import BarMeter from "./BarMeter";
-import DangerMeter from "./DangerMeter";
-import NumberPanel from "./NumberPanel";
-import Dialogue from "./Dialogue";
-import PausedSymbol from "./PausedSymbol";
+import FullCanvas from "../FullCanvas";
+import WorldInterface from "../WorldInterface";
+import FollowBodyCanvas from "../FollowBodyCanvas";
+import BarMeter from "../BarMeter";
+import DangerMeter from "../DangerMeter";
+import NumberPanel from "../NumberPanel";
+import Dialogue from "../Dialogue";
+import PausedSymbol from "../PausedSymbol";
 
-import { GameContainerState } from "./GameContainer";
-import { controlSpaceShip } from "../modules/controlSpaceShip";
-import { GameMode } from "../modules/GameMode";
-import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../modules/worldValues";
-import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../modules/minimap";
+import { GameContainerState } from "../GameContainer";
+import { controlSpaceShip } from "../../modules/controlSpaceShip";
+import { GameMode } from "../../modules/GameMode";
+import { getPlayerFuel, getPlayerThrust, WorldStatus, getWorldStatus, getPlayerSpeed } from "../../modules/worldValues";
+import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
-import dialogueStyles from "./Dialogue/styles.module.scss";
+import dialogueStyles from "../Dialogue/styles.module.scss";
 
 
 function sleep(ms: number) {

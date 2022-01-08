@@ -1,6 +1,6 @@
 
-import { ScoreData } from "../modules/data-access/ScoreData";
-import HighScoreTable from "./HighScoreTable";
+import { ScoreData } from "../../modules/data-access/ScoreData";
+import HighScoreTable from "../HighScoreTable";
 import styles from "./MoonLanderTitleScreen.module.scss";
 
 export default function MoonLanderTitleScreen(props: {
