@@ -16,17 +16,17 @@ class LandingPad extends Terrain {
 }
 
 
-interface LandingPadData extends BodyData {
+interface RefuelPadData extends BodyData {
     fuel: number
     maxFuel: number
     renderIndicator?: boolean
 }
 
 class RefuelPad extends LandingPad {
-    data: LandingPadData;
+    data: RefuelPadData;
     noise?: SoundControl | null
 
-    constructor(data: LandingPadData) {
+    constructor(data: RefuelPadData) {
         super(data)
         const elasticity = data.elasticity || LandingPad.DEFAULT_ELASTICITY;
         this.data = data

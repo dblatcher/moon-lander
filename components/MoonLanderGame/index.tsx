@@ -12,7 +12,7 @@ import DashboardPanel from "../DashboardPanel";
 import { GameContainerState } from "../GameContainer";
 import { controlSpaceShip } from "../../modules/controlSpaceShip";
 import { GameMode } from "../../modules/GameMode";
-import { getPlayerFuel, WorldStatus, getWorldStatus } from "../../modules/worldValues";
+import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerSpaceship } from "../../modules/moonLanderWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";
@@ -26,9 +26,7 @@ function sleep(ms: number) {
 export default function MoonLanderGame(props: Readonly<{
     world: World
     gameMode: GameMode
-    playerHasLanded: boolean
-    playerHasDied: boolean
-    playerIsStranded: boolean
+    worldStatus: WorldStatus
     score: number
     lives: number
     level: number
@@ -43,7 +41,7 @@ export default function MoonLanderGame(props: Readonly<{
 }>) {
 
     const {
-        world, playerHasLanded, level, score, lives, controls, playerHasDied, playerIsStranded, isPaused, mode, gameMode,
+        world, worldStatus, level, score, lives, controls, isPaused, mode, gameMode,
         handleWorldStatus, startLevel, addPoints, addLives, endPlaySession
     } = props
 
@@ -75,6 +73,7 @@ export default function MoonLanderGame(props: Readonly<{
                 <div>
                     <FollowBodyCanvas
                         world={world}
+                        getSubject={getPlayerSpaceship}
                         magnify={1}
                         height={1200} width={1200}
                         framefill={'gray'} />
@@ -105,7 +104,7 @@ export default function MoonLanderGame(props: Readonly<{
             <DashboardPanel world={world} />
         </section>
 
-        {(playerHasLanded && mode === "PLAY") && (
+        {(worldStatus.playerLanded && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
                 <p>You have landed!</p>
                 {onLastLevel && <p> Congratulations! That was the last level!</p>}
@@ -116,7 +115,7 @@ export default function MoonLanderGame(props: Readonly<{
             </Dialogue>
         )}
 
-        {(playerHasDied && mode === "PLAY") && (
+        {(worldStatus.playerDead && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
                 <p>You have crashed.</p>
 
@@ -128,7 +127,7 @@ export default function MoonLanderGame(props: Readonly<{
             </Dialogue>
         )}
 
-        {(playerIsStranded && !playerHasLanded && mode === "PLAY") && (
+        {(worldStatus.playerStranded && !worldStatus.playerLanded && mode === "PLAY") && (
             <Dialogue placement="TOP" design="YELLOW">
                 <p>You have ran out of fuel.</p>
 
@@ -145,7 +144,7 @@ export default function MoonLanderGame(props: Readonly<{
         )}
 
         <WorldInterface
-            controls={(!playerHasLanded && mode === "PLAY") ? controls : {}}
+            controls={(!worldStatus.playerLanded && mode === "PLAY") ? controls : {}}
             world={world}
             controlFunction={controlSpaceShip}
             getWorldStatus={getWorldStatus}

@@ -1,5 +1,5 @@
 import { World } from "physics-worlds";
-import { getPlayerSpaceship } from "./worldValues";
+import { getPlayerSpaceship } from "./moonLanderWorldValues";
 
 
 function controlSpaceShip(world: World, key: string) {

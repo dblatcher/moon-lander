@@ -5,9 +5,9 @@ import HighScoreEntry from "../HighScoreEntry";
 import KeyReader from "../KeyReader";
 import styles from "./GameContainer.module.scss";
 
-import { World } from "physics-worlds";
+import { SoundDeck, World } from "physics-worlds";
 
-import { WorldStatus } from "../../modules/worldValues";
+import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../modules/moonLanderWorldValues";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
@@ -37,9 +37,7 @@ interface GameContainerState {
     score: number
     lives: number,
     controls: { [index: string]: boolean }
-    playerHasLanded: boolean  // should wrap these properies into a WorldStatus prop to 
-    playerIsStranded: boolean // the generalise and simplify this component
-    playerHasDied: boolean
+    worldStatus: WorldStatus
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     levelIntro?: LevelIntro
     soundEnabled: boolean
@@ -56,6 +54,7 @@ export default class GameContainer extends React.Component {
     state!: GameContainerState;
     canvasRef: React.RefObject<HTMLCanvasElement>;
     world?: World
+    songPlaying?: Promise<boolean>
 
     constructor(props: GameContainer["props"]) {
         super(props);
@@ -66,9 +65,7 @@ export default class GameContainer extends React.Component {
             score: 0,
             lives: props.gameMode.startingLives,
             controls: {},
-            playerHasLanded: false,
-            playerHasDied: false,
-            playerIsStranded: false,
+            worldStatus: {},
             mode: "TITLE",
             soundEnabled: true,
         }
@@ -95,7 +92,7 @@ export default class GameContainer extends React.Component {
         this.world = undefined;
     }
 
-    setSoundEnabled(value: boolean, ignorePauseState=false): Promise<GameContainerState> {
+    setSoundEnabled(value: boolean, ignorePauseState = false): Promise<GameContainerState> {
         return this.asyncSetState({ soundEnabled: value }).then(state => {
             if (this.world?.soundDeck) {
                 this.world.soundDeck.masterVolume = state.soundEnabled ? 1 : 0;
@@ -143,36 +140,38 @@ export default class GameContainer extends React.Component {
         }
     }
 
+    unlessSongAlreadyPlaying(songFunction: { (deck?: SoundDeck): Promise<boolean> }) {
+        if (!this.songPlaying) {
+            this.songPlaying = songFunction(this.world?.soundDeck);
+            this.songPlaying.then(() => {
+                this.songPlaying = undefined;
+            })
+        }
+    }
+
     handleWorldStatus(status: WorldStatus): void {
-        const { landingPadPlayerIsOn, playerDead, playerStranded } = status;
-        const modification: any = {}
+        const { worldStatus: oldStatus } = this.state;
 
-        if (!this.state.playerHasDied && playerDead) {
-            modification.playerHasDied = true
-            playFailSong(this.world?.soundDeck)
+        if (isChangeToVictory(oldStatus, status)) {
+            this.unlessSongAlreadyPlaying(playVictorySong)
         }
 
-        if (!this.state.playerHasLanded && landingPadPlayerIsOn && landingPadPlayerIsOn.typeId == "LandingPad") {
-            modification.playerHasLanded = true;
-            playVictorySong(this.world?.soundDeck)
+        if (isChangeToFailure(oldStatus, status)) {
+            this.unlessSongAlreadyPlaying(playFailSong)
         }
 
-        if (!this.state.playerIsStranded && playerStranded) {
-            modification.playerIsStranded = true
-        }
-
-        this.setState(modification)
+        this.setState({ worldStatus: status })
     }
 
     togglePaused(): void {
         if (!this.world) { return }
-        const { mode, playerHasDied, playerHasLanded, playerIsStranded } = this.state
+        const { mode, worldStatus } = this.state
         const { speed } = this.props.gameMode;
-        if (mode !== "PLAY" || playerHasDied || playerHasLanded || playerIsStranded) { return }
+        if (mode !== "PLAY" || playerIsInactive(worldStatus)) { return }
 
         if (this.isPaused) {
             this.world.ticksPerSecond = speed;
-            if (this.state.soundEnabled) {this.world.soundDeck?.unmute()}
+            if (this.state.soundEnabled) { this.world.soundDeck?.unmute() }
         } else {
             this.world.ticksPerSecond = 0;
             this.world.soundDeck?.mute()
@@ -202,9 +201,7 @@ export default class GameContainer extends React.Component {
             mode: levelIntro ? "INTRO" : "PLAY",
             level: levelNumber,
             levelIntro,
-            playerHasLanded: false,
-            playerHasDied: false,
-            playerIsStranded: false,
+            worldStatus: {},
         })
 
         if (!levelIntro) {
@@ -228,9 +225,7 @@ export default class GameContainer extends React.Component {
     async goToHighScore(): Promise<GameContainerState> {
         await this.asyncSetState({
             mode: "HIGHSCORE",
-            playerHasLanded: false,
-            playerHasDied: false,
-            playerIsStranded: false,
+            worldStatus: {},
         })
 
         return this.state
@@ -242,9 +237,7 @@ export default class GameContainer extends React.Component {
         await this.asyncSetState({
             level: 1,
             lives: this.props.gameMode.startingLives,
-            playerHasLanded: false,
-            playerHasDied: false,
-            playerIsStranded: false,
+            worldStatus: {},
             score: 0,
             mode: "TITLE"
         })
@@ -271,7 +264,7 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { controls, playerHasLanded, playerHasDied, playerIsStranded, score, lives, mode, level, levelIntro, soundEnabled } = this.state;
+        const { controls, worldStatus, score, lives, mode, level, levelIntro, soundEnabled } = this.state;
         const { world } = this;
 
 
@@ -289,9 +282,7 @@ export default class GameContainer extends React.Component {
                     <MoonLanderGame key={world.name}
                         world={world}
                         gameMode={gameMode}
-                        playerHasDied={playerHasDied}
-                        playerIsStranded={playerIsStranded}
-                        playerHasLanded={playerHasLanded}
+                        worldStatus={worldStatus}
                         controls={controls}
                         score={score}
                         mode={mode}

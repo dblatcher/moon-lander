@@ -1,6 +1,6 @@
 import { World } from "physics-worlds";
 import React, { useEffect } from "react";
-import { WorldStatus } from "../modules/worldValues";
+import { WorldStatus } from "../modules/moonLanderWorldValues";
 
 
 /**

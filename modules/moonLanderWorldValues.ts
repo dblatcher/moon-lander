@@ -1,7 +1,11 @@
 import { Body, World } from "physics-worlds";
-import { LandingPad } from "./world-things/LandingPad";
 import { SpaceShip } from "./world-things/SpaceShip";
 
+interface WorldStatus {
+    playerDead?: boolean
+    playerStranded?: boolean
+    playerLanded?: boolean
+}
 
 function getPlayerSpaceship(world: World): SpaceShip | null {
     const playerBody: Body | undefined = world.bodies.find(body => body instanceof SpaceShip && (body as SpaceShip).isPlayer)
@@ -36,20 +40,30 @@ const getPlayerSpeed = (world: World) => {
     }
 }
 
-interface WorldStatus {
-    playerDead?: boolean
-    landingPadPlayerIsOn?: LandingPad
-    playerStranded?: boolean
+const isChangeToVictory = (oldStatus: WorldStatus, newStatus: WorldStatus): boolean => {
+    return (
+        (!oldStatus.playerLanded && newStatus.playerLanded)
+    ) || false
 }
 
+const isChangeToFailure = (oldStatus: WorldStatus, newStatus: WorldStatus): boolean => {
+    return (
+        (!oldStatus.playerDead && newStatus.playerDead) ||
+        (!oldStatus.playerStranded && newStatus.playerStranded)
+    ) || false
+}
+
+const playerIsInactive = (status: WorldStatus): boolean => {
+    return status.playerDead || status.playerStranded || status.playerStranded || false
+}
 
 const getWorldStatus = (world: World): WorldStatus => {
     const player = getPlayerSpaceship(world)
 
     return {
         playerDead: !player,
-        landingPadPlayerIsOn: player?.landingPadIsRestingOn,
-        playerStranded: player?.isStranded
+        playerStranded: player?.isStranded,
+        playerLanded: player?.landingPadIsRestingOn?.typeId === 'LandingPad',
     }
 }
 
@@ -57,5 +71,6 @@ export type {
     WorldStatus
 }
 export {
-    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed
+    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed,
+    isChangeToFailure, isChangeToVictory, playerIsInactive,
 }

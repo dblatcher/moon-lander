@@ -22,7 +22,6 @@ class DistantPlanet extends BackGround {
 
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort): void {
         const { fillColor, parallax } = this.data
-        console.log(this)
         RenderFunctions.renderCircle.onCanvas(ctx, this.data, { fillColor, parallax }, viewPort)
     }
 }

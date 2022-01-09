@@ -1,7 +1,7 @@
 import { World } from "physics-worlds";
 import BarMeter from "../BarMeter";
 import DangerMeter from "../DangerMeter";
-import { getPlayerFuel, getPlayerThrust, getPlayerSpeed } from "../../modules/worldValues";
+import { getPlayerFuel, getPlayerThrust, getPlayerSpeed } from "../../modules/moonLanderWorldValues";
 
 import styles from "./styles.module.scss";
 
