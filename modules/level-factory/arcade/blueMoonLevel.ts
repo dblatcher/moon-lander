@@ -3,7 +3,7 @@ import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadImageFill } from "../imageFills";
 import { atmosphere } from "../gradientFills";
 import { makeShip } from "../items";
 
@@ -16,7 +16,7 @@ async function makeBlueMoonLevel(): Promise<Level> {
 
     const planetRadius = 350;
     const atmosphereThickness = 400;
-    const neptune = await asyncCreateImageFill('neptune');
+    const neptune = await loadImageFill('neptune');
 
     const world = new World([
         makeShip({

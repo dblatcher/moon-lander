@@ -1,17 +1,15 @@
-import { Area, Force, Geometry, RadialGradientFill, shapes, StarField, World } from "physics-worlds";
-import { Circle } from "physics-worlds/dist/src/geometry";
+import { Force, Geometry, World } from "physics-worlds";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadManyImageFills } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
 async function level(): Promise<Level> {
 
-    const soil = await asyncCreateImageFill('soil');
-    const sky = await asyncCreateImageFill('sky');
+    const [sky, soil] = await loadManyImageFills(['sky', 'soil'])
 
     const worldDimensions = {
         width: 1000,

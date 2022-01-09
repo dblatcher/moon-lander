@@ -4,13 +4,13 @@ import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadImageFill } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
 async function level(): Promise<Level> {
 
-    const soil = await asyncCreateImageFill('soil');
+    const soil = await loadImageFill('soil');
 
     const bg = new RadialGradientFill({
         fallbackColor: "rgba(150,40,160,.5)",

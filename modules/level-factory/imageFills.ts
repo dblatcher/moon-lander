@@ -32,7 +32,7 @@ function createImageFill(key: string): ImageFill {
     return ImageFill.fromSrc(...data['soil']);
 }
 
-async function asyncCreateImageFill(key: string): Promise<ImageFill> {
+async function loadImageFill(key: string): Promise<ImageFill> {
 
     if (!data[key]) { key = 'neptune' }
     const params = data[key]
@@ -52,6 +52,10 @@ async function asyncCreateImageFill(key: string): Promise<ImageFill> {
     });
 }
 
+async function loadManyImageFills(keys: string[]): Promise<ImageFill[]> {
+    return await Promise.all(keys.map(key => { return loadImageFill(key) }));
+}
+
 export {
-    createImageFill, asyncCreateImageFill
+    createImageFill, loadImageFill, loadManyImageFills
 }

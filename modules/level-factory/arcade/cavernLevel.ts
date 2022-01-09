@@ -4,7 +4,7 @@ import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadImageFill } from "../imageFills";
 import { gloomyBackground } from "../gradientFills";
 import { makeShip ,makeBuilding} from "../items";
 
@@ -45,7 +45,7 @@ async function makeCavernLevel(): Promise<Level> {
         height: 2000
     }
 
-    const soil = await asyncCreateImageFill('soil');
+    const soil = await loadImageFill('soil');
 
     const world = new World([
         makeShip({

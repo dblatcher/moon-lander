@@ -4,7 +4,7 @@ import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 
 import { makeBuilding, makeShip } from "../items";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadManyImageFills } from "../imageFills";
 
 import { Level } from "../../Level";
 
@@ -17,9 +17,9 @@ async function makeDaylightCityLevel(): Promise<Level> {
         width: 2800,
         height: 5000
     }
-    const soil = await asyncCreateImageFill('soil');
-    const brick = await asyncCreateImageFill('brick');
-    const sky = await asyncCreateImageFill('sky');
+
+    const [soil, brick, sky] = await loadManyImageFills(['soil', 'brick', 'sky'])
+
     const world = new World(
         [
             makeShip({
@@ -27,9 +27,9 @@ async function makeDaylightCityLevel(): Promise<Level> {
                 y: worldDimensions.height - (worldDimensions.width * (3 / 16)),
             }),
 
-            makeBuilding((2.5 / 12), (1 / 16), (4 / 4), worldDimensions, {fillColor:brick}),
+            makeBuilding((2.5 / 12), (1 / 16), (4 / 4), worldDimensions, { fillColor: brick }),
             makeBuilding((2 / 12), (1.5 / 16), (2 / 4), worldDimensions, { fillColor: 'DarkKhaki', color: 'antiquewhite' }),
-            makeBuilding((7 / 12), (3.75 / 16), (2 / 4), worldDimensions, {fillColor:brick}),
+            makeBuilding((7 / 12), (3.75 / 16), (2 / 4), worldDimensions, { fillColor: brick }),
             makeBuilding((6 / 12), (2 / 16), (2 / 4), worldDimensions),
             makeBuilding((9 / 12), (1.5 / 16), (3 / 4), worldDimensions, { fillColor: 'darkseagreen', color: 'antiquewhite' }),
             makeBuilding((11 / 12), (3 / 16), (1 / 4), worldDimensions),

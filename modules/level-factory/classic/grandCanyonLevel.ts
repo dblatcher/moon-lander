@@ -3,13 +3,13 @@ import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadManyImageFills } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
 async function level(): Promise<Level> {
 
-    const soil = await asyncCreateImageFill('soil');
+    const [soil, jupiter] = await loadManyImageFills(['soil','jupiter']);
 
     const worldDimensions = {
         width: 1000,
@@ -40,6 +40,7 @@ async function level(): Promise<Level> {
         gravitationalConstant: .001,
         globalGravityForce: new Force(50, 0),
         hasHardEdges: true,
+        fillColor:jupiter,
     });
 
     const levelIntro = new LevelIntro("The Grand Canyon of Cygnus 4", "classic/3");

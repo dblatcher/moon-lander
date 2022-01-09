@@ -5,7 +5,7 @@ import { DistantPlanet } from "../../world-things/DistantPlanet";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { atmosphere } from "../gradientFills";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadImageFill } from "../imageFills";
 import { makeMountain, makeShip } from "../items";
 
 
@@ -14,7 +14,7 @@ async function makeMountainsLevel(): Promise<Level> {
         width: 1400,
         height: 2600
     }
-    const jupiterFill = await asyncCreateImageFill('jupiter5');
+    const jupiterFill = await loadImageFill('jupiter5');
     const world = new World([
         makeShip({
             x: worldDimensions.width / 2,

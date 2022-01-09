@@ -4,7 +4,7 @@ import { LevelIntro } from "../../LevelIntro";
 import { DistantPlanet } from "../../world-things/DistantPlanet";
 import { RefuelPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { asyncCreateImageFill } from "../imageFills";
+import { loadImageFill } from "../imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../utility";
 
@@ -80,7 +80,7 @@ export async function tutorial2(): Promise<Level> {
 
 export async function tutorial3(): Promise<Level> {
 
-    const jupiterFill = await asyncCreateImageFill('jupiter5');
+    const jupiterFill = await loadImageFill('jupiter5');
     const worldDimensions = {
         width: 2800,
         height: 1200
