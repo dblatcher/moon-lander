@@ -109,10 +109,10 @@ const gameModes: { [index: string]: GameMode } = {
         allowSkip:true,
         startingLives: 3,
         levelFunctions: [
-            classics.planetFall,
             classics.breezio,
             classics.moonbaseAlpha,
             classics.grandCanyon,
+            classics.planetFall,
         ]
     })
 }

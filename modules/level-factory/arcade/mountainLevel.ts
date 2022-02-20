@@ -14,7 +14,7 @@ async function makeMountainsLevel(): Promise<Level> {
         width: 1400,
         height: 2600
     }
-    const jupiterFill = await loadImageFill('jupiter5');
+    const jupiterFill = await loadImageFill('jupiter', undefined, { scale: 3.5, parallax: 5 });
     const world = new World([
         makeShip({
             x: worldDimensions.width / 2,
@@ -84,7 +84,7 @@ async function makeMountainsLevel(): Promise<Level> {
                 depth: 6,
                 ...worldDimensions
             }),
-            new DistantPlanet({ y: 180, x: 230, radius:1600, parallax:5, fillColor: jupiterFill }),
+            new DistantPlanet({ y: 180, x: 230, radius: 1600, parallax: 5, fillColor: jupiterFill }),
         ],
 
         edges: {

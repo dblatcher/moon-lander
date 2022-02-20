@@ -6,18 +6,20 @@ import neptuneImage from "../../image/neptune.jpg";
 import brickImage from "../../image/brick.png";
 import skyImage from "../../image/clouds.png";
 
-
+// TO DO - make these types importable in physics-worlds
 interface ImageFillTransforms {
     scale?: number
     rotate?: number
     parallax?: number
     offset?: Geometry.Vector
 }
+type ImageFillParameters =  [string, string, ImageFillTransforms]
 
-const data: { [index: string]: [string, string, ImageFillTransforms] } = {
+type AvailableFillImage = 'soil' | 'jupiter' | 'neptune' | 'brick' | 'sky';
+
+const data: { [index: string]: ImageFillParameters } = {
     soil: [soilImage.src, 'brown', { scale: 1, rotate: 30 }],
     jupiter: [jupiterImage.src, 'orange', { scale: 10 }],
-    jupiter5: [jupiterImage.src, 'orange', { scale: 3.5, parallax: 5 }],
     neptune: [neptuneImage.src, 'blue', { scale: 3 }],
     brick: [brickImage.src, 'red', { scale: .5 }],
     sky: [skyImage.src, 'skyblue', { scale: 10, parallax: 4 }]
@@ -25,17 +27,25 @@ const data: { [index: string]: [string, string, ImageFillTransforms] } = {
 
 // needs to be in a function so Next.js doesn't create the Image fills server-side when importing the module
 
-function createImageFill(key: string): ImageFill {
+function createImageFill(key: AvailableFillImage): ImageFill {
     if (data[key]) {
         return ImageFill.fromSrc(...data[key])
     }
     return ImageFill.fromSrc(...data['soil']);
 }
 
-async function loadImageFill(key: string): Promise<ImageFill> {
+async function loadImageFill(
+    key: AvailableFillImage,
+    fallbackColor?: string,
+    imageFillTransforms?: ImageFillTransforms
+): Promise<ImageFill> {
 
     if (!data[key]) { key = 'neptune' }
-    const params = data[key]
+    const params: ImageFillParameters = [
+        data[key][0],
+        fallbackColor || data[key][1],
+        imageFillTransforms || data[key][2],
+    ]
 
     const image = new Image();
     image.src = params[0];
@@ -52,8 +62,14 @@ async function loadImageFill(key: string): Promise<ImageFill> {
     });
 }
 
-async function loadManyImageFills(keys: string[]): Promise<ImageFill[]> {
-    return await Promise.all(keys.map(key => { return loadImageFill(key) }));
+async function loadManyImageFills(inputs: (AvailableFillImage|[AvailableFillImage, string?, ImageFillTransforms?])[]): Promise<ImageFill[]> {
+    return await Promise.all(inputs.map(key => { 
+        if ( typeof key == 'string') {
+            return loadImageFill(key) 
+        } else {
+            return loadImageFill(...key);
+        }
+    }));
 }
 
 export {

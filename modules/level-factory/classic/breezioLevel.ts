@@ -10,7 +10,7 @@ import { makeRectangleProperties } from "../utility";
 
 async function level(): Promise<Level> {
 
-    const soil = await loadImageFill('soil');
+    const soil = await loadImageFill('soil', 'brown', { scale: 1.5, rotate:5 });
 
     const bg = new RadialGradientFill({
         fallbackColor: "rgba(150,40,160,.5)",
@@ -31,21 +31,22 @@ async function level(): Promise<Level> {
         width: 1000,
         height: 2500,
     }
-    
+
     const world = new World([
-        makeShip({ x:150,y:worldDimensions.height-1200,
-            color:'purple',
+        makeShip({
+            x: 150, y: worldDimensions.height - 1200,
+            color: 'purple',
         }),
 
-        new Terrain({ x: 500, y: 4950, size: 2550, shape:shapes.square, fillColor: soil, color: 'transparent', density: .01 }),
+        new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: soil, color: 'transparent', density: .01 }),
 
         new LandingPad({
-            x:500,y:2400, fillColor: 'green',
-            ...makeRectangleProperties(150,15)
+            x: 500, y: 2400, fillColor: 'green',
+            ...makeRectangleProperties(150, 15)
         }),
 
         new Area({
-            x: 500, y: 4950, fillColor:bg, size:3500, density:.4
+            x: 500, y: 4950, fillColor: bg, size: 3500, density: .4
         })
     ], {
         ...worldDimensions,
@@ -53,8 +54,8 @@ async function level(): Promise<Level> {
         globalGravityForce: new Force(75, 0),
         hasHardEdges: true,
         backGrounds: [
-            new StarField({numberOfStars:50, depth:10, ...worldDimensions}),
-            new StarField({numberOfStars:50, depth:20, ...worldDimensions}),
+            new StarField({ numberOfStars: 50, depth: 10, ...worldDimensions }),
+            new StarField({ numberOfStars: 50, depth: 20, ...worldDimensions }),
         ],
     });
 
