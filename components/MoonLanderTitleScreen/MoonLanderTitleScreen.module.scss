@@ -1,5 +1,6 @@
 @import "../../styles/mixins";
 @import "../../styles/design-mixins";
+@import "../../styles/button";
 
 .article {
     @include fullHeight;
@@ -25,6 +26,20 @@
             @include engraved(regular);
             margin: 0;
             font-size: 1.5rem;
+        }
+    }
+
+    .controls {
+        margin: 1em auto;
+        display: block;
+        padding: 1em;
+        border-radius: .5em;
+        background-color: white;
+
+        .startButton {
+            @include button();
+            font-size: large;
+            background-color: forestgreen;
         }
     }
 

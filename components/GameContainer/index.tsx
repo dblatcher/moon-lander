@@ -287,6 +287,7 @@ export default class GameContainer extends React.Component {
                 {(mode === "TITLE") &&
                     <MoonLanderTitleScreen
                         showHighScores={!gameMode.noScores && isDataBase}
+                        reportPress={(command: string) => { this.handleCommandPress(command) }}
                         scoreData={scoreData}
                         title={gameMode.title} />
                 }
