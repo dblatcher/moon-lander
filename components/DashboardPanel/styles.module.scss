@@ -3,6 +3,7 @@
 
 .panel {
     @include metal;
+    @include noSelectHighlight();
     position: relative;
 }
 

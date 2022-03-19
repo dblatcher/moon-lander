@@ -3,6 +3,7 @@
 
 .numberPanel {
     @include metal;
+    @include noSelectHighlight();
     position: relative;
     display: flex;
     justify-content: center;

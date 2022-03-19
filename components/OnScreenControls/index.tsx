@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { OnScreenTapButton } from "./OnScreenTapButton";
 import { OnScreenTouchButton } from "./OnScreenTouchButton";
 import styles from "./styles.module.scss";
@@ -31,7 +31,11 @@ export default function OnScreenControls(props: {
         }
     }
 
-    return <aside className={styles.panel}>
+    const doNothing: MouseEventHandler = (event) => {
+        event.preventDefault()
+    }
+
+    return <aside className={styles.panel} onContextMenu={doNothing}>
 
         <div className={styles.directionsFrame}>
             {directionButtons.map(

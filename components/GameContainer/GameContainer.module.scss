@@ -12,6 +12,7 @@
     position: absolute;
     display: inline-flex;
     flex-direction: column;
+    @include noSelectHighlight();
 
     button {
         @include button();
