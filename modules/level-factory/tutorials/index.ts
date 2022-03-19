@@ -80,7 +80,7 @@ export async function tutorial2(): Promise<Level> {
 
 export async function tutorial3(): Promise<Level> {
 
-    const jupiterFill = await loadImageFill('jupiter5');
+    const jupiterFill = await loadImageFill('jupiter', undefined, { scale: 3.5, parallax: 5 });
     const worldDimensions = {
         width: 2800,
         height: 1200
