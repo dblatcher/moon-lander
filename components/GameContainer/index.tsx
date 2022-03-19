@@ -13,6 +13,7 @@ import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
 import MoonLanderLevelIntro from "../MoonLanderLevelIntro";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
+import OnScreenControls from "../OnScreenControls";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -36,11 +37,13 @@ interface GameContainerState {
     level: number
     score: number
     lives: number,
-    controls: { [index: string]: boolean }
+    keyBoardControlInput: { [index: string]: boolean }
+    onScreenControlInput: { [index: string]: boolean }
     worldStatus: WorldStatus
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     levelIntro?: LevelIntro
     soundEnabled: boolean
+    showOnScreenControls: boolean
 }
 
 export type { GameContainerState }
@@ -64,10 +67,12 @@ export default class GameContainer extends React.Component {
             level: 1,
             score: 0,
             lives: props.gameMode.startingLives,
-            controls: {},
+            keyBoardControlInput: {},
+            onScreenControlInput: {},
             worldStatus: {},
             mode: "TITLE",
             soundEnabled: true,
+            showOnScreenControls: false,
         }
 
         this.togglePaused = this.togglePaused.bind(this)
@@ -111,6 +116,7 @@ export default class GameContainer extends React.Component {
     }
 
     handleCommandPress(command: string) {
+        console.log({ command })
         const { mode } = this.state;
         const { startingLives, speed } = this.props.gameMode;
         switch (command) {
@@ -264,9 +270,16 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { controls, worldStatus, score, lives, mode, level, levelIntro, soundEnabled } = this.state;
+        const { keyBoardControlInput, onScreenControlInput, worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
         const { world } = this;
 
+        const controls: { [index: string]: true } = {};
+        Object.keys(keyBoardControlInput).forEach(key => {
+            if (keyBoardControlInput[key] === true) { controls[key] = true }
+        })
+        Object.keys(onScreenControlInput).forEach(key => {
+            if (onScreenControlInput[key] === true) { controls[key] = true }
+        })
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
@@ -306,9 +319,18 @@ export default class GameContainer extends React.Component {
                 }
 
                 <KeyReader
-                    report={(controls: { [index: string]: boolean }) => { this.setState({ controls }) }}
+                    report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
                     reportPress={(command: string) => { this.handleCommandPress(command) }}
                     controlMapping={controlMapping} />
+
+                {showOnScreenControls &&
+                    <OnScreenControls
+                        report={(onScreenControlInput: { [index: string]: boolean }) => { this.setState({ onScreenControlInput }) }}
+                        reportPress={(command: string) => { this.handleCommandPress(command) }}
+                        directionButtons={['left', 'right', 'up', 'down']}
+                        commandButtons={['PAUSE', 'START']}
+                    />
+                }
 
                 {(mode !== "TITLE") &&
                     <div className={styles.menuBar}>
@@ -317,6 +339,10 @@ export default class GameContainer extends React.Component {
                         <button
                             onClick={() => { this.setSoundEnabled(!soundEnabled) }}
                         >{soundEnabled ? 'sound = on' : 'sound = off'}</button>
+
+                        <button
+                            onClick={() => { this.setState({ showOnScreenControls: !showOnScreenControls }) }}
+                        >{showOnScreenControls ? 'on screen controls = on' : 'on screen controls = off'}</button>
 
                         {gameMode.allowRestart && <button onClick={() => { this.startLevel() }}>Restart Level</button>}
                         {gameMode.allowSkip && <button onClick={() => { this.startLevel(level + 1) }}>Skip Level</button>}

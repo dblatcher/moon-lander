@@ -1,0 +1,63 @@
+@import "../../styles/design-mixins";
+
+.panel {
+    @include metal();
+    position: relative;
+    display: inline-flex;
+    padding: .25rem 15px;
+    justify-content: space-around;
+}
+
+.directionsFrame {
+    position: relative;
+    box-sizing: border-box;
+    width: 12em;
+    height: 5em;
+
+    .button {
+        position: absolute;
+        min-height: 3em;
+        min-width: 4em;
+        vertical-align: middle;
+    }
+}
+
+.commandsFrame {
+    display: inline-flex;
+
+    button {
+        margin: .5em;
+        padding: 0 1em;
+    }
+
+}
+
+.button {
+    display: inline-block;
+    text-align: center;
+    border-radius: 1em;
+    font-size: small;
+    font-family: monospace;
+    padding: .5em;
+
+    &.up {
+        transform: translateX(-50%);
+        left: 50%;
+        top: 0;
+    }
+    &.down {
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: 0;
+    }
+
+    &.left {
+        left: 0;
+        bottom: 0;
+    }
+    &.right {
+        right:0;
+        bottom: 0;
+    }
+}
+
