@@ -102,6 +102,20 @@ export default class GameContainer extends React.Component {
         this.world = undefined;
     }
 
+    get controls() {
+        const { keyBoardControlInput, onScreenControlInput,} = this.state
+
+        const controls: { [index: string]: true } = {};
+        Object.keys(keyBoardControlInput).forEach(key => {
+            if (keyBoardControlInput[key] === true) { controls[key] = true }
+        })
+        Object.keys(onScreenControlInput).forEach(key => {
+            if (onScreenControlInput[key] === true) { controls[key] = true }
+        })
+
+        return controls
+    }
+
     setSoundEnabled(value: boolean, ignorePauseState = false): Promise<GameContainerState> {
         return this.asyncSetState({ soundEnabled: value }).then(state => {
             if (this.world?.soundDeck) {
@@ -301,16 +315,8 @@ export default class GameContainer extends React.Component {
 
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
-        const { keyBoardControlInput, onScreenControlInput, worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
-        const { world } = this;
-
-        const controls: { [index: string]: true } = {};
-        Object.keys(keyBoardControlInput).forEach(key => {
-            if (keyBoardControlInput[key] === true) { controls[key] = true }
-        })
-        Object.keys(onScreenControlInput).forEach(key => {
-            if (onScreenControlInput[key] === true) { controls[key] = true }
-        })
+        const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
+        const { world, controls } = this;
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
