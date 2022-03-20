@@ -121,7 +121,6 @@ export default class GameContainer extends React.Component {
     }
 
     handleCommandPress(command: Command) {
-        console.log({ command })
         const { mode, soundEnabled, showOnScreenControls, level } = this.state;
         const { startingLives, speed } = this.props.gameMode;
         switch (command) {
@@ -192,7 +191,13 @@ export default class GameContainer extends React.Component {
             this.unlessSongAlreadyPlaying(playFailSong)
         }
 
-        this.setState({ worldStatus: status })
+        const newStatus:WorldStatus = {
+            playerDead: oldStatus.playerDead || status.playerDead,
+            playerStranded: oldStatus.playerLanded || status.playerLanded,
+            playerLanded: oldStatus.playerLanded || status.playerLanded,
+        }
+
+        this.setState({ worldStatus: newStatus })
     }
 
     togglePaused(): void {
