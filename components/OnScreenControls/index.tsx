@@ -1,4 +1,5 @@
 import { MouseEventHandler, useState } from "react";
+import { Command } from '../GameContainer'
 import { OnScreenTapButton } from "./OnScreenTapButton";
 import { OnScreenTouchButton } from "./OnScreenTouchButton";
 import styles from "./styles.module.scss";
@@ -9,12 +10,12 @@ type Direction = 'up' | 'down' | 'left' | 'right'
 export default function OnScreenControls(props: {
     displayInput?: boolean
     report?: Function
-    reportPress?: Function
+    issueCommand: { (command: Command): void }
     directionButtons?: Direction[]
-    commandButtons?: string[]
+    commandButtons?: Command[]
 }) {
 
-    const { report = () => { }, reportPress, directionButtons = [], commandButtons = [] } = props
+    const { report = () => { }, issueCommand, directionButtons = [], commandButtons = [] } = props
 
     const [keys, setKeys] = useState<{ [index: string]: boolean }>({})
 
@@ -23,12 +24,6 @@ export default function OnScreenControls(props: {
         newKeys[action] = onOrOff;
         setKeys(newKeys)
         report(newKeys)
-    }
-
-    function respondToCommand(command: string) {
-        if (reportPress) {
-            reportPress(command)
-        }
     }
 
     const doNothing: MouseEventHandler = (event) => {
@@ -50,7 +45,7 @@ export default function OnScreenControls(props: {
             {commandButtons.map(
                 command => <OnScreenTapButton key={command}
                     action={command}
-                    reportPress={respondToCommand} />
+                    issueCommand={issueCommand} />
             )}
         </div>
 

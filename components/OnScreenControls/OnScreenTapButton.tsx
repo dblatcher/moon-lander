@@ -2,11 +2,11 @@ import styles from "./styles.module.scss";
 
 export function OnScreenTapButton(props: {
     action: string
-    reportPress: Function
+    issueCommand: Function
 }) {
-    const { action, reportPress } = props
+    const { action, issueCommand } = props
     return <button className={[styles.button, styles[action]].join(" ")}
-        onClick={() => { reportPress(action) }}
+        onClick={() => { issueCommand(action) }}
         key={action}>{action}
     </button>
 }

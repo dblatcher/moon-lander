@@ -1,21 +1,8 @@
 @import "../../styles/mixins";
 @import "../../styles/design-mixins";
-@import "../../styles/button";
 
 .component {
     @include fullHeight;
     @include yellowAndBlackStripes;
     padding: .5rem;
-}
-
-.menuBar {
-    position: absolute;
-    display: inline-flex;
-    flex-direction: column;
-    @include noSelectHighlight();
-
-    button {
-        @include button();
-        background-color: yellow;
-    }
 }

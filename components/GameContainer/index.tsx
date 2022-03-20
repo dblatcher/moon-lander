@@ -14,10 +14,13 @@ import { LevelIntro } from "../../modules/LevelIntro";
 import MoonLanderLevelIntro from "../MoonLanderLevelIntro";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
 import OnScreenControls from "../OnScreenControls";
+import CommandMenu from "../CommandMenu";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 
 const controlMapping: { [index: string]: string } = {
     "w": "up",
@@ -31,6 +34,8 @@ const controlMapping: { [index: string]: string } = {
     " ": "START",
     "p": "PAUSE",
     "P": "PAUSE",
+    "O": "CONTROLTOGGLE",
+    "o": "CONTROLTOGGLE",
 }
 
 interface GameContainerState {
@@ -115,9 +120,9 @@ export default class GameContainer extends React.Component {
         })
     }
 
-    handleCommandPress(command: string) {
+    handleCommandPress(command: Command) {
         console.log({ command })
-        const { mode } = this.state;
+        const { mode, soundEnabled, showOnScreenControls, level } = this.state;
         const { startingLives, speed } = this.props.gameMode;
         switch (command) {
             case "START":
@@ -143,6 +148,27 @@ export default class GameContainer extends React.Component {
             case "PAUSE":
                 this.togglePaused();
                 break;
+
+            case "QUIT":
+                this.endPlaySession()
+                break;
+
+            case "SOUNDTOGGLE":
+                this.setSoundEnabled(!soundEnabled)
+                break;
+
+            case "CONTROLTOGGLE":
+                this.setState({ showOnScreenControls: !showOnScreenControls })
+                break;
+
+            case "RESTARTLEVEL":
+                this.startLevel()
+                break;
+
+            case "SKIPLEVEL":
+                this.startLevel(level + 1)
+                break;
+
         }
     }
 
@@ -287,7 +313,7 @@ export default class GameContainer extends React.Component {
                 {(mode === "TITLE") &&
                     <MoonLanderTitleScreen
                         showHighScores={!gameMode.noScores && isDataBase}
-                        reportPress={(command: string) => { this.handleCommandPress(command) }}
+                        issueCommand={this.handleCommandPress}
                         scoreData={scoreData}
                         title={gameMode.title} />
                 }
@@ -321,34 +347,27 @@ export default class GameContainer extends React.Component {
 
                 <KeyReader
                     report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
-                    reportPress={(command: string) => { this.handleCommandPress(command) }}
+                    issueCommand={this.handleCommandPress}
                     controlMapping={controlMapping} />
 
                 {showOnScreenControls &&
                     <OnScreenControls
                         report={(onScreenControlInput: { [index: string]: boolean }) => { this.setState({ onScreenControlInput }) }}
-                        reportPress={(command: string) => { this.handleCommandPress(command) }}
+                        issueCommand={this.handleCommandPress}
                         directionButtons={['left', 'right', 'up', 'down']}
                         commandButtons={['PAUSE', 'START']}
                     />
                 }
 
                 {(mode !== "TITLE") &&
-                    <div className={styles.menuBar}>
-                        <button onClick={this.togglePaused}>Pause</button>
-
-                        <button
-                            onClick={() => { this.setSoundEnabled(!soundEnabled) }}
-                        >{soundEnabled ? 'sound = on' : 'sound = off'}</button>
-
-                        <button
-                            onClick={() => { this.setState({ showOnScreenControls: !showOnScreenControls }) }}
-                        >{showOnScreenControls ? 'on screen controls = on' : 'on screen controls = off'}</button>
-
-                        {gameMode.allowRestart && <button onClick={() => { this.startLevel() }}>Restart Level</button>}
-                        {gameMode.allowSkip && <button onClick={() => { this.startLevel(level + 1) }}>Skip Level</button>}
-                        <button onClick={() => { this.endPlaySession() }}>Quit</button>
-                    </div>
+                    <CommandMenu issueCommand={this.handleCommandPress} buttons={[
+                        ['PAUSE', 'Pause'],
+                        ['SOUNDTOGGLE', soundEnabled ? 'sound = on' : 'sound = off'],
+                        ['CONTROLTOGGLE', showOnScreenControls ? 'on screen controls = on' : 'on screen controls = off'],
+                        ['QUIT', 'Quit'],
+                        ['RESTARTLEVEL', 'Restart Level', gameMode.allowRestart],
+                        ['SKIPLEVEL', 'Skip Level', gameMode.allowSkip],
+                    ]} />
                 }
             </main>
         )

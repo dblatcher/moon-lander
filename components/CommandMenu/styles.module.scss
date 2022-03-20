@@ -1,0 +1,15 @@
+@import "../../styles/mixins";
+@import "../../styles/design-mixins";
+@import "../../styles/button";
+
+.menuBar {
+    position: absolute;
+    display: inline-flex;
+    flex-direction: column;
+    @include noSelectHighlight();
+
+    button {
+        @include button();
+        background-color: yellow;
+    }
+}

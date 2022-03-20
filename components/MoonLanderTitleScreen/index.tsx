@@ -7,10 +7,10 @@ export default function MoonLanderTitleScreen(props: {
     scoreData?: ScoreData
     showHighScores: boolean
     title?: string
-    reportPress?: Function
+    issueCommand?: Function
 }) {
 
-    const { scoreData, showHighScores, title, reportPress = () => { } } = props;
+    const { scoreData, showHighScores, title, issueCommand = () => { } } = props;
 
     return <article className={styles.article}>
         <header>
@@ -19,7 +19,7 @@ export default function MoonLanderTitleScreen(props: {
             <span className={styles["bottom-rivets"]}></span>
         </header>
         <div className={styles.controls}>
-            <button className={styles.startButton} onClick={() => { reportPress('START') }}>START</button>
+            <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
         </div>
 
 
