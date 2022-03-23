@@ -1,0 +1,44 @@
+.container {
+
+    display: inline-flex;
+    align-items: center;
+    display: inline-flex;
+    align-items: center;
+
+    .label {
+        padding-right: .5em;
+    }
+
+    .slider {
+        cursor: pointer;
+        width: 2.5em;
+        position: relative;
+        height: 1em;
+        background-color: lightgray;
+        padding: 0;
+        border: none;
+        margin: 0;
+        border-radius: 1em;
+        border: 1px solid black;
+        box-sizing: content-box;
+
+        span {
+            background-color: black;
+            left: 0;
+            top: 0;
+            height: 1em;
+            width: 1em;
+            border-radius: 1em;
+            display: inline-block;
+            position: absolute;
+            transition: left .5s;
+        }
+
+        &.on {
+            background-color: lightgreen;
+            span {
+                left: 1.5em;
+            }
+        }
+    }
+}

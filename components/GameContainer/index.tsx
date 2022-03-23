@@ -325,6 +325,8 @@ export default class GameContainer extends React.Component {
                     <MoonLanderTitleScreen
                         showHighScores={!gameMode.noScores && isDataBase}
                         issueCommand={this.handleCommandPress}
+                        soundEnabled={soundEnabled}
+                        showOnScreenControls={showOnScreenControls}
                         scoreData={scoreData}
                         title={gameMode.title} />
                 }
@@ -361,7 +363,7 @@ export default class GameContainer extends React.Component {
                     issueCommand={this.handleCommandPress}
                     controlMapping={controlMapping} />
 
-                {showOnScreenControls &&
+                {(showOnScreenControls && mode !== "TITLE") &&
                     <OnScreenControls
                         report={(onScreenControlInput: { [index: string]: boolean }) => { this.setState({ onScreenControlInput }) }}
                         issueCommand={this.handleCommandPress}
@@ -374,7 +376,7 @@ export default class GameContainer extends React.Component {
                     <CommandMenu issueCommand={this.handleCommandPress} buttons={[
                         ['PAUSE', 'Pause'],
                         ['SOUNDTOGGLE', soundEnabled ? 'sound = on' : 'sound = off'],
-                        ['CONTROLTOGGLE', showOnScreenControls ? 'on screen controls = on' : 'on screen controls = off'],
+                        ['CONTROLTOGGLE', showOnScreenControls ? 'touch controls = on' : 'touch controls = off'],
                         ['QUIT', 'Quit'],
                         ['RESTARTLEVEL', 'Restart Level', gameMode.allowRestart],
                         ['SKIPLEVEL', 'Skip Level', gameMode.allowSkip],
