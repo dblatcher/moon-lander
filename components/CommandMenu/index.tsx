@@ -1,27 +1,39 @@
 import { useState } from 'react'
+import { GameMode } from '../../modules/GameMode'
 import { Command } from '../GameContainer'
 import Switch from '../Switch'
 import styles from './styles.module.scss'
 
 interface Props {
     issueCommand: { (command: Command): void }
-    buttons: [Command, string, boolean?][]
+    isPaused: boolean
+    showOnScreenControls: boolean
+    soundEnabled: boolean
+    gameMode: GameMode
 }
 
-export default function CommandMenu({ issueCommand: issue, buttons }: Props) {
+const switchStyle = { justifyContent: 'flex-end', margin: '.5em 0' }
+
+export default function CommandMenu({ issueCommand, showOnScreenControls, soundEnabled, gameMode, isPaused }: Props) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const buttonsToRender = buttons.filter(button => typeof button[2] === 'undefined' || button[2] === true)
+    const commandFunc = (command: Command) => () => { if (isOpen) { issueCommand(command) } }
+    const { allowRestart, allowSkip } = gameMode
+
 
     return (
         <div className={styles.container}>
             <div>
-                <Switch value={isOpen} toggle={() => { setIsOpen(!isOpen) }} label='menu' />
+                <Switch value={isOpen} toggle={() => { setIsOpen(!isOpen) }} />
             </div>
             {isOpen && (
                 <div className={styles.menuBar}>
-                    {buttonsToRender.map(button => (
-                        <button key={button[0]} onClick={() => { issue(button[0]) }}>{button[1]}</button>
-                    ))}
+                    <Switch style={switchStyle} value={isPaused} toggle={commandFunc('PAUSE')} label='pause' />
+                    {allowRestart && <button className={styles.button} onClick={commandFunc('RESTARTLEVEL')}>Restart Level</button>}
+                    {allowSkip && <button className={styles.button} onClick={commandFunc('SKIPLEVEL')}>Skip Level</button>}
+                    <Switch style={switchStyle} value={soundEnabled} toggle={commandFunc('SOUNDTOGGLE')} label='sound' />
+                    <Switch style={switchStyle} value={showOnScreenControls} toggle={commandFunc('CONTROLTOGGLE')} label='touch controls' />
+                    <br></br>
+                    <button className={styles.button} onClick={commandFunc('QUIT')}>Quit</button>
                 </div>
             )}
         </div>

@@ -4,8 +4,9 @@
 
 
 .container {
+    @include lcd();
+    border: none;
     position: absolute;
-    background-color: azure;
     padding: .5rem;
 
     .toggle {
@@ -24,7 +25,8 @@
     flex-direction: column;
     @include noSelectHighlight();
 
-    button {
+    
+    .button {
         @include button();
         background-color: yellow;
     }

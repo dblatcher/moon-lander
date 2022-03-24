@@ -103,7 +103,7 @@ export default class GameContainer extends React.Component {
     }
 
     get controls() {
-        const { keyBoardControlInput, onScreenControlInput,} = this.state
+        const { keyBoardControlInput, onScreenControlInput, } = this.state
 
         const controls: { [index: string]: true } = {};
         Object.keys(keyBoardControlInput).forEach(key => {
@@ -205,7 +205,7 @@ export default class GameContainer extends React.Component {
             this.unlessSongAlreadyPlaying(playFailSong)
         }
 
-        const newStatus:WorldStatus = {
+        const newStatus: WorldStatus = {
             playerDead: oldStatus.playerDead || status.playerDead,
             playerStranded: oldStatus.playerLanded || status.playerLanded,
             playerLanded: oldStatus.playerLanded || status.playerLanded,
@@ -316,7 +316,7 @@ export default class GameContainer extends React.Component {
     render() {
         const { scoreData, isDataBase, gameMode } = this.props;
         const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
-        const { world, controls } = this;
+        const { world, controls, handleCommandPress } = this;
 
         return (
             <main className={styles.component} key={world?.name || "no_world"}>
@@ -324,7 +324,7 @@ export default class GameContainer extends React.Component {
                 {(mode === "TITLE") &&
                     <MoonLanderTitleScreen
                         showHighScores={!gameMode.noScores && isDataBase}
-                        issueCommand={this.handleCommandPress}
+                        issueCommand={handleCommandPress}
                         soundEnabled={soundEnabled}
                         showOnScreenControls={showOnScreenControls}
                         scoreData={scoreData}
@@ -360,27 +360,25 @@ export default class GameContainer extends React.Component {
 
                 <KeyReader
                     report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
-                    issueCommand={this.handleCommandPress}
+                    issueCommand={handleCommandPress}
                     controlMapping={controlMapping} />
 
                 {(showOnScreenControls && mode !== "TITLE") &&
                     <OnScreenControls
                         report={(onScreenControlInput: { [index: string]: boolean }) => { this.setState({ onScreenControlInput }) }}
-                        issueCommand={this.handleCommandPress}
+                        issueCommand={handleCommandPress}
                         directionButtons={['left', 'right', 'up', 'down']}
                         commandButtons={['PAUSE', 'START']}
                     />
                 }
 
                 {(mode !== "TITLE") &&
-                    <CommandMenu issueCommand={this.handleCommandPress} buttons={[
-                        ['PAUSE', 'Pause'],
-                        ['SOUNDTOGGLE', soundEnabled ? 'sound = on' : 'sound = off'],
-                        ['CONTROLTOGGLE', showOnScreenControls ? 'touch controls = on' : 'touch controls = off'],
-                        ['QUIT', 'Quit'],
-                        ['RESTARTLEVEL', 'Restart Level', gameMode.allowRestart],
-                        ['SKIPLEVEL', 'Skip Level', gameMode.allowSkip],
-                    ]} />
+                    <CommandMenu 
+                    gameMode={gameMode} 
+                    isPaused={this.isPaused}
+                    issueCommand={handleCommandPress} 
+                    soundEnabled={soundEnabled} 
+                    showOnScreenControls={showOnScreenControls} />
                 }
             </main>
         )
