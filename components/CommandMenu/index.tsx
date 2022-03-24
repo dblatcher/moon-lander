@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { GameMode } from '../../modules/GameMode'
+import BurgerSwitch from '../BurgerSwitch'
 import { Command } from '../GameContainer'
 import Switch from '../Switch'
 import styles from './styles.module.scss'
@@ -23,7 +24,7 @@ export default function CommandMenu({ issueCommand, showOnScreenControls, soundE
     return (
         <div className={styles.container}>
             <div>
-                <Switch value={isOpen} toggle={() => { setIsOpen(!isOpen) }} />
+                <BurgerSwitch value={isOpen} toggle={() => { setIsOpen(!isOpen) }} />
             </div>
             {isOpen && (
                 <div className={styles.menuBar}>
