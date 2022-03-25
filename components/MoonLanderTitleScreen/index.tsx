@@ -4,6 +4,10 @@ import HighScoreTable from "../HighScoreTable";
 import Switch from "../Switch";
 import styles from "./MoonLanderTitleScreen.module.scss";
 
+const switchStyle = {
+    marginBottom: '.5em',
+}
+
 export default function MoonLanderTitleScreen(props: {
     scoreData?: ScoreData
     showHighScores: boolean
@@ -19,14 +23,14 @@ export default function MoonLanderTitleScreen(props: {
         <header>
             <h1>MOON LANDER</h1>
             {title && <h2>{title}</h2>}
+            <div className={styles.controls}>
+
+                <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
+                <Switch style={switchStyle} label="sound" value={soundEnabled} toggle={() => { issueCommand('SOUNDTOGGLE') }} />
+                <Switch style={switchStyle} label="touch controls" value={showOnScreenControls} toggle={() => { issueCommand('CONTROLTOGGLE') }} />
+            </div>
             <span className={styles["bottom-rivets"]}></span>
         </header>
-        <div className={styles.controls}>
-            <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
-
-            <Switch label="sound" value={soundEnabled} toggle={() => { issueCommand('SOUNDTOGGLE') }} />
-            <Switch label="touch controls" value={showOnScreenControls} toggle={() => { issueCommand('CONTROLTOGGLE') }} />
-        </div>
 
 
         {(showHighScores && scoreData) && (

@@ -15,13 +15,14 @@
         @include metal;
         position: relative;
         padding: 2rem;
-        
+        margin-bottom: .5em;
+
         h1 {
             @include engraved(regular);
             margin: 0;
             font-size: 3rem;
         }
-        
+
         h2 {
             @include engraved(regular);
             margin: 0;
@@ -30,22 +31,23 @@
     }
 
     .controls {
+        @include raised();
+        @include metal();
         margin: 1em auto;
         display: flex;
         padding: 1em;
-        border-radius: .5em;
-        background-color: white;
         color: black;
         flex-direction: column;
         align-items: flex-end;
+        max-width: 15em
+    }
 
-        .startButton {
-            @include button();
-            font-size: large;
-            background-color: forestgreen;
-            align-self: center;
-            margin-bottom: 1em;
-        }
+    .startButton {
+        @include button();
+        font-size: large;
+        background-color: forestgreen;
+        align-self: center;
+        margin: 1em 0;
     }
 
     .tableWrapper {

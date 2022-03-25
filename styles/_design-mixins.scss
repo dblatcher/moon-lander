@@ -79,6 +79,10 @@
     border: 5px inset darkgray;
 }
 
+@mixin raised {
+    padding: 3px;
+    border: 5px outset darkgray;
+}
 
 @keyframes scanLines {
     from {

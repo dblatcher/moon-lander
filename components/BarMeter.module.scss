@@ -9,13 +9,14 @@
         margin: 0;
         display: inline-flex;
         align-items: center;
-        border: 3px outset gray;
+        border: 3px inset gray;
         width: 1.5rem;
         height: 4rem;
         box-sizing: border-box;
+        background-color: black ;
 
         .bar {
-            background-color: lightskyblue;
+            background-color: red;
             height: 100%;
             width: 100%;
             transform-origin: bottom;
