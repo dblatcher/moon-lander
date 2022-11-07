@@ -9,9 +9,9 @@ import Dialogue from "../../Dialogue";
 import PausedSymbol from "../../PausedSymbol";
 
 import { GameContainerState } from "../../GameContainer";
-import { controlSpaceShip } from "../../../modules/controlSpaceShip";
+import { controlRobot } from "../../../modules/platform-game/controlRobot";
 import { GameMode } from "../../../modules/GameMode";
-import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerSpaceship } from "../../../modules/moonLanderWorldValues";
+import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerRobot } from "../../../modules/platform-game/platformGameWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";
@@ -72,7 +72,7 @@ export default function GamePlayer(props: Readonly<{
                 <div>
                     <FollowBodyCanvas
                         world={world}
-                        getSubject={getPlayerSpaceship}
+                        getSubject={getPlayerRobot}
                         magnify={1}
                         height={1200} width={1200}
                         framefill={'gray'} />
@@ -125,18 +125,6 @@ export default function GamePlayer(props: Readonly<{
             </Dialogue>
         )}
 
-        {(worldStatus.playerStranded && !worldStatus.playerLanded && mode === "PLAY") && (
-            <Dialogue placement="TOP" design="PLAIN">
-                <p>You have ran out of fuel.</p>
-
-                {lives > 0 ? (
-                    <button className={dialogueStyles.button} onClick={retry}>Try again....</button>
-                ) : (
-                    <button className={dialogueStyles.button} onClick={() => { endPlaySession() }}>Game Over!</button>
-                )}
-            </Dialogue>
-        )}
-
         {(isPaused && mode === "PLAY") && (
             <PausedSymbol />
         )}
@@ -144,7 +132,7 @@ export default function GamePlayer(props: Readonly<{
         <WorldInterface displayInput
             controls={(!worldStatus.playerLanded && mode === "PLAY") ? controls : {}}
             world={world}
-            controlFunction={controlSpaceShip}
+            controlFunction={controlRobot}
             getWorldStatus={getWorldStatus}
             reportWorldStatus={handleWorldStatus} />
 

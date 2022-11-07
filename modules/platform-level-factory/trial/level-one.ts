@@ -5,6 +5,7 @@ import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { makeRectangleProperties } from "../../utility";
+import { Robot } from "../../world-things/Robot";
 
 async function level(): Promise<Level> {
 
@@ -30,12 +31,21 @@ async function level(): Promise<Level> {
 
     const world = new World([
 
+        new Robot({ 
+            x: 200, y: worldDimensions.height-200, instanceId: Robot.PLAYER_INSTANCE_ID,
+            heading: Math.PI,
+            size: 20,
+            elasticity: .01,
+            maxThrust: 6000,
+            maxImpact: 50000,
+            maxFuel: 4000,
+        }),
 
         new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .01 }),
 
         new LandingPad({
-            x: 500, y: 2400, fillColor: 'green',
-            ...makeRectangleProperties(150, 15)
+            x: 700, y: 2400, fillColor: 'green',
+            ...makeRectangleProperties(50, 15)
         }),
 
         new Area({
@@ -44,7 +54,7 @@ async function level(): Promise<Level> {
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
-        globalGravityForce: new Force(75, 0),
+        globalGravityForce: new Force(25, 0),
         hasHardEdges: true,
         backGrounds: [
             new StarField({ numberOfStars: 50, depth: 10, ...worldDimensions }),

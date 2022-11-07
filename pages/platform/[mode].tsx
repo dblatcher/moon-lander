@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { ConfigurationProp, getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
-import { plaformGameModes } from '../../modules/platformGameModes'
+import { plaformGameModes } from '../../modules/platform-game/platformGameModes'
 
 import Head from 'next/head'
 import Link from 'next/link'

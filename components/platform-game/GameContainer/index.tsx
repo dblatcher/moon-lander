@@ -6,7 +6,7 @@ import styles from "./GameContainer.module.scss";
 
 import { SoundDeck, World } from "physics-worlds";
 
-import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../../modules/moonLanderWorldValues";
+import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../../modules/platform-game/platformGameWorldValues";
 import { ScoreData } from "../../../modules/data-access/ScoreData";
 import { GameMode } from "../../../modules/GameMode";
 import { LevelIntro } from "../../../modules/LevelIntro";
@@ -206,7 +206,6 @@ export default class GameContainer extends React.Component {
 
         const newStatus: WorldStatus = {
             playerDead: oldStatus.playerDead || status.playerDead,
-            playerStranded: oldStatus.playerLanded || status.playerLanded,
             playerLanded: oldStatus.playerLanded || status.playerLanded,
         }
 

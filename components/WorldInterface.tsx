@@ -1,6 +1,5 @@
 import { World } from "physics-worlds";
 import React, { useEffect } from "react";
-import { WorldStatus } from "../modules/moonLanderWorldValues";
 
 
 /**
@@ -9,12 +8,12 @@ import { WorldStatus } from "../modules/moonLanderWorldValues";
  * every time the World ticks then reports back a status object
  * with properties relevant to the parent's state.
  */
-export default function WorldInterface(props: {
+export default function WorldInterface<T extends {}>(props: {
     controls: { [index: string]: boolean }
     displayInput?: boolean
     controlFunction: { (world: World, key: string): void }
     reportWorldStatus: Function
-    getWorldStatus: { (world: World): WorldStatus }
+    getWorldStatus: { (world: World): T }
     world: World
 }) {
 
