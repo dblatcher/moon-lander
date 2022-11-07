@@ -1,5 +1,5 @@
 import React from "react";
-import MoonLanderGame from "../../MoonLanderGame";
+
 import HighScoreEntry from "../../HighScoreEntry";
 import KeyReader from "../../KeyReader";
 import styles from "./GameContainer.module.scss";
@@ -16,6 +16,7 @@ import OnScreenControls from "../../OnScreenControls";
 import CommandMenu from "../../CommandMenu";
 import TitleScreen from "../TitleScreen";
 import IntroDialogue from "../IntroDialogue";
+import GamePlayer from "../GamePlayer";
 
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
@@ -330,7 +331,7 @@ export default class GameContainer extends React.Component {
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE" || mode === "INTRO")) &&
-                    <MoonLanderGame key={world.name}
+                    <GamePlayer key={world.name}
                         world={world}
                         gameMode={gameMode}
                         worldStatus={worldStatus}
