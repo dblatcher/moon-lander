@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { ConfigurationProp, getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
-import { gameModes } from '../../modules/gameModes'
+import { plaformGameModes } from '../../modules/platformGameModes'
 
 import Head from 'next/head'
 import Link from 'next/link'
@@ -44,13 +44,13 @@ const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
     const { data, error } = useSWR('/api/scores', makeFetcher(config))
 
-    const gameMode = gameModes[gameModeKey]
+    const gameMode = plaformGameModes[gameModeKey]
 
     return (
         <div className={styles["full-height-page"]}>
 
             <Head>
-                <title>Moon Lander - {gameMode.title}</title>
+                <title>Platforms - {gameMode.title}</title>
             </Head>
 
             <main className={styles["full-height-container"]}>
@@ -82,7 +82,7 @@ export const getStaticProps = async (context: { params: { mode: string } }): Pro
 
 export async function getStaticPaths() {
     return {
-        paths: Object.keys(gameModes).map(key => `/game/${key}`),
+        paths: Object.keys(plaformGameModes).map(key => `/platform/${key}`),
         fallback: false
     }
 }

@@ -5,7 +5,7 @@ import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { loadManyImageFills } from "../imageFills";
 import { makeShip } from "../items";
-import { makeRectangleProperties } from "../utility";
+import { makeRectangleProperties } from "../../utility";
 
 async function level(): Promise<Level> {
 

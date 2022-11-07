@@ -6,7 +6,7 @@ import { RefuelPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { loadImageFill } from "../imageFills";
 import { makeShip } from "../items";
-import { makeRectangleProperties } from "../utility";
+import { makeRectangleProperties } from "../../utility";
 
 
 import { makeTutorialWorldContents, makeTutorialAtmo, makeTutorialBackground } from './generics';

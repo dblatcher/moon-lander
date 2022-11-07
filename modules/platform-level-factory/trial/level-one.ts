@@ -4,13 +4,9 @@ import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
-import { loadImageFill } from "../imageFills";
-import { makeShip } from "../items";
 import { makeRectangleProperties } from "../../utility";
 
 async function level(): Promise<Level> {
-
-    const soil = await loadImageFill('soil', 'brown', { scale: 1.5, rotate:5 });
 
     const bg = new RadialGradientFill({
         fallbackColor: "rgba(150,40,160,.5)",
@@ -33,12 +29,9 @@ async function level(): Promise<Level> {
     }
 
     const world = new World([
-        makeShip({
-            x: 150, y: worldDimensions.height - 1200,
-            color: 'purple',
-        }),
 
-        new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: soil, color: 'transparent', density: .01 }),
+
+        new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .01 }),
 
         new LandingPad({
             x: 500, y: 2400, fillColor: 'green',

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
-import { gameModes } from '../modules/GameMode'
+import { gameModes } from '../modules/gameModes'
 import AnimationCanvas from '../components/AnimationCanvas'
 import { createShipCloseUp } from '../modules/animation-factory'
 
