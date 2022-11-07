@@ -1,0 +1,25 @@
+@import "../../../styles/mixins";
+@import "../../../styles/design-mixins";
+
+.lcdScreen {
+    border: 3px inset aqua;
+    box-sizing: border-box;
+    min-height: 14rem;
+    width: 30rem;
+    max-width: 100%;
+
+    text-align: center;
+
+    h3,h2,h4 {
+        &:before {
+            content: '--';
+        }
+        &:after {
+            content: '--';
+        }
+    }
+}
+
+.blinking {
+    animation: blink 1s linear 0s infinite;
+}

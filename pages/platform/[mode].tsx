@@ -8,7 +8,7 @@ import { plaformGameModes } from '../../modules/platformGameModes'
 import Head from 'next/head'
 import Link from 'next/link'
 import FullScreenWrapper from '../../components/FullScreenWrapper'
-import GameContainer from '../../components/GameContainer'
+import GameContainer from '../../components/platform-game/GameContainer'
 import styles from '../../styles/Page.module.scss'
 
 const fetcher = async (url: string): Promise<ScoreData> => {
