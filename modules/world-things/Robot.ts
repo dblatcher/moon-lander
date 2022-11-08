@@ -7,14 +7,6 @@ import { Terrain } from './Terrain'
 const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
 
 interface RobotData extends BodyData {
-    x: number
-    y: number
-    heading?: number
-    size?: number
-    color?: string
-    density?: number
-    shape?: Shape
-    elasticity?: number
 
     headingFollowsDirection?: false
     fillColor?: string
@@ -27,6 +19,8 @@ interface RobotData extends BodyData {
 
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
+    jumpCooldownDuration?: number
+    jumpCooldownCurrent?: number
     instanceId?: string
 }
 
@@ -47,6 +41,8 @@ class Robot extends Body {
 
         this.data.shootCooldownCurrent = 0
         this.data.shootCooldownDuration = config.shootCooldownDuration || 20
+        this.data.jumpCooldownCurrent = 0
+        this.data.jumpCooldownDuration = config.jumpCooldownDuration || 20
 
         this.ticksBeenStrandedFor = 0;
     }
@@ -98,9 +94,10 @@ class Robot extends Body {
     }
 
     tick() {
-        const { shootCooldownCurrent = 0, thrust = 0, maxThrust = 1, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
+        const { shootCooldownCurrent = 0, jumpCooldownCurrent = 0, thrust = 0, maxThrust = 1, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
         const { landingPadIsRestingOn } = this
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
+        if (jumpCooldownCurrent > 0) { this.data.jumpCooldownCurrent = jumpCooldownCurrent - 1 }
 
         if (this.isPlayer && this.world.soundDeck && !this.thrustNoise) {
             this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 75, duration: 3 }, { loop: true, volume: 0 })
@@ -315,6 +312,19 @@ class Robot extends Body {
                 this.data.heading = heading - this.steerSpeed;
                 break;
         }
+    }
+
+    bounce(direction: "LEFT" | "RIGHT" | "UP") {
+        if (!this.world) { return }
+
+        const { jumpCooldownCurrent = 0 } = this.data
+
+        if (jumpCooldownCurrent > 0) { return }
+        this.data.jumpCooldownCurrent = this.data.jumpCooldownDuration
+
+        const angle = direction === 'LEFT' ? -135 : direction === 'RIGHT' ? 135 : 180
+        const jumpForce = new Force(2, angle * Geometry._deg)
+        this.momentum = Force.combine([this.momentum, jumpForce])
     }
 
     changeThrottle(change: number) {

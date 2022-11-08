@@ -32,7 +32,7 @@ async function level(): Promise<Level> {
     const world = new World([
 
         new Robot({ 
-            x: 200, y: worldDimensions.height-200, instanceId: Robot.PLAYER_INSTANCE_ID,
+            x: 200, y: worldDimensions.height-100, instanceId: Robot.PLAYER_INSTANCE_ID,
             heading: Math.PI,
             size: 20,
             elasticity: .01,
@@ -41,7 +41,7 @@ async function level(): Promise<Level> {
             maxFuel: 4000,
         }),
 
-        new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .01 }),
+        new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .001 }),
 
         new LandingPad({
             x: 700, y: 2400, fillColor: 'green',
@@ -49,7 +49,7 @@ async function level(): Promise<Level> {
         }),
 
         new Area({
-            x: 500, y: 4950, fillColor: bg, size: 3500, density: .4
+            x: 500, y: 4950, fillColor: bg, size: 3500, density: .1
         })
     ], {
         ...worldDimensions,

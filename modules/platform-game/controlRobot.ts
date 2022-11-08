@@ -11,17 +11,13 @@ function controlRobot(world: World, key: string) {
 
     switch (key) {
         case 'up':
-            player.changeThrottle(throttleRate)
-            break;
-        case 'down':
-            player.changeThrottle(-throttleRate)
-            player.shoot()
+            player.bounce("UP")
             break;
         case 'right':
-            player.steer("RIGHT")
+            player.bounce("RIGHT")
             break;
         case 'left':
-            player.steer("LEFT")
+            player.bounce("LEFT")
             break;
     }
 }
