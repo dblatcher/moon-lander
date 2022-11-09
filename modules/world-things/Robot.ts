@@ -10,13 +10,9 @@ interface RobotData extends BodyData {
 
     headingFollowsDirection?: false
     fillColor?: string
-    thrust?: number
-    maxThrust?: number
     maxImpact?: number
 
-    maxFuel?: number
-    fuel?: number
-
+    facing: 'LEFT' | 'RIGHT'
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
     jumpCooldownDuration?: number
@@ -26,25 +22,18 @@ interface RobotData extends BodyData {
 
 class Robot extends Body {
     data: RobotData
-    ticksBeenStrandedFor: number
-    thrustNoise?: SoundControl | null
 
     constructor(config: RobotData, momentum: Force = Force.none) {
         super(config, momentum);
         this.data = config
         this.data.color = config.color || 'red'
         this.data.fillColor = config.fillColor || 'white'
-        this.data.thrust = config.thrust || 0
-        this.data.maxThrust = config.maxThrust || 100
-        this.data.maxFuel = config.maxFuel || 1000
-        this.data.fuel = config.fuel || this.data.maxFuel
 
         this.data.shootCooldownCurrent = 0
         this.data.shootCooldownDuration = config.shootCooldownDuration || 20
         this.data.jumpCooldownCurrent = 0
         this.data.jumpCooldownDuration = config.jumpCooldownDuration || 20
-
-        this.ticksBeenStrandedFor = 0;
+        this.data.facing = config.facing || 'LEFT'
     }
 
     get typeId() { return 'Robot' }
@@ -54,9 +43,7 @@ class Robot extends Body {
     static PLAYER_INSTANCE_ID = 'player'
 
     get seemsStill(): boolean {
-        const { thrust = 0 } = this.data
         const { momentum } = this
-        if (thrust > 0) { return false }
         if (momentum.magnitude > Robot.negligableSpeed) { return false }
         return true
     }
@@ -65,14 +52,15 @@ class Robot extends Body {
         return this.data.instanceId === Robot.PLAYER_INSTANCE_ID;
     }
 
-    get seemsStranded(): boolean {
-        const { seemsStill } = this;
-        const { fuel } = this.data;
-        return seemsStill && fuel === 0;
-    }
+    get onGround(): Body | undefined {
+        if (!this.seemsStill) { return undefined }
+        const { bottom, x } = this.boundingRectangle
 
-    get isStranded(): boolean {
-        return this.ticksBeenStrandedFor > 10
+        const ground = this.world.bodies
+            .filter(body => Math.abs(body.boundingRectangle.top - bottom) < 5)
+            .find(body => body.boundingRectangle.left < x && body.boundingRectangle.right > x)
+
+        return ground
     }
 
     get landingPadIsRestingOn(): LandingPad | undefined {
@@ -94,57 +82,16 @@ class Robot extends Body {
     }
 
     tick() {
-        const { shootCooldownCurrent = 0, jumpCooldownCurrent = 0, thrust = 0, maxThrust = 1, fuel: currentFuel = 1, maxFuel = 1 } = this.data;
-        const { landingPadIsRestingOn } = this
+        const { shootCooldownCurrent = 0, jumpCooldownCurrent = 0, } = this.data;
         if (shootCooldownCurrent > 0) { this.data.shootCooldownCurrent = shootCooldownCurrent - 1 }
         if (jumpCooldownCurrent > 0) { this.data.jumpCooldownCurrent = jumpCooldownCurrent - 1 }
-
-        if (this.isPlayer && this.world.soundDeck && !this.thrustNoise) {
-            this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 75, duration: 3 }, { loop: true, volume: 0 })
-        }
-        if (this.thrustNoise) {
-            this.thrustNoise.volume = thrust > 0 ? .5 + (1.5 * thrust / maxThrust) : 0
-        }
-
-        if (thrust > 0) {
-            this.data.fuel = currentFuel - (thrust / 1000);
-            if (this.data.fuel <= 0) {
-                this.data.fuel = 0;
-                this.data.thrust = 0;
-            }
-        }
-
-        if (this.seemsStranded) { this.ticksBeenStrandedFor++ }
-        else { this.ticksBeenStrandedFor = 0 }
-
-        if (landingPadIsRestingOn && landingPadIsRestingOn instanceof RefuelPad) {
-            (landingPadIsRestingOn as RefuelPad).refuel(this);
-        }
     }
 
-    renderFlame(ctx: CanvasRenderingContext2D, viewPort: ViewPort, leftBoosterCorner: Geometry.Point, rightBoosterCorner: Geometry.Point) {
-
-        const { size = 0, thrust = 0, maxThrust = 0, heading = 0 } = this.data
-
-        let flameStartPoint = {
-            x: (leftBoosterCorner.x + rightBoosterCorner.x) / 2,
-            y: (leftBoosterCorner.y + rightBoosterCorner.y) / 2,
-        }
-
-        let flicker = (Math.random() - .5) * .5
-        let leftFlameEndPoint = {
-            x: flameStartPoint.x + getVectorX(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker)),
-            y: flameStartPoint.y + getVectorY(size * (thrust / maxThrust) * 2, reverseHeading(heading + flicker))
-        }
-
-        RenderFunctions.renderPolygon.onCanvas(ctx, [leftBoosterCorner, leftFlameEndPoint, rightBoosterCorner], { strokeColor: 'yellow', fillColor: 'red' }, viewPort)
-
-    }
 
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
 
-        const { x, y, size = 0, heading = 0, color, fillColor, thrust = 0 } = this.data
-        const { shapeValues } = this
+        const { x, y, size = 0, heading = 0, color, fillColor, facing } = this.data
+        const { shapeValues, onGround } = this
 
         const chasis: Geometry.Wedge = {
             x: x, y: y,
@@ -153,10 +100,12 @@ class Robot extends Body {
             angle: Geometry._deg * 240,
         }
 
+        const tilt = facing === 'LEFT' ? Geometry._deg * 10 : Geometry._deg * -10;
+
         const cockpit: Geometry.Wedge = {
             x: x, y: y,
             radius: size * (2 / 3),
-            heading: heading,
+            heading: heading + tilt,
             angle: Geometry._deg * 150,
         }
 
@@ -187,18 +136,10 @@ class Robot extends Body {
         RenderFunctions.renderWedge.onCanvas(ctx, cockpit, { fillColor: color, lineWidth: 1 / 2 }, viewPort);
         RenderFunctions.renderPolygon.onCanvas(ctx, leftLeg, { strokeColor: color, fillColor: "gray" }, viewPort)
         RenderFunctions.renderPolygon.onCanvas(ctx, rightLeg, { strokeColor: color, fillColor: "gray" }, viewPort)
-
-        if (thrust > 0) {
-            this.renderFlame(ctx, viewPort, leftBackPoint, leftBackRightPoint);
-            this.renderFlame(ctx, viewPort, rightBackPoint, rightBackLeftPoint);
-        }
     }
 
     updateMomentum() {
         Body.prototype.updateMomentum.apply(this, [])
-        const { thrust = 0, heading = 0 } = this.data
-        const thrustForce = new Force(thrust / this.mass, heading)
-        this.momentum = Force.combine([this.momentum, thrustForce])
     }
 
     explode(config: {
@@ -282,11 +223,11 @@ class Robot extends Body {
         }
     }
 
-    get steerSpeed() { return .075 }
-
     shoot() {
         if (!this.world) { return }
-        const { shootCooldownCurrent = 0, size = 1, heading = 0 } = this.data
+        const { shootCooldownCurrent = 0, size = 1, facing } = this.data
+
+        const heading = facing === 'LEFT' ? -Geometry._90deg : Geometry._90deg
 
         if (shootCooldownCurrent > 0) { return }
         this.data.shootCooldownCurrent = this.data.shootCooldownDuration
@@ -296,52 +237,26 @@ class Robot extends Body {
             y: this.data.y + getVectorY(size + 5, heading),
             color: 'red',
             fillColor: 'red',
-            ticksRemaining: 100
-        }, new Force(10, heading))
+            ticksRemaining: 150,
+        }, new Force(20, heading))
 
         bullet.enterWorld(this.world)
     }
 
-    steer(direction: "LEFT" | "RIGHT") {
-        const { heading = 0 } = this.data
-        switch (direction) {
-            case "LEFT":
-                this.data.heading = heading + this.steerSpeed;
-                break;
-            case "RIGHT":
-                this.data.heading = heading - this.steerSpeed;
-                break;
-        }
-    }
-
     bounce(direction: "LEFT" | "RIGHT" | "UP") {
-        if (!this.world) { return }
-
         const { jumpCooldownCurrent = 0 } = this.data
-
+        this.data.facing = direction !== 'UP' ? direction : this.data.facing
+        if (!this.world || !this.onGround) { return }
         if (jumpCooldownCurrent > 0) { return }
-        this.data.jumpCooldownCurrent = this.data.jumpCooldownDuration
 
+        this.data.jumpCooldownCurrent = this.data.jumpCooldownDuration
         const angle = direction === 'LEFT' ? -135 : direction === 'RIGHT' ? 135 : 180
         const jumpForce = new Force(2, angle * Geometry._deg)
         this.momentum = Force.combine([this.momentum, jumpForce])
     }
 
-    changeThrottle(change: number) {
-        const { thrust = 0, maxThrust = 0, fuel = 1 } = this.data
-        if (fuel <= 0) {
-            this.data.thrust = 0
-            return
-        }
-        let newAmount = thrust + change
-        if (newAmount < 0) { newAmount = 0 }
-        if (newAmount > maxThrust) { newAmount = maxThrust }
-        this.data.thrust = newAmount
-    }
-
     leaveWorld(): void {
         Body.prototype.leaveWorld.apply(this, [])
-        this.thrustNoise?.stop()
     }
 
 }

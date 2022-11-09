@@ -10,6 +10,7 @@ import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } f
 import { ScoreData } from "../../../modules/data-access/ScoreData";
 import { GameMode } from "../../../modules/GameMode";
 import { LevelIntro } from "../../../modules/LevelIntro";
+import { controlMapping } from "../../../modules/platform-game/controlRobot";
 
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
 import OnScreenControls from "../../OnScreenControls";
@@ -20,22 +21,6 @@ import GamePlayer from "../GamePlayer";
 
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
-
-const controlMapping: { [index: string]: string } = {
-    "w": "up",
-    "ArrowUp": "up",
-    "a": "left",
-    "ArrowLeft": "left",
-    "d": "right",
-    "ArrowRight": "right",
-    "s": "down",
-    "ArrowDown": "down",
-    " ": "START",
-    "p": "PAUSE",
-    "P": "PAUSE",
-    "O": "CONTROLTOGGLE",
-    "o": "CONTROLTOGGLE",
-}
 
 interface GameContainerState {
     level: number
@@ -356,7 +341,7 @@ export default class GameContainer extends React.Component {
                     <HighScoreEntry score={score} exit={this.goToTitles} />
                 }
 
-                <KeyReader
+                <KeyReader displayInput
                     report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
                     issueCommand={handleCommandPress}
                     controlMapping={controlMapping} />

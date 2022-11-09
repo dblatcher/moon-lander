@@ -1,13 +1,27 @@
 import { World } from "physics-worlds";
 import { getPlayerRobot } from "./platformGameWorldValues";
 
+export const controlMapping: { [index: string]: string } = {
+    "w": "up",
+    "ArrowUp": "up",
+    "a": "left",
+    "ArrowLeft": "left",
+    "d": "right",
+    "ArrowRight": "right",
+    "s": "down",
+    "ArrowDown": "down",
+    "Enter":"fire",
+    " ": "START",
+    "p": "PAUSE",
+    "P": "PAUSE",
+    "O": "CONTROLTOGGLE",
+    "o": "CONTROLTOGGLE",
+}
 
-function controlRobot(world: World, key: string) {
+export function controlRobot(world: World, key: string) {
 
     const player = getPlayerRobot(world)
     if (!player) { return }
-
-    const throttleRate = player.data.maxThrust ? (player.data.maxThrust / 30) : 200
 
     switch (key) {
         case 'up':
@@ -19,9 +33,8 @@ function controlRobot(world: World, key: string) {
         case 'left':
             player.bounce("LEFT")
             break;
+        case 'fire':
+            player.shoot();
+            break
     }
-}
-
-export {
-    controlRobot
 }

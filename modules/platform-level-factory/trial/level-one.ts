@@ -36,9 +36,7 @@ async function level(): Promise<Level> {
             heading: Math.PI,
             size: 20,
             elasticity: .01,
-            maxThrust: 6000,
             maxImpact: 50000,
-            maxFuel: 4000,
         }),
 
         new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .001 }),
@@ -49,7 +47,7 @@ async function level(): Promise<Level> {
         }),
 
         new Area({
-            x: 500, y: 4950, fillColor: bg, size: 3500, density: .1
+            x: 500, y: 4950, fillColor: bg, size: 3500, density: .05
         })
     ], {
         ...worldDimensions,
