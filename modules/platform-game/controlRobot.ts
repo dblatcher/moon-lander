@@ -25,14 +25,17 @@ export function controlRobot(world: World, key: string) {
 
     switch (key) {
         case 'up':
-            player.bounce("UP")
+            player.bounce(player.data.facing)
             break;
         case 'right':
-            player.bounce("RIGHT")
+            player.roll("RIGHT")
             break;
         case 'left':
-            player.bounce("LEFT")
+            player.roll("LEFT")
             break;
+        case 'down':
+            player.stop()
+            break
         case 'fire':
             player.shoot();
             break

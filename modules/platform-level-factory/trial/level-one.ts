@@ -1,11 +1,13 @@
-import { Area, Force, RadialGradientFill, shapes, StarField, World } from "physics-worlds";
-import { Circle } from "physics-worlds/dist/src/geometry";
+import { Area, Force, RadialGradientFill, shapes, StarField, World, Geometry } from "physics-worlds";
+import type { Circle } from "physics-worlds/dist/src/geometry";
 import { Level } from "../../Level";
 import { LevelIntro } from "../../LevelIntro";
 import { LandingPad } from "../../world-things/LandingPad";
 import { Terrain } from "../../world-things/Terrain";
 import { makeRectangleProperties } from "../../utility";
 import { Robot } from "../../world-things/Robot";
+
+const {_deg} = Geometry
 
 async function level(): Promise<Level> {
 
@@ -37,9 +39,11 @@ async function level(): Promise<Level> {
             size: 20,
             elasticity: .01,
             maxImpact: 50000,
+            facing: 'RIGHT',
         }),
 
         new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .001 }),
+        new Terrain({ x: 350, y: 2480, size: 100, shape: shapes.square, heading:_deg*30, fillColor: 'blue', color: 'transparent', density: .001 }),
 
         new LandingPad({
             x: 700, y: 2400, fillColor: 'green',
@@ -47,7 +51,7 @@ async function level(): Promise<Level> {
         }),
 
         new Area({
-            x: 500, y: 4950, fillColor: bg, size: 3500, density: .05
+            x: 500, y: 4950, fillColor: bg, size: 3500, density: 0
         })
     ], {
         ...worldDimensions,

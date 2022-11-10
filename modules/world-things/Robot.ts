@@ -1,8 +1,11 @@
-import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, SoundControl } from 'physics-worlds'
+import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 import { LandingPad, RefuelPad } from './LandingPad'
 import { Terrain } from './Terrain'
+
+
+const { getPolygonLineSegments, doLineSegmentsIntersect, getUnitVectorBetweenPoints, getDirection } = Geometry
 
 const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
 
@@ -13,6 +16,7 @@ interface RobotData extends BodyData {
     maxImpact?: number
 
     facing: 'LEFT' | 'RIGHT'
+    rolling?: 'LEFT' | 'RIGHT'
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
     jumpCooldownDuration?: number
@@ -52,21 +56,38 @@ class Robot extends Body {
         return this.data.instanceId === Robot.PLAYER_INSTANCE_ID;
     }
 
-    get onGround(): Body | undefined {
+    get terrainAndEdge(): { body: Body, surface: [Geometry.Point, Geometry.Point] } | undefined {
+
         if (!this.seemsStill) { return undefined }
-        const { bottom, x } = this.boundingRectangle
+        const { bottom, x, y, top } = this.boundingRectangle
 
-        const ground = this.world.bodies
-            .filter(body => Math.abs(body.boundingRectangle.top - bottom) < 5)
-            .find(body => body.boundingRectangle.left < x && body.boundingRectangle.right > x)
+        const possibleTerrain = this.world.bodies
+            .filter(body => {
+                const { boundingRectangle } = body
+                return body instanceof Terrain && boundingRectangle.left < x && boundingRectangle.right > x && boundingRectangle.y > bottom
+            })
 
-        return ground
+        if (!possibleTerrain) { return undefined }
+
+        const quarterHeight = (bottom - top) / 4
+        const lineDownMiddle: [Geometry.Point, Geometry.Point] = [{ x, y: bottom - quarterHeight }, { x, y: bottom + quarterHeight }]
+
+        for (let i = 0; i < possibleTerrain.length; i++) {
+            const body = possibleTerrain[i];
+            const edges = getPolygonLineSegments(body.polygonPoints)
+            const intersectedEdge = edges.find(edge => doLineSegmentsIntersect(lineDownMiddle, edge))
+            if (intersectedEdge) {
+                return { body, surface: intersectedEdge }
+            }
+        }
+
+        return undefined
     }
 
     get landingPadIsRestingOn(): LandingPad | undefined {
 
         if (!this.seemsStill) { return undefined }
-        const landingPads: LandingPad[] = this.world.bodies.filter(body => body instanceof LandingPad).map(body => body as LandingPad);
+        const landingPads = this.world.bodies.filter(body => body instanceof LandingPad) as LandingPad[];
 
         return landingPads.find(landingPad => {
             const edges = Geometry.getPolygonLineSegments(landingPad.polygonPoints)
@@ -91,7 +112,7 @@ class Robot extends Body {
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
 
         const { x, y, size = 0, heading = 0, color, fillColor, facing } = this.data
-        const { shapeValues, onGround } = this
+        const { shapeValues } = this
 
         const chasis: Geometry.Wedge = {
             x: x, y: y,
@@ -140,6 +161,21 @@ class Robot extends Body {
 
     updateMomentum() {
         Body.prototype.updateMomentum.apply(this, [])
+
+        const { rolling } = this.data
+        const { terrainAndEdge } = this
+        if (rolling && terrainAndEdge) {
+
+            // to do - check the left-right direction of the surface
+            const reverse = rolling === 'RIGHT'
+            
+            const unitVector = getUnitVectorBetweenPoints(...terrainAndEdge.surface)
+            const direction = reverse ? reverseHeading(getDirection(unitVector.x, unitVector.y)) : getDirection(unitVector.x, unitVector.y)
+
+            const rollForce = new Force(3, direction)
+            this.momentum = Force.combine([this.momentum, rollForce])
+        }
+
     }
 
     explode(config: {
@@ -245,14 +281,23 @@ class Robot extends Body {
 
     bounce(direction: "LEFT" | "RIGHT" | "UP") {
         const { jumpCooldownCurrent = 0 } = this.data
+        const { terrainAndEdge: onGround } = this
         this.data.facing = direction !== 'UP' ? direction : this.data.facing
-        if (!this.world || !this.onGround) { return }
         if (jumpCooldownCurrent > 0) { return }
-
+        if (!this.world || !onGround) { return }
         this.data.jumpCooldownCurrent = this.data.jumpCooldownDuration
         const angle = direction === 'LEFT' ? -135 : direction === 'RIGHT' ? 135 : 180
         const jumpForce = new Force(2, angle * Geometry._deg)
         this.momentum = Force.combine([this.momentum, jumpForce])
+    }
+
+    roll(direction: "LEFT" | "RIGHT") {
+        this.data.facing = direction
+        this.data.rolling = direction
+    }
+
+    stop() {
+        this.data.rolling = undefined
     }
 
     leaveWorld(): void {
