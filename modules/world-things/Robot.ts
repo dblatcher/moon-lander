@@ -1,13 +1,16 @@
-import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, } from 'physics-worlds'
+import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, Physics } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 import { LandingPad, RefuelPad } from './LandingPad'
 import { Terrain } from './Terrain'
 
 
-const { getPolygonLineSegments, doLineSegmentsIntersect, getUnitVectorBetweenPoints, getDirection } = Geometry
+const {
+    getPolygonLineSegments, doLineSegmentsIntersect, getUnitVectorBetweenPoints, getDirection,
+    getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _deg
+} = Geometry
 
-const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
+const { calculateDragForce } = Physics
 
 interface RobotData extends BodyData {
 
@@ -57,6 +60,8 @@ class Robot extends Body {
     }
 
     get terrainAndEdge(): { body: Body, surface: [Geometry.Point, Geometry.Point] } | undefined {
+
+        const { } = this.world
 
         if (!this.seemsStill) { return undefined }
         const { bottom, x, y, top } = this.boundingRectangle
@@ -160,22 +165,30 @@ class Robot extends Body {
     }
 
     updateMomentum() {
-        Body.prototype.updateMomentum.apply(this, [])
 
         const { rolling } = this.data
-        const { terrainAndEdge } = this
-        if (rolling && terrainAndEdge) {
+        const { terrainAndEdge, gravitationalForces, mass, upthrustForces } = this
 
-            // to do - check the left-right direction of the surface
-            const reverse = rolling === 'RIGHT'
-            
-            const unitVector = getUnitVectorBetweenPoints(...terrainAndEdge.surface)
-            const direction = reverse ? reverseHeading(getDirection(unitVector.x, unitVector.y)) : getDirection(unitVector.x, unitVector.y)
-
-            const rollForce = new Force(3, direction)
-            this.momentum = Force.combine([this.momentum, rollForce])
+        if (!terrainAndEdge) {
+            gravitationalForces.magnitude = gravitationalForces.magnitude / mass
+        } else {
+            gravitationalForces.magnitude = 0
         }
 
+        upthrustForces.magnitude = upthrustForces.magnitude / mass
+
+        let rollForce = Force.none
+        if (rolling && terrainAndEdge) {
+            // to do - check the left-right direction of the surface
+            const reverse = rolling === 'RIGHT'
+            const unitVector = getUnitVectorBetweenPoints(...terrainAndEdge.surface)
+            const direction = reverse ? reverseHeading(getDirection(unitVector.x, unitVector.y)) : getDirection(unitVector.x, unitVector.y)
+            rollForce = new Force(3, direction)
+        }
+
+        const drag = calculateDragForce(this, Force.combine([this.momentum, gravitationalForces, upthrustForces, rollForce]))
+        this.momentum = Force.combine([this.momentum, gravitationalForces, upthrustForces, rollForce, drag])
+        this.otherBodiesCollidedWithThisTick = []
     }
 
     explode(config: {
