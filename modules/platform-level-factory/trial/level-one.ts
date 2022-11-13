@@ -7,7 +7,33 @@ import { Terrain } from "../../world-things/Terrain";
 import { makeRectangleProperties } from "../../utility";
 import { Robot } from "../../world-things/Robot";
 
-const {_deg} = Geometry
+const { _deg } = Geometry
+
+const octCorner = .4
+const octogon: Geometry.Point[] = [
+    { x: -(1 - octCorner), y: -1 },
+    { x: (1 - octCorner), y: -1 },
+    { x: 1, y: -(1 - octCorner) },
+    { x: 1, y: (1 - octCorner) },
+    { x: (1 - octCorner), y: 1 },
+    { x: -(1 - octCorner), y: 1 },
+    { x: -1, y: (1 - octCorner) },
+    { x: -1, y: -(1 - octCorner) },
+]
+
+const rockShape = [
+    { x: -1.0, y: -0.6 },
+    { x: -0.65, y: -1.0 },
+    { x: 0.65, y: -0.75 },
+    { x: .8, y: -0.75 },
+    { x: 0.6, y: 0.4 },
+    { x: 1, y: 0.6 },
+    { x: .55, y: 1 },
+    { x: -.25, y: .75 },
+    { x: -.55, y: .8 },
+    { x: -1, y: .7 },
+    { x: -1, y: -.6 },
+]
 
 async function level(): Promise<Level> {
 
@@ -33,8 +59,8 @@ async function level(): Promise<Level> {
 
     const world = new World([
 
-        new Robot({ 
-            x: 200, y: worldDimensions.height-100, instanceId: Robot.PLAYER_INSTANCE_ID,
+        new Robot({
+            x: 200, y: worldDimensions.height - 100, instanceId: Robot.PLAYER_INSTANCE_ID,
             heading: Math.PI,
             size: 20,
             elasticity: .01,
@@ -43,7 +69,7 @@ async function level(): Promise<Level> {
         }),
 
         new Terrain({ x: 500, y: 4950, size: 2550, shape: shapes.square, fillColor: 'red', color: 'transparent', density: .001 }),
-        new Terrain({ x: 350, y: 2480, size: 100, shape: shapes.square, heading:_deg*30, fillColor: 'blue', color: 'transparent', density: .001 }),
+        new Terrain({ x: 350, y: 2450, size: 100, shape: shapes.polygon, corners: octogon, heading: _deg * 30, fillColor: 'blue', color: 'transparent', density: .001 }),
 
         new LandingPad({
             x: 700, y: 2400, fillColor: 'green',
