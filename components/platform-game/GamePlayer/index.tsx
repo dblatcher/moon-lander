@@ -11,11 +11,13 @@ import PausedSymbol from "../../PausedSymbol";
 import { GameContainerState } from "../../GameContainer";
 import { controlRobot } from "../../../modules/platform-game/controlRobot";
 import { GameMode } from "../../../modules/GameMode";
-import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerRobot } from "../../../modules/platform-game/platformGameWorldValues";
+import { WorldStatus, getWorldStatus, getPlayerRobot, getPlayerMotion } from "../../../modules/platform-game/platformGameWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
+import RollMeter from "../RollMeter";
+import BarMeter from "../../BarMeter";
 
 
 function sleep(ms: number) {
@@ -47,8 +49,8 @@ export default function GamePlayer(props: Readonly<{
     const onLastLevel = (level + 1 > gameMode.numberOfLevels);
 
     async function advance() {
-        const fuelLeft = getPlayerFuel(world)?.value;
-        const points = (fuelLeft ? Math.floor(fuelLeft / 50) : 0) + (onLastLevel ? 100 : 50);
+
+        const points = 100;
 
         await addPoints(points)
         await sleep(250);
@@ -100,6 +102,16 @@ export default function GamePlayer(props: Readonly<{
                 score={score}
                 level={level}
                 lives={lives} />
+
+            <RollMeter world={world} getValues={getPlayerMotion} />
+            <BarMeter world={world} meterType={'BIGAGE'} getValues={(world) => {
+                const { rolling = 0 } = getPlayerMotion(world) || { rolling: 0 }
+                return {
+                    max: 3,
+                    value: -rolling
+                }
+            }} />
+
         </section>
 
         {(worldStatus.playerLanded && mode === "PLAY") && (

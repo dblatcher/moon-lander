@@ -1,13 +1,13 @@
-import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, Physics } from 'physics-worlds'
+import { Body, Force, BodyData, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, Physics } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
-import { LandingPad, RefuelPad } from './LandingPad'
+import { LandingPad } from './LandingPad'
 import { Terrain } from './Terrain'
 
 
 const {
     getPolygonLineSegments, doLineSegmentsIntersect, getUnitVectorBetweenPoints, getDirection,
-    getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _deg
+    getVectorX, getVectorY, getXYVector, translatePoint,
 } = Geometry
 
 const { calculateDragForce } = Physics
@@ -19,7 +19,7 @@ interface RobotData extends BodyData {
     maxImpact?: number
 
     facing: 'LEFT' | 'RIGHT'
-    rolling?: 'LEFT' | 'RIGHT'
+    rolling?: number
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
     jumpCooldownDuration?: number
@@ -41,6 +41,7 @@ class Robot extends Body {
         this.data.jumpCooldownCurrent = 0
         this.data.jumpCooldownDuration = config.jumpCooldownDuration || 20
         this.data.facing = config.facing || 'LEFT'
+        this.data.rolling = 0
     }
 
     get typeId() { return 'Robot' }
@@ -180,10 +181,10 @@ class Robot extends Body {
         let rollForce = Force.none
         if (rolling && terrainAndEdge) {
             // to do - check the left-right direction of the surface
-            const reverse = rolling === 'RIGHT'
+
             const unitVector = getUnitVectorBetweenPoints(...terrainAndEdge.surface)
-            const direction = reverse ? reverseHeading(getDirection(unitVector.x, unitVector.y)) : getDirection(unitVector.x, unitVector.y)
-            rollForce = new Force(3, direction)
+            const direction = getDirection(unitVector.x, unitVector.y)
+            rollForce = new Force(rolling, direction)
         }
 
         const drag = calculateDragForce(this, Force.combine([this.momentum, gravitationalForces, upthrustForces, rollForce]))
@@ -305,12 +306,15 @@ class Robot extends Body {
     }
 
     roll(direction: "LEFT" | "RIGHT") {
-        this.data.facing = direction
-        this.data.rolling = direction
+        const { rolling = 0 } = this.data
+        const change = direction === 'LEFT' ? .1 : -.1
+        const newRolling = Math.min(Math.max(rolling + change, -2), 2)
+        this.data.rolling = newRolling
+        this.data.facing = newRolling > 0 ? 'LEFT' : 'RIGHT'
     }
 
     stop() {
-        this.data.rolling = undefined
+        this.data.rolling = 0
     }
 
     leaveWorld(): void {

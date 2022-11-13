@@ -12,21 +12,12 @@ function getPlayerRobot(world: World): Robot | null {
     return playerBody as Robot;
 }
 
-const getPlayerFuel = (world: World) => {
+const getPlayerMotion = (world: World) => {
     const player = getPlayerRobot(world)
     if (!player) { return null }
     return {
-        value: player.data.fuel || 0,
-        max: player.data.maxFuel || 0
-    }
-}
-
-const getPlayerThrust = (world: World) => {
-    const player = getPlayerRobot(world)
-    if (!player) { return null }
-    return {
-        value: player.data.thrust || 0,
-        max: player.data.maxThrust || 1
+        facing: player.data.facing,
+        rolling: player.data.rolling || 0,
     }
 }
 
@@ -47,7 +38,7 @@ const isChangeToVictory = (oldStatus: WorldStatus, newStatus: WorldStatus): bool
 
 const isChangeToFailure = (oldStatus: WorldStatus, newStatus: WorldStatus): boolean => {
     return (
-        (!oldStatus.playerDead && newStatus.playerDead) 
+        (!oldStatus.playerDead && newStatus.playerDead)
     ) || false
 }
 
@@ -68,6 +59,6 @@ export type {
     WorldStatus
 }
 export {
-    getPlayerRobot, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed,
+    getPlayerRobot, getWorldStatus, getPlayerSpeed, getPlayerMotion,
     isChangeToFailure, isChangeToVictory, playerIsInactive,
 }

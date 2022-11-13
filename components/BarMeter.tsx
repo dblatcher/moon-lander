@@ -41,10 +41,31 @@ function renderGage(value: number, maxValue: number, caption?: string) {
     )
 }
 
+function renderBiGage(value: number, maxValue: number, caption?: string) {
+
+    const angle = 90 * (value / maxValue)
+
+    const needleStyle = {
+        transform: `translateX(-50%) rotate(${angle}deg)`
+    }
+    return (
+        <figure className={styles.gage}>
+            <div className={styles.wrapper}>
+                <div className={styles.panel}></div>
+                <div className={styles.needle} style={needleStyle}></div>
+                <div className={styles.center}></div>
+                <span className={styles.labelEmpty}>-100%</span>
+                <span className={styles.labelFull}>100%</span>
+            </div>
+            {caption && <figcaption>{caption}</figcaption>}
+        </figure>
+    )
+}
+
 export default function BarMeter(props: {
     world: World
     getValues: GetMeterValuesFunction
-    meterType?: "BAR" | "GAGE"
+    meterType?: "BAR" | "GAGE" | "BIGAGE"
     caption?: string
 }) {
     const { world, getValues, meterType, caption } = props;
@@ -69,6 +90,8 @@ export default function BarMeter(props: {
     switch (meterType) {
         case "GAGE":
             return renderGage(value, maxValue, caption);
+        case "BIGAGE":
+            return renderBiGage(value, maxValue, caption);
         case "BAR":
         default:
             return renderBar(value, maxValue, caption);
