@@ -1,12 +1,12 @@
 import { Area, Force, RadialGradientFill, shapes, StarField, World } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry";
-import { Level } from "../../Level";
-import { LevelIntro } from "../../LevelIntro";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { Level } from "../../../Level";
+import { LevelIntro } from "../../../LevelIntro";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 import { loadImageFill } from "../imageFills";
 import { makeShip } from "../items";
-import { makeRectangleProperties } from "../../utility";
+import { makeRectangleProperties } from "../../../utility";
 
 async function level(): Promise<Level> {
 

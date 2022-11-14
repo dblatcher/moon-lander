@@ -1,8 +1,8 @@
 import { Area, Body, shapes, StarField } from "physics-worlds";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 import { atmosphere } from "../gradientFills";
-import { makeRectangleProperties } from "../../utility";
+import { makeRectangleProperties } from "../../../utility";
 
 function makeTutorialWorldContents(worldDimensions = { width: 1400, height: 1400 }, padPlacement = (1 / 2)) {
     const contents: (Body | Area)[] = [

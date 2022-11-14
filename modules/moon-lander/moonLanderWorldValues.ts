@@ -1,5 +1,5 @@
 import { Body, World } from "physics-worlds";
-import { SpaceShip } from "./world-things/SpaceShip";
+import { SpaceShip } from "../world-things/SpaceShip";
 
 interface WorldStatus {
     playerDead?: boolean

@@ -1,10 +1,10 @@
 import { ImageFill, Geometry } from "physics-worlds";
 
-import soilImage from "../../image/soil.jpg";
-import jupiterImage from "../../image/jupiter.jpg";
-import neptuneImage from "../../image/neptune.jpg";
-import brickImage from "../../image/brick.png";
-import skyImage from "../../image/clouds.png";
+import soilImage from "../../../image/soil.jpg";
+import jupiterImage from "../../../image/jupiter.jpg";
+import neptuneImage from "../../../image/neptune.jpg";
+import brickImage from "../../../image/brick.png";
+import skyImage from "../../../image/clouds.png";
 
 // TO DO - make these types importable in physics-worlds
 interface ImageFillTransforms {

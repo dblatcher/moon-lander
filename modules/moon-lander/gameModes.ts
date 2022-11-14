@@ -2,7 +2,7 @@ import * as tutorials from "./level-factory/tutorials";
 import * as arcade from "./level-factory/arcade";
 import * as classics from "./level-factory/classic";
 
-import { GameMode } from "./GameMode";
+import { GameMode } from "../GameMode";
 
 
 const gameModes: { [index: string]: GameMode } = {

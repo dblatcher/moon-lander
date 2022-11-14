@@ -1,12 +1,12 @@
 import { Force, World, shapes } from "physics-worlds";
-import { LevelIntro } from "../../LevelIntro";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { LevelIntro } from "../../../LevelIntro";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 
 import { makeBuilding, makeShip } from "../items";
 import { loadManyImageFills } from "../imageFills";
 
-import { Level } from "../../Level";
+import { Level } from "../../../Level";
 
 
 

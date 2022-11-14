@@ -1,8 +1,8 @@
 import { World, shapes, StarField, Area } from "physics-worlds";
-import { Level } from "../../Level";
-import { LevelIntro } from "../../LevelIntro";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { Level } from "../../../Level";
+import { LevelIntro } from "../../../LevelIntro";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 import { loadImageFill } from "../imageFills";
 import { atmosphere } from "../gradientFills";
 import { makeShip } from "../items";

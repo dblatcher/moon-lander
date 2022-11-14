@@ -10,9 +10,9 @@ import PausedSymbol from "../PausedSymbol";
 import DashboardPanel from "../DashboardPanel";
 
 import { GameContainerState } from "../GameContainer";
-import { controlSpaceShip } from "../../modules/controlSpaceShip";
+import { controlSpaceShip } from "../../modules/moon-lander/controlSpaceShip";
 import { GameMode } from "../../modules/GameMode";
-import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerSpaceship } from "../../modules/moonLanderWorldValues";
+import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerSpaceship } from "../../modules/moon-lander/moonLanderWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../modules/minimap";
 
 import styles from "./MoonLanderGame.module.scss";

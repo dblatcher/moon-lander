@@ -1,5 +1,5 @@
 import { Area, Geometry, StarField, World } from "physics-worlds"
-import { atmosphere } from "../level-factory/gradientFills"
+import { atmosphere } from "../moon-lander/level-factory/gradientFills"
 import { SpaceShip } from "../world-things/SpaceShip"
 
 function createShipCloseUp() {

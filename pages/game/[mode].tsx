@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { ConfigurationProp, getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
-import { gameModes } from '../../modules/gameModes'
+import { gameModes } from '../../modules/moon-lander/gameModes'
 
 import Head from 'next/head'
 import Link from 'next/link'

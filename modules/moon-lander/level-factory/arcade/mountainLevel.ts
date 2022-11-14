@@ -1,9 +1,9 @@
 import { Body, Force, World, shapes, StarField, Area } from "physics-worlds";
-import { Level } from "../../Level";
-import { LevelIntro } from "../../LevelIntro";
-import { DistantPlanet } from "../../world-things/DistantPlanet";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { Level } from "../../../Level";
+import { LevelIntro } from "../../../LevelIntro";
+import { DistantPlanet } from "../../../world-things/DistantPlanet";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 import { atmosphere } from "../gradientFills";
 import { loadImageFill } from "../imageFills";
 import { makeMountain, makeShip } from "../items";

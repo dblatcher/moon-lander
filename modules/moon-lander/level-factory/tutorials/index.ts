@@ -1,12 +1,12 @@
 import { World, Force } from "physics-worlds";
-import { Level } from "../../Level";
-import { LevelIntro } from "../../LevelIntro";
-import { DistantPlanet } from "../../world-things/DistantPlanet";
-import { RefuelPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
+import { Level } from "../../../Level";
+import { LevelIntro } from "../../../LevelIntro";
+import { DistantPlanet } from "../../../world-things/DistantPlanet";
+import { RefuelPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
 import { loadImageFill } from "../imageFills";
 import { makeShip } from "../items";
-import { makeRectangleProperties } from "../../utility";
+import { makeRectangleProperties } from "../../../utility";
 
 
 import { makeTutorialWorldContents, makeTutorialAtmo, makeTutorialBackground } from './generics';

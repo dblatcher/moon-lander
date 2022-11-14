@@ -1,6 +1,6 @@
 import { Geometry, shapes, AbstractFill } from "physics-worlds";
-import { SpaceShip, SpaceShipData } from "../world-things/SpaceShip";
-import { Terrain } from "../world-things/Terrain";
+import { SpaceShip, SpaceShipData } from "../../world-things/SpaceShip";
+import { Terrain } from "../../world-things/Terrain";
 import { mountainGradient } from "./gradientFills";
 
 

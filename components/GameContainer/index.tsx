@@ -7,7 +7,7 @@ import styles from "./GameContainer.module.scss";
 
 import { SoundDeck, World } from "physics-worlds";
 
-import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../modules/moonLanderWorldValues";
+import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../modules/moon-lander/moonLanderWorldValues";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
