@@ -1,11 +1,11 @@
 import { Area, Force, RadialGradientFill, shapes, StarField, World, Geometry } from "physics-worlds";
 import type { Circle } from "physics-worlds/dist/src/geometry";
-import { Level } from "../../Level";
-import { LevelIntro } from "../../LevelIntro";
-import { LandingPad } from "../../world-things/LandingPad";
-import { Terrain } from "../../world-things/Terrain";
-import { makeRectangleProperties } from "../../utility";
-import { Robot } from "../../world-things/Robot";
+import { Level } from "../../../Level";
+import { LevelIntro } from "../../../LevelIntro";
+import { LandingPad } from "../../../world-things/LandingPad";
+import { Terrain } from "../../../world-things/Terrain";
+import { makeRectangleProperties } from "../../../utility";
+import { Robot } from "../../../world-things/Robot";
 
 const { _deg } = Geometry
 

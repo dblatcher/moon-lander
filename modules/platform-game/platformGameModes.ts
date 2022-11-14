@@ -1,4 +1,4 @@
-import * as trial from "../platform-level-factory/trial"
+import * as trial from "./level-factory/trial"
 import { GameMode } from "../GameMode";
 
 const plaformGameModes: Record<string, GameMode> = {
