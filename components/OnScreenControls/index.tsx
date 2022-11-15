@@ -1,5 +1,5 @@
 import { MouseEventHandler, useState } from "react";
-import { Command } from '../GameContainer'
+import { Command } from '../moon-lander/GameContainer'
 import { OnScreenTapButton } from "./OnScreenTapButton";
 import { OnScreenTouchButton } from "./OnScreenTouchButton";
 import styles from "./styles.module.scss";

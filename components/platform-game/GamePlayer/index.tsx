@@ -8,7 +8,7 @@ import NumberPanel from "../../NumberPanel";
 import Dialogue from "../../Dialogue";
 import PausedSymbol from "../../PausedSymbol";
 
-import { GameContainerState } from "../../GameContainer";
+import { GameContainerState } from "../../moon-lander/GameContainer";
 import { controlRobot } from "../../../modules/platform-game/controlRobot";
 import { GameMode } from "../../../modules/GameMode";
 import { WorldStatus, getWorldStatus, getPlayerRobot, getPlayerMotion } from "../../../modules/platform-game/platformGameWorldValues";

@@ -8,7 +8,7 @@ import { gameModes } from '../../modules/moon-lander/gameModes'
 import Head from 'next/head'
 import Link from 'next/link'
 import FullScreenWrapper from '../../components/FullScreenWrapper'
-import GameContainer from '../../components/GameContainer'
+import GameContainer from '../../components/moon-lander/GameContainer'
 import styles from '../../styles/Page.module.scss'
 
 const fetcher = async (url: string): Promise<ScoreData> => {

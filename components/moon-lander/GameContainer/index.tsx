@@ -1,20 +1,20 @@
 import React from "react";
 import MoonLanderGame from "../MoonLanderGame";
 import MoonLanderTitleScreen from "../MoonLanderTitleScreen";
-import HighScoreEntry from "../HighScoreEntry";
-import KeyReader from "../KeyReader";
+import HighScoreEntry from "../../HighScoreEntry";
+import KeyReader from "../../KeyReader";
 import styles from "./GameContainer.module.scss";
 
 import { SoundDeck, World } from "physics-worlds";
 
-import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../modules/moon-lander/moonLanderWorldValues";
-import { ScoreData } from "../../modules/data-access/ScoreData";
-import { GameMode } from "../../modules/GameMode";
-import { LevelIntro } from "../../modules/LevelIntro";
+import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../../modules/moon-lander/moonLanderWorldValues";
+import { ScoreData } from "../../../modules/data-access/ScoreData";
+import { GameMode } from "../../../modules/GameMode";
+import { LevelIntro } from "../../../modules/LevelIntro";
 import MoonLanderLevelIntro from "../MoonLanderLevelIntro";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import OnScreenControls from "../OnScreenControls";
-import CommandMenu from "../CommandMenu";
+import OnScreenControls from "../../OnScreenControls";
+import CommandMenu from "../../CommandMenu";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));

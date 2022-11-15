@@ -1,7 +1,7 @@
 
-import { ScoreData } from "../../modules/data-access/ScoreData";
-import HighScoreTable from "../HighScoreTable";
-import Switch from "../Switch";
+import { ScoreData } from "../../../modules/data-access/ScoreData";
+import HighScoreTable from "../../HighScoreTable";
+import Switch from "../../Switch";
 import styles from "./MoonLanderTitleScreen.module.scss";
 
 const switchStyle = {
