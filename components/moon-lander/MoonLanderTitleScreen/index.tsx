@@ -1,5 +1,7 @@
 
+import { createShipCloseUp } from "../../../modules/animation-factory";
 import { ScoreData } from "../../../modules/data-access/ScoreData";
+import AnimationCanvas from "../../AnimationCanvas";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
 import styles from "./MoonLanderTitleScreen.module.scss";
@@ -21,6 +23,10 @@ export default function MoonLanderTitleScreen(props: {
 
     return <article className={styles.article}>
         <header>
+            <AnimationCanvas makeWorld={createShipCloseUp}
+                magnify={.75}
+                frameClass={styles.cornerAnimation} />
+
             <h1>MOON LANDER</h1>
             {title && <h2>{title}</h2>}
             <div className={styles.controls}>

@@ -16,6 +16,7 @@
         position: relative;
         padding: 2rem;
         margin-bottom: .5em;
+        z-index: 1;
 
         h1 {
             @include engraved(regular);
@@ -39,8 +40,19 @@
         color: black;
         flex-direction: column;
         align-items: flex-end;
-        max-width: 15em
+        max-width: 15em;
     }
+
+    .cornerAnimation {
+        text-align: center;
+        align-self: center;
+        position: absolute;
+        transform-origin: bottom right;
+        bottom: .75em;
+        right: .75em;
+        z-index: -1;
+        max-width: 50%;
+      }
 
     .startButton {
         @include button();
