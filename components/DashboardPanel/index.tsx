@@ -1,5 +1,5 @@
 import { World } from "physics-worlds";
-import BarMeter from "../BarMeter";
+import Indicator from "../Indicator";
 import DangerMeter from "../DangerMeter";
 import { getPlayerFuel, getPlayerThrust, getPlayerSpeed } from "../../modules/moon-lander/moonLanderWorldValues";
 
@@ -13,11 +13,11 @@ export default function DashboardPanel(props: {
 
     return <div className={styles.panel}>
         <div className={styles.row}>
-            <BarMeter
+            <Indicator
                 caption="THRUST"
                 world={world}
                 getValues={getPlayerThrust} />
-            <BarMeter
+            <Indicator
                 caption="FUEL"
                 meterType="GAGE"
                 world={world}

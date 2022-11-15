@@ -17,7 +17,7 @@ import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, h
 import styles from "./styles.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
 import RollMeter from "../RollMeter";
-import BarMeter from "../../BarMeter";
+import Indicator from "../../Indicator";
 
 
 function sleep(ms: number) {
@@ -104,7 +104,7 @@ export default function GamePlayer(props: Readonly<{
                 lives={lives} />
 
             <RollMeter world={world} getValues={getPlayerMotion} />
-            <BarMeter world={world} meterType={'BIGAGE'} getValues={(world) => {
+            <Indicator world={world} meterType={'BIGAGE'} getValues={(world) => {
                 const { rolling = 0 } = getPlayerMotion(world) || { rolling: 0 }
                 return {
                     max: 3,

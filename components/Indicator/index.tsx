@@ -62,7 +62,7 @@ function renderBiGage(value: number, maxValue: number, caption?: string) {
     )
 }
 
-export default function BarMeter(props: {
+export default function Indicator(props: {
     world: World
     getValues: GetMeterValuesFunction
     meterType?: "BAR" | "GAGE" | "BIGAGE"
