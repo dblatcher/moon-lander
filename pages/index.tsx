@@ -3,9 +3,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
-import { gameModes } from '../modules/moon-lander/gameModes'
+import { gameModes as moonLanderModes } from '../modules/moon-lander/gameModes'
 import AnimationCanvas from '../components/AnimationCanvas'
 import { createShipCloseUp } from '../modules/animation-factory'
+import { plaformGameModes } from '../modules/platform-game/platformGameModes'
 
 
 
@@ -28,11 +29,11 @@ const Home: NextPage = () => {
           </header>
 
           <ul className={styles.gameModeList}>
-            {Object.keys(gameModes).filter(key => !gameModes[key].hidden).map(key => (
+            {Object.keys(moonLanderModes).filter(key => !moonLanderModes[key].hidden).map(key => (
               <li key={key} >
-                <Link key={key} href={`/game/${key}`} passHref={true}>
+                <Link key={key} href={`/moon-lander/${key}`} passHref={true}>
                   <a>
-                    <h2>{gameModes[key].title}</h2>
+                    <h2>{moonLanderModes[key].title}</h2>
                   </a>
                 </Link>
               </li>
@@ -47,6 +48,18 @@ const Home: NextPage = () => {
               textAlign: 'center',
               alignSelf: 'center',
             }} />
+
+          <ul className={styles.gameModeList}>
+            {Object.keys(plaformGameModes).filter(key => !plaformGameModes[key].hidden).map(key => (
+              <li key={key} >
+                <Link key={key} href={`/platform/${key}`} passHref={true}>
+                  <a>
+                    <h2>{plaformGameModes[key].title}</h2>
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
           <p>
             <Link href={`/about`} passHref={true}>

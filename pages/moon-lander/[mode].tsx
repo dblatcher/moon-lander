@@ -82,7 +82,7 @@ export const getStaticProps = async (context: { params: { mode: string } }): Pro
 
 export async function getStaticPaths() {
     return {
-        paths: Object.keys(gameModes).map(key => `/game/${key}`),
+        paths: Object.keys(gameModes).map(key => `/moon-lander/${key}`),
         fallback: false
     }
 }

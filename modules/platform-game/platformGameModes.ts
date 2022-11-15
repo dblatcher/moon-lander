@@ -3,7 +3,7 @@ import { GameMode } from "../GameMode";
 
 const plaformGameModes: Record<string, GameMode> = {
     'trial': new GameMode({
-        title: "plaform game",
+        title: "trial game",
         key: 'trial',
         levelFunctions: [
             trial.levelOne
