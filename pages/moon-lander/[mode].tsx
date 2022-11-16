@@ -1,63 +1,39 @@
 import type { NextPage } from 'next'
 import useSWR from 'swr';
-
-import { getStaticConfiguration, GamePageProps } from '../../modules/configuration'
+import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps, GamePageModel } from '../../modules/configuration'
 import { gameModes } from '../../modules/moon-lander/gameModes'
-
-import Head from 'next/head'
-import Link from 'next/link'
-import FullScreenWrapper from '../../components/FullScreenWrapper'
 import GameContainer from '../../components/moon-lander/GameContainer'
-import styles from '../../styles/Page.module.scss'
 import { makeFetcher } from '../../modules/configuration/fetchers';
+import GamePageTemplate from '../../components/GamePageTemplate';
 
+const model: GamePageModel = {
+    title: 'Moon Lander',
+    modes: gameModes,
+    route: 'moon-lander',
+    scoreFetcherUrl: '/api/scores',
+}
 
 const GamePage: NextPage = (props: GamePageProps) => {
-
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR('/api/scores', makeFetcher(config))
-
-    const gameMode = gameModes[gameModeKey]
+    const { data, error } = useSWR(model.scoreFetcherUrl, makeFetcher(config))
+    const gameMode = model.modes[gameModeKey]
 
     return (
-        <div className={styles["full-height-page"]}>
-
-            <Head>
-                <title>Moon Lander - {gameMode.title}</title>
-            </Head>
-
-            <main className={styles["full-height-container"]}>
-
-                <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
-
-                <FullScreenWrapper>
-                    <GameContainer
-                        scoreData={data}
-                        isDataBase={config.dataBaseType !== 'NONE'}
-                        gameMode={gameMode}
-                    />
-                </FullScreenWrapper>
-            </main>
-        </div>
+        <GamePageTemplate title={`${model.title} - ${gameMode.title}`}>
+            <GameContainer
+                scoreData={data}
+                isDataBase={config.dataBaseType !== 'NONE'}
+                gameMode={gameMode} />
+        </GamePageTemplate>
     )
 
 }
 
-export const getStaticProps = async (context: { params: { mode: string } }): Promise<{ props: GamePageProps }> => {
-    return {
-        props: {
-            config: getStaticConfiguration(),
-            gameModeKey: context.params.mode,
-        },
-    }
-}
+export const getStaticProps = buildGameGetStaticProps()
 
 
 export async function getStaticPaths() {
-    return {
-        paths: Object.keys(gameModes).map(key => `/moon-lander/${key}`),
-        fallback: false
-    }
+    return getGamePageStaticPaths(model)
 }
 
 export default GamePage
