@@ -2,7 +2,23 @@ import { World } from "physics-worlds";
 import { getPlayerSpaceship } from "./moonLanderWorldValues";
 
 
-function controlSpaceShip(world: World, key: string) {
+export const controlMapping: Record<string, string> = {
+    "w": "up",
+    "ArrowUp": "up",
+    "a": "left",
+    "ArrowLeft": "left",
+    "d": "right",
+    "ArrowRight": "right",
+    "s": "down",
+    "ArrowDown": "down",
+    " ": "START",
+    "p": "PAUSE",
+    "P": "PAUSE",
+    "O": "CONTROLTOGGLE",
+    "o": "CONTROLTOGGLE",
+}
+
+export function controlSpaceShip(world: World, key: string) {
 
     const player = getPlayerSpaceship(world)
     if (!player) { return }
@@ -25,6 +41,3 @@ function controlSpaceShip(world: World, key: string) {
     }
 }
 
-export {
-    controlSpaceShip
-}
