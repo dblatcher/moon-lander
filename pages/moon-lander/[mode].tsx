@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import useSWR from 'swr';
 
-import { ScoreData } from "../../modules/data-access/ScoreData";
-import { ConfigurationProp, getStaticConfiguration, PropsWithChildrenAndConfig } from '../../modules/configuration'
+import { getStaticConfiguration, GamePageProps } from '../../modules/configuration'
 import { gameModes } from '../../modules/moon-lander/gameModes'
 
 import Head from 'next/head'
@@ -10,34 +9,8 @@ import Link from 'next/link'
 import FullScreenWrapper from '../../components/FullScreenWrapper'
 import GameContainer from '../../components/moon-lander/GameContainer'
 import styles from '../../styles/Page.module.scss'
+import { makeFetcher } from '../../modules/configuration/fetchers';
 
-const fetcher = async (url: string): Promise<ScoreData> => {
-    const res = await fetch(url)
-    const data: ScoreData = await res.json()
-
-    if (res.status !== 200) {
-        throw new Error(data.message)
-    }
-    return data
-}
-
-const dummyFetcher = async (url: string): Promise<ScoreData> => {
-    return {
-        message: "",
-        scores: []
-    }
-}
-
-const makeFetcher = (config: ConfigurationProp) => {
-    if (config.dataBaseType === 'LOCAL') {
-        return fetcher;
-    }
-    return dummyFetcher;
-}
-
-interface GamePageProps extends PropsWithChildrenAndConfig {
-    gameModeKey?: string
-}
 
 const GamePage: NextPage = (props: GamePageProps) => {
 

@@ -11,6 +11,10 @@ interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
     config?: ConfigurationProp
 }
 
+interface GamePageProps extends PropsWithChildrenAndConfig {
+    gameModeKey?: string
+}
+
 function getStaticConfiguration(): ConfigurationProp {
 
     let dataBaseType: "LOCAL" | "NONE";
@@ -28,5 +32,5 @@ function getStaticConfiguration(): ConfigurationProp {
 
 
 
-export type { ConfigurationProp, PropsWithChildrenAndConfig }
+export type { ConfigurationProp, PropsWithChildrenAndConfig, GamePageProps }
 export { getStaticConfiguration}
