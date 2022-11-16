@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { GameMode } from '../../modules/GameMode'
 import BurgerSwitch from '../BurgerSwitch'
-import { Command } from '../moon-lander/GameContainer'
+import { Command } from '../GameContainerTemplate/index'
 import Switch from '../Switch'
 import styles from './styles.module.scss'
 
