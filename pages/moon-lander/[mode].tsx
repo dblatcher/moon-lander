@@ -10,6 +10,8 @@ import MoonLanderGame from '../../components/moon-lander/MoonLanderGame';
 import MoonLanderTitleScreen from '../../components/moon-lander/MoonLanderTitleScreen';
 import { getWorldStatus, isChangeToFailure, isChangeToVictory, playerIsInactive } from '../../modules/moon-lander/moonLanderWorldValues';
 
+import styles from '../../styles/Page.module.scss'
+
 const model: GamePageModel = {
     title: 'Moon Lander',
     modes: gameModes,
@@ -52,6 +54,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                     "O": "CONTROLTOGGLE",
                     "o": "CONTROLTOGGLE",
                 }}
+                extraClassNames={[styles.yellowAndBlackStripes]}
             />
         </GamePageTemplate>
     )

@@ -1,4 +1,5 @@
 @import "./_mixins.scss";
+@import "./_design-mixins";
 
 .full-height-page {
     @include noScrollPage;
@@ -6,4 +7,12 @@
 
 .full-height-container {
     @include fullHeight;
+}
+
+.red {
+    background: red;
+}
+
+.yellowAndBlackStripes {
+    @include yellowAndBlackStripes;
 }

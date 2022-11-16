@@ -1,15 +1,15 @@
 import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
-import HighScoreEntry from "../HighScoreEntry";
-import KeyReader from "../KeyReader";
-import styles from "./GameContainer.module.scss";
+import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
+import { StatusFunctions, WorldStatus } from "./statusFunctions";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
+import HighScoreEntry from "../HighScoreEntry";
+import KeyReader from "../KeyReader";
 import OnScreenControls from "../OnScreenControls";
 import CommandMenu from "../CommandMenu";
-import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import { StatusFunctions, WorldStatus } from "./statusFunctions";
+import styles from "./GameContainer.module.scss";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 
@@ -30,9 +30,7 @@ interface Props {
     scoreData?: ScoreData
     isDataBase: boolean
     gameMode: GameMode
-
     statusFunctions: StatusFunctions
-
     controlMapping: { [index: string]: string }
 
     TitleScreenComponent: FunctionComponent<{
@@ -64,6 +62,8 @@ interface Props {
         startLevel: { (level?: number): Promise<GameContainerState> }
         endPlaySession: { (): Promise<GameContainerState> }
     }>
+
+    extraClassNames?: string[]
 }
 
 
@@ -325,12 +325,18 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
     }
 
     render() {
-        const { scoreData, isDataBase, gameMode, TitleScreenComponent, LevelIntroComponent, GameComponent, controlMapping } = this.props;
+        const {
+            scoreData, isDataBase, gameMode, controlMapping,
+            extraClassNames = [],
+            TitleScreenComponent, LevelIntroComponent, GameComponent,
+        } = this.props;
         const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
         const { world, controls, handleCommandPress } = this;
 
+        const mainClassNames = [styles.component, ...extraClassNames].join(" ")
+
         return (
-            <main className={styles.component} key={world?.name || "no_world"}>
+            <main className={mainClassNames} key={world?.name || "no_world"}>
 
                 {(mode === "TITLE") &&
                     <TitleScreenComponent
