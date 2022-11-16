@@ -1,8 +1,0 @@
-@import "../../../styles/mixins";
-@import "../../../styles/design-mixins";
-
-.component {
-    @include fullHeight;
-    @include yellowAndBlackStripes;
-    padding: .5rem;
-}

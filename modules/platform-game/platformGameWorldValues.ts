@@ -1,10 +1,7 @@
 import { Body, World } from "physics-worlds";
 import { Robot } from "../world-things/Robot";
+import { WorldStatus } from "../../components/GameContainerTemplate/statusFunctions"
 
-interface WorldStatus {
-    playerDead?: boolean
-    playerLanded?: boolean
-}
 
 function getPlayerRobot(world: World): Robot | null {
     const playerBody: Body | undefined = world.bodies.find(body => body instanceof Robot && (body as Robot).isPlayer)

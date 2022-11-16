@@ -1,24 +1,15 @@
-import React from "react";
-
-import HighScoreEntry from "../../HighScoreEntry";
-import KeyReader from "../../KeyReader";
-import styles from "./GameContainer.module.scss";
-
+import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
-
-import { isChangeToFailure, isChangeToVictory, playerIsInactive, WorldStatus } from "../../../modules/platform-game/platformGameWorldValues";
-import { ScoreData } from "../../../modules/data-access/ScoreData";
-import { GameMode } from "../../../modules/GameMode";
-import { LevelIntro } from "../../../modules/LevelIntro";
-import { controlMapping } from "../../../modules/platform-game/controlRobot";
-
+import HighScoreEntry from "../HighScoreEntry";
+import KeyReader from "../KeyReader";
+import styles from "./GameContainer.module.scss";
+import { ScoreData } from "../../modules/data-access/ScoreData";
+import { GameMode } from "../../modules/GameMode";
+import { LevelIntro } from "../../modules/LevelIntro";
+import OnScreenControls from "../OnScreenControls";
+import CommandMenu from "../CommandMenu";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import OnScreenControls from "../../OnScreenControls";
-import CommandMenu from "../../CommandMenu";
-import TitleScreen from "../TitleScreen";
-import IntroDialogue from "../IntroDialogue";
-import GamePlayer from "../GamePlayer";
-
+import { StatusFunctions, WorldStatus } from "./statusFunctions";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 
@@ -35,20 +26,55 @@ interface GameContainerState {
     showOnScreenControls: boolean
 }
 
+interface Props {
+    scoreData?: ScoreData
+    isDataBase: boolean
+    gameMode: GameMode
+
+    statusFunctions: StatusFunctions
+
+    controlMapping: { [index: string]: string }
+
+    TitleScreenComponent: FunctionComponent<{
+        scoreData?: ScoreData
+        showHighScores: boolean
+        title?: string
+        issueCommand?: Function
+        soundEnabled: boolean
+        showOnScreenControls: boolean
+    }>
+
+    LevelIntroComponent: ComponentClass<{
+        levelIntro?: LevelIntro
+    }>
+
+    GameComponent: FunctionComponent<{
+        world: World
+        gameMode: GameMode
+        worldStatus: WorldStatus
+        score: number
+        lives: number
+        level: number
+        mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
+        isPaused: boolean
+        controls: { [index: string]: boolean }
+        handleWorldStatus: { (worldStatus: WorldStatus): void }
+        addPoints: { (points: number): Promise<GameContainerState> }
+        addLives: { (points: number): Promise<GameContainerState> }
+        startLevel: { (level?: number): Promise<GameContainerState> }
+        endPlaySession: { (): Promise<GameContainerState> }
+    }>
+}
+
+
 export type { GameContainerState }
 
-export default class GameContainer extends React.Component {
-    props!: {
-        scoreData?: ScoreData
-        isDataBase: boolean
-        gameMode: GameMode
-    };
-    state!: GameContainerState;
+export default class GameContainerTemplate extends React.Component<Props, GameContainerState> {
     canvasRef: React.RefObject<HTMLCanvasElement>;
     world?: World
     songPlaying?: Promise<boolean>
 
-    constructor(props: GameContainer["props"]) {
+    constructor(props: Props) {
         super(props);
         this.canvasRef = React.createRef();
 
@@ -114,7 +140,7 @@ export default class GameContainer extends React.Component {
 
     async asyncSetState(modification: Partial<GameContainerState>): Promise<GameContainerState> {
         return new Promise(resolve => {
-            this.setState(modification, () => { resolve(this.state) })
+            this.setState(modification as GameContainerState, () => { resolve(this.state) })
         })
     }
 
@@ -180,6 +206,7 @@ export default class GameContainer extends React.Component {
 
     handleWorldStatus(status: WorldStatus): void {
         const { worldStatus: oldStatus } = this.state;
+        const { isChangeToFailure, isChangeToVictory } = this.props.statusFunctions
 
         if (isChangeToVictory(oldStatus, status)) {
             this.unlessSongAlreadyPlaying(playVictorySong)
@@ -191,6 +218,7 @@ export default class GameContainer extends React.Component {
 
         const newStatus: WorldStatus = {
             playerDead: oldStatus.playerDead || status.playerDead,
+            playerStranded: oldStatus.playerLanded || status.playerLanded,
             playerLanded: oldStatus.playerLanded || status.playerLanded,
         }
 
@@ -200,8 +228,8 @@ export default class GameContainer extends React.Component {
     togglePaused(): void {
         if (!this.world) { return }
         const { mode, worldStatus } = this.state
-        const { speed } = this.props.gameMode;
-        if (mode !== "PLAY" || playerIsInactive(worldStatus)) { return }
+        const { speed, } = this.props.gameMode;
+        if (mode !== "PLAY" || this.props.statusFunctions.playerIsInactive(worldStatus)) { return }
 
         if (this.isPaused) {
             this.world.ticksPerSecond = speed;
@@ -297,7 +325,7 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        const { scoreData, isDataBase, gameMode } = this.props;
+        const { scoreData, isDataBase, gameMode, TitleScreenComponent, LevelIntroComponent, GameComponent, controlMapping } = this.props;
         const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
         const { world, controls, handleCommandPress } = this;
 
@@ -305,7 +333,7 @@ export default class GameContainer extends React.Component {
             <main className={styles.component} key={world?.name || "no_world"}>
 
                 {(mode === "TITLE") &&
-                    <TitleScreen
+                    <TitleScreenComponent
                         showHighScores={!gameMode.noScores && isDataBase}
                         issueCommand={handleCommandPress}
                         soundEnabled={soundEnabled}
@@ -315,7 +343,7 @@ export default class GameContainer extends React.Component {
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE" || mode === "INTRO")) &&
-                    <GamePlayer key={world.name}
+                    <GameComponent key={world.name}
                         world={world}
                         gameMode={gameMode}
                         worldStatus={worldStatus}
@@ -334,14 +362,14 @@ export default class GameContainer extends React.Component {
                 }
 
                 {(mode === "INTRO") &&
-                    <IntroDialogue levelIntro={levelIntro} />
+                    <LevelIntroComponent levelIntro={levelIntro} />
                 }
 
                 {(mode === "HIGHSCORE") &&
                     <HighScoreEntry score={score} exit={this.goToTitles} />
                 }
 
-                <KeyReader displayInput
+                <KeyReader
                     report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
                     issueCommand={handleCommandPress}
                     controlMapping={controlMapping} />
@@ -356,12 +384,12 @@ export default class GameContainer extends React.Component {
                 }
 
                 {(mode !== "TITLE") &&
-                    <CommandMenu 
-                    gameMode={gameMode} 
-                    isPaused={this.isPaused}
-                    issueCommand={handleCommandPress} 
-                    soundEnabled={soundEnabled} 
-                    showOnScreenControls={showOnScreenControls} />
+                    <CommandMenu
+                        gameMode={gameMode}
+                        isPaused={this.isPaused}
+                        issueCommand={handleCommandPress}
+                        soundEnabled={soundEnabled}
+                        showOnScreenControls={showOnScreenControls} />
                 }
             </main>
         )

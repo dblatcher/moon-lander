@@ -1,8 +1,0 @@
-@import "../../../styles/mixins";
-@import "../../../styles/design-mixins";
-
-.component {
-    @include fullHeight;
-    background-color: aquamarine;
-    padding: .5rem;
-}
