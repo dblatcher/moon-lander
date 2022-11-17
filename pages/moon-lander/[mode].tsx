@@ -2,9 +2,7 @@ import type { NextPage } from 'next'
 import useSWR from 'swr';
 import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps, GamePageModel } from '../../modules/configuration'
 import { makeFetcher } from '../../modules/configuration/fetchers';
-import { gameModes } from '../../modules/moon-lander/gameModes'
-import { controlMapping } from '../../modules/platform-game/controlRobot';
-import { getWorldStatus, isChangeToFailure, isChangeToVictory, playerIsInactive } from '../../modules/moon-lander/moonLanderWorldValues';
+import { moonLander } from '../../modules/moon-lander';
 import GamePageTemplate from '../../components/GamePageTemplate';
 import GameContainerTemplate from '../../components/GameContainerTemplate';
 import MoonLanderLevelIntro from '../../components/moon-lander/MoonLanderLevelIntro';
@@ -13,9 +11,10 @@ import MoonLanderTitleScreen from '../../components/moon-lander/MoonLanderTitleS
 
 import styles from '../../styles/Page.module.scss'
 
+
 const model: GamePageModel = {
     title: 'Moon Lander',
-    modes: gameModes,
+    modes: moonLander.gameModes,
     route: 'moon-lander',
     scoreFetcherUrl: '/api/scores',
 }
@@ -34,13 +33,8 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 TitleScreenComponent={MoonLanderTitleScreen}
                 LevelIntroComponent={MoonLanderLevelIntro}
                 GameComponent={MoonLanderGame}
-                statusFunctions={{
-                    isChangeToFailure,
-                    isChangeToVictory,
-                    getWorldStatus,
-                    playerIsInactive,
-                }}
-                controlMapping={controlMapping}
+                statusFunctions={moonLander.statusFunctions}
+                controlMapping={moonLander.controlMapping}
                 extraClassNames={[styles.yellowAndBlackStripes]}
             />
         </GamePageTemplate>
