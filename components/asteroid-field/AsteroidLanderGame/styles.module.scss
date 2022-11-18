@@ -1,0 +1,86 @@
+@import "../../../styles/mixins";
+@import "../../../styles/design-mixins";
+
+.article {
+    @include fullHeight;
+    justify-content: stretch;
+    align-items: center;
+}
+
+.screensRow {
+    @include fullHeight;
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+
+    @media (max-width:600px) {
+        flex-direction: column;
+    }
+}
+
+.mainScreen {
+    flex: 1;
+    @include fullHeight;
+    justify-content: stretch;
+    align-items: center;
+    padding: .5rem;
+
+    &>div {
+        flex-basis: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &>canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    @media (max-width:600px) {
+        padding: 0;
+        flex: 2;
+    }
+}
+
+.scannerScreen {
+    flex: .25;
+    max-height: inherit;
+    @include lcd();
+    @include withScanLines(15s);
+    border: none;
+    align-self: flex-end;
+    text-align: center;
+
+    canvas {
+        max-height: inherit;
+        max-width: 10rem;
+    }
+
+    @media (max-width:600px) {
+
+        position: absolute;
+        opacity: .6;
+
+        canvas {
+            max-width: 15rem;
+            max-height: 10rem;
+        }
+    }
+}
+
+.panelRow {
+    display: flex;
+    padding: .5rem;
+    align-items: stretch;
+    justify-content: space-around;
+    width: 100%;
+    flex-wrap: wrap;
+
+    >* {
+        margin-bottom: .1rem;
+    }
+}
