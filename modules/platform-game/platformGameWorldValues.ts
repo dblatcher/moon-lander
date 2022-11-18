@@ -1,6 +1,6 @@
 import { Body, World } from "physics-worlds";
 import { Robot } from "../world-things/Robot";
-import { WorldStatus } from "../../components/GameContainerTemplate/statusFunctions"
+import { WorldStatus } from "../../components/GameContainerTemplate/types"
 
 
 function getPlayerRobot(world: World): Robot | null {
