@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import { StatusFunctions, WorldStatus } from "./statusFunctions";
+import { GameContainerState, StatusFunctions, WorldStatus } from "./statusFunctions";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
@@ -13,18 +13,6 @@ import styles from "./GameContainer.module.scss";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 
-interface GameContainerState {
-    level: number
-    score: number
-    lives: number,
-    keyBoardControlInput: { [index: string]: boolean }
-    onScreenControlInput: { [index: string]: boolean }
-    worldStatus: WorldStatus
-    mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
-    levelIntro?: LevelIntro
-    soundEnabled: boolean
-    showOnScreenControls: boolean
-}
 
 interface Props {
     scoreData?: ScoreData
@@ -67,7 +55,7 @@ interface Props {
 }
 
 
-export type { GameContainerState }
+
 
 export default class GameContainerTemplate extends React.Component<Props, GameContainerState> {
     canvasRef: React.RefObject<HTMLCanvasElement>;
