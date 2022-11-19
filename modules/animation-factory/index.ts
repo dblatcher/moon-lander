@@ -15,6 +15,7 @@ function createTestWorld2() {
     return world
 }
 
+export { wanderingRoids } from "./wanderingRoids"
 export {
-    createTestWorld2,createShipCloseUp
+    createTestWorld2, createShipCloseUp,
 }

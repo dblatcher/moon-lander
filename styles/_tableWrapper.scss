@@ -1,0 +1,34 @@
+@mixin tableWrapper() {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        background-color: rgba($color: #fff, $alpha: .5);
+        width: .75rem;
+        border-radius: .5rem;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        border-radius: .5rem;
+        background-color: yellow;
+        border: .2rem outset yellow;
+    }
+
+    table {
+        width: 100%;
+
+        thead {
+            position: sticky;
+            top: 0px;
+            z-index: 2;
+
+            th {
+                background-color: white;
+                color: black;
+            }
+        }
+
+        tbody {
+            z-index: 1;
+        }
+    }
+}

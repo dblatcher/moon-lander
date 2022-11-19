@@ -7,6 +7,7 @@ const buttonStyle: CSSProperties = {
     top: 0,
     right: 0,
     margin: '1rem 1.5rem',
+    zIndex: 1000,
 }
 
 export default function FullScreenWrapper(props: {

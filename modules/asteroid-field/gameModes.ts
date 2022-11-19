@@ -9,6 +9,7 @@ const gameModes: { [index: string]: GameMode } = {
     'normal': new GameMode({
         title: "arcade mode",
         key: "normal",
+        noScores: true,
         levelFunctions: [
             arcade.makeDaylightCityLevel,
             arcade.makeMountainsLevel,

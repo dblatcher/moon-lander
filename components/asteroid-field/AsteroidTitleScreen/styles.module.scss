@@ -1,31 +1,36 @@
 @import "../../../styles/mixins";
 @import "../../../styles/design-mixins";
 @import "../../../styles/button";
+@import "../../../styles/tableWrapper";
 
 .article {
     @include fullHeight;
     text-align: center;
-    justify-content: flex-start;
-    background-color:black;
+    justify-content: space-around;
     color: white;
-    margin: 2rem;
-    padding: 2rem;
+    position: relative;
+
+    .fullScreenAnimation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
     header {
-        @include metal;
+
         position: relative;
         padding: 2rem;
         margin-bottom: .5em;
         z-index: 1;
 
         h1 {
-            @include engraved(regular);
             margin: 0;
             font-size: 3rem;
         }
 
         h2 {
-            @include engraved(regular);
             margin: 0;
             font-size: 1.5rem;
         }
@@ -34,6 +39,7 @@
     .controls {
         @include raised();
         @include metal();
+        position: relative;
         margin: 1em auto;
         display: flex;
         padding: 1em;
@@ -57,43 +63,13 @@
     .startButton {
         @include button();
         font-size: large;
-        background-color: forestgreen;
+        background-color: red;
         align-self: center;
         margin: 1em 0;
     }
 
     .tableWrapper {
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            background-color: rgba($color: #fff, $alpha: .5);
-            width: .75rem;
-            border-radius: .5rem;
-        }
-        
-        &::-webkit-scrollbar-thumb {
-            border-radius: .5rem;
-            background-color: yellow;
-            border: .2rem outset yellow;
-        }
-
-        table {
-            width: 100%;
-
-            thead {
-                position: sticky;
-                top: 0px;
-                z-index: 2;
-
-                th {
-                    background-color: white;
-                    color: black;
-                }
-            }
-
-            tbody {
-                z-index: 1;
-            }
-        }
+        @include tableWrapper();
     }
+
 }
