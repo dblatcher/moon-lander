@@ -23,8 +23,8 @@ const gameModes: { [index: string]: GameMode } = {
         startingLives: Infinity,
         noScores: true,
         hidden: true,
-        allowSkip:true,
-        allowRestart:true,
+        allowSkip: true,
+        allowRestart: true,
         levelFunctions: [
             arcade.makeDaylightCityLevel,
             arcade.makeMountainsLevel,
@@ -39,10 +39,11 @@ const gameModes: { [index: string]: GameMode } = {
         startingLives: Infinity,
         speed: 40,
         noScores: true,
-        allowSkip:true,
-        allowRestart:true,
+        allowSkip: true,
+        allowRestart: true,
         levelFunctions: [
-            tutorials.tutorial1
+            // tutorials.tutorial1,
+            tutorials.tutorial2,
         ]
     }),
 }

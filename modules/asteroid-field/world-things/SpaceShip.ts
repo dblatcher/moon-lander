@@ -50,7 +50,7 @@ class SpaceShip extends Body {
         const { boostersOn, maxThrust = 100, thrust = 0 } = this.data
 
         if (this.data.shootCooldownCurrent && this.data.shootCooldownCurrent > 0) { this.data.shootCooldownCurrent-- }
-        const throttleRate = maxThrust * .2
+        const throttleRate = maxThrust * .1
 
         if (boostersOn) {
             this.changeThrottle(throttleRate)

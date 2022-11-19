@@ -35,7 +35,7 @@ class Rock extends Body {
     }
 
     shatter(report: CollisionDetection.CollisionReport | null = null) {
-        if (this.data.size && this.data.size > 10) {
+        if (this.data.size && this.data.size > 30) {
 
             let impactDirection = Math.random() * 2 * Math.PI
             if (report) {
