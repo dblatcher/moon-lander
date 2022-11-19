@@ -2,9 +2,9 @@ import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetec
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 
-const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint, _360deg } = Geometry
+const { getVectorX, getVectorY, reverseHeading, getXYVector, translatePoint } = Geometry
 
-class SpaceShipData implements BodyData {
+interface SpaceShipData extends BodyData {
     x: number
     y: number
     heading?: number
@@ -21,12 +21,15 @@ class SpaceShipData implements BodyData {
 
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
+    instanceId?: string
 }
 
 class SpaceShip extends Body {
     data: SpaceShipData
-    constructor(config: SpaceShipData, momentum: Force = null) {
+
+    constructor(config: SpaceShipData, momentum: Force = Force.none) {
         super(config, momentum);
+        this.data = config
         this.data.color = config.color || 'red'
         this.data.fillColor = config.fillColor || 'white'
         this.data.thrust = config.thrust || 0
@@ -36,14 +39,18 @@ class SpaceShip extends Body {
     }
 
     get typeId() { return 'SpaceShip' }
+    static PLAYER_INSTANCE_ID = 'player'
+    get isPlayer() {
+        return this.data.instanceId === SpaceShip.PLAYER_INSTANCE_ID;
+    }
 
     tick() {
-        if (this.data.shootCooldownCurrent > 0) { this.data.shootCooldownCurrent-- }
+        if (this.data.shootCooldownCurrent && this.data.shootCooldownCurrent > 0) { this.data.shootCooldownCurrent-- }
     }
 
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
 
-        const { x, y, size, heading, color, fillColor, thrust, maxThrust } = this.data
+        const { x, y, size = 1, heading = 0, color, fillColor, thrust = 0, maxThrust = 0 } = this.data
         const { shapeValues } = this
 
         const frontPoint = translatePoint(shapeValues, getXYVector(size, heading))
@@ -81,7 +88,7 @@ class SpaceShip extends Body {
 
     updateMomentum() {
         Body.prototype.updateMomentum.apply(this, [])
-        const { thrust, heading } = this.data
+        const { thrust = 0, heading = 0 } = this.data
         const thrustForce = new Force(thrust / this.mass, heading)
         this.momentum = Force.combine([this.momentum, thrustForce])
     }
@@ -90,7 +97,7 @@ class SpaceShip extends Body {
         driftBiasX?: number
         driftBiasY?: number
     } = {}) {
-
+        const { size = 1, color = 'red' } = this.data
         const { driftBiasX = 0, driftBiasY = 0 } = config
 
         this.leaveWorld()
@@ -99,7 +106,7 @@ class SpaceShip extends Body {
             x: this.data.x,
             y: this.data.y,
             duration: 50,
-            size: this.data.size * 2,
+            size: size * 2,
             color: this.data.color,
         }).enterWorld(this.world)
 
@@ -107,7 +114,7 @@ class SpaceShip extends Body {
             x: this.data.x,
             y: this.data.y,
             duration: 60,
-            size: this.data.size * 3,
+            size: size * 3,
             color: 'white',
         }).enterWorld(this.world)
 
@@ -115,7 +122,7 @@ class SpaceShip extends Body {
             x: this.data.x,
             y: this.data.y,
             duration: 70,
-            size: this.data.size * 4,
+            size: size * 4,
             color: this.data.color,
         }).enterWorld(this.world)
 
@@ -128,19 +135,19 @@ class SpaceShip extends Body {
             driftSpeed: 2,
             driftBiasX,
             driftBiasY,
-            colors: ['white', this.data.color, this.data.color]
+            colors: ['white', color, color]
         }).enterWorld(this.world)
 
-        this.world.emitter.emit('SFX',{soundName:'shipExploding', source:this});
+        this.world.emitter.emit('SFX', { soundName: 'shipExploding', source: this });
     }
 
     handleCollision(report: CollisionDetection.CollisionReport) {
 
-        switch(report.item2.typeId) {
+        switch (report.item2.typeId) {
             case 'Rock':
-            const drift = Geometry.getXYVector(-1, this.momentum.direction);
-            this.explode({ driftBiasX: drift.x, driftBiasY: drift.y })
-            this.world.emitter.emit('shipDeath', this)
+                const drift = Geometry.getXYVector(-1, this.momentum.direction);
+                this.explode({ driftBiasX: drift.x, driftBiasY: drift.y })
+                this.world.emitter.emit('shipDeath', this)
         }
 
         Body.prototype.handleCollision(report)
@@ -149,7 +156,7 @@ class SpaceShip extends Body {
 
     respondToImpact(report: CollisionDetection.CollisionReport) {
 
-        switch(report.item1.typeId) {
+        switch (report.item1.typeId) {
             case 'Rock':
                 const drift = Geometry.getXYVector(1, report.item1.momentum.direction);
                 this.explode({ driftBiasX: drift.x, driftBiasY: drift.y })
@@ -163,40 +170,43 @@ class SpaceShip extends Body {
 
     shoot() {
         if (!this.world) { return }
+        const { shootCooldownCurrent = 0, shootCooldownDuration = 20, size = 1, heading = 0 } = this.data
 
-        if (this.data.shootCooldownCurrent > 0) { return }
-        this.data.shootCooldownCurrent = this.data.shootCooldownDuration
+        if (shootCooldownCurrent > 0) { return }
+        this.data.shootCooldownCurrent = shootCooldownDuration
 
         const bullet = new Bullet({
-            x: this.data.x + getVectorX(this.data.size + 5, this.data.heading),
-            y: this.data.y + getVectorY(this.data.size + 5, this.data.heading),
+            x: this.data.x + getVectorX(size + 5, heading),
+            y: this.data.y + getVectorY(size + 5, heading),
             color: 'red',
             fillColor: 'red',
             ticksRemaining: 100
-        }, new Force(10, this.data.heading))
+        }, new Force(10, heading))
 
         bullet.enterWorld(this.world)
-        this.world.emitter.emit('SFX',{soundName:'laser', source:this});
+        this.world.emitter.emit('SFX', { soundName: 'laser', source: this });
     }
 
     steer(direction: "LEFT" | "RIGHT") {
         switch (direction) {
             case "LEFT":
-                this.data.heading += this.steerSpeed;
+                this.data.heading = (this.data.heading || 0) + this.steerSpeed;
                 break;
             case "RIGHT":
-                this.data.heading -= this.steerSpeed;
+                this.data.heading = (this.data.heading || 0) - this.steerSpeed;
                 break;
         }
     }
 
     changeThrottle(change: number) {
-        let newAmount = this.data.thrust + change
+        const { thrust = 0, maxThrust = 10 } = this.data
+        let newAmount = thrust + change
         if (newAmount < 0) { newAmount = 0 }
-        if (newAmount > this.data.maxThrust) { newAmount = this.data.maxThrust }
+        if (newAmount > maxThrust) { newAmount = maxThrust }
         this.data.thrust = newAmount
     }
 
 }
 
-export { SpaceShip, SpaceShipData }
+export type { SpaceShipData }
+export { SpaceShip }
