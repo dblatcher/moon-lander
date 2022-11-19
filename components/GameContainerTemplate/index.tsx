@@ -206,9 +206,8 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
         }
 
         const newStatus: WorldStatus = {
-            playerDead: oldStatus.playerDead || status.playerDead,
-            playerStranded: oldStatus.playerLanded || status.playerLanded,
-            playerLanded: oldStatus.playerLanded || status.playerLanded,
+            ...oldStatus,
+            ...status,
         }
 
         this.setState({ worldStatus: newStatus })

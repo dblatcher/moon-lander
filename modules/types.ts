@@ -5,6 +5,7 @@ export interface WorldStatus {
     playerDead?: boolean
     playerStranded?: boolean
     playerLanded?: boolean
+    enemiesGone?: boolean
 }
 
 export type StatusFunctions = {
