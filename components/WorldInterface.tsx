@@ -1,5 +1,7 @@
 import { World } from "physics-worlds";
 import React, { useEffect } from "react";
+import { KeyMap } from "../modules/types";
+
 
 
 /**
@@ -9,22 +11,29 @@ import React, { useEffect } from "react";
  * with properties relevant to the parent's state.
  */
 export default function WorldInterface<T extends {}>(props: {
-    controls: { [index: string]: boolean }
+    controls: KeyMap
     displayInput?: boolean
-    controlFunction: { (world: World, key: string): void }
+    singleKeyControlFunction?: { (world: World, key: string): void }
+    allKeyControlFunction?: { (world: World, keyMap: KeyMap): void }
     reportWorldStatus: Function
     getWorldStatus: { (world: World): T }
     world: World
 }) {
 
-    const { controls, world, controlFunction, reportWorldStatus: report = () => { }, getWorldStatus } = props;
+    const { controls, world, singleKeyControlFunction, allKeyControlFunction, reportWorldStatus: report = () => { }, getWorldStatus } = props;
 
     function executeControlFunction(tickReport: any): void {
-        Object.keys(controls)
-            .filter(key => controls[key] == true)
-            .forEach(key => {
-                controlFunction(world, key)
-            })
+
+        if (singleKeyControlFunction) {
+            Object.keys(controls)
+                .filter(key => controls[key] == true)
+                .forEach(key => {
+                    singleKeyControlFunction(world, key)
+                })
+        }
+        if (allKeyControlFunction) {
+            allKeyControlFunction(world, controls)
+        }
 
         report(getWorldStatus(world))
     }

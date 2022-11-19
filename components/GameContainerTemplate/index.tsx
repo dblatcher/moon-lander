@@ -2,7 +2,7 @@ import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
 import { GameContainerState } from "./types";
-import { StatusFunctions, WorldStatus } from "../../modules/types";
+import { KeyMap, StatusFunctions, WorldStatus } from "../../modules/types";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
@@ -44,7 +44,7 @@ interface Props {
         level: number
         mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
         isPaused: boolean
-        controls: { [index: string]: boolean }
+        controls: KeyMap
         handleWorldStatus: { (worldStatus: WorldStatus): void }
         addPoints: { (points: number): Promise<GameContainerState> }
         addLives: { (points: number): Promise<GameContainerState> }
@@ -364,13 +364,13 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                 }
 
                 <KeyReader
-                    report={(keyBoardControlInput: { [index: string]: boolean }) => { this.setState({ keyBoardControlInput }) }}
+                    report={(keyBoardControlInput: KeyMap) => { this.setState({ keyBoardControlInput }) }}
                     issueCommand={handleCommandPress}
                     controlMapping={controlMapping} />
 
                 {(showOnScreenControls && mode !== "TITLE") &&
                     <OnScreenControls
-                        report={(onScreenControlInput: { [index: string]: boolean }) => { this.setState({ onScreenControlInput }) }}
+                        report={(onScreenControlInput: KeyMap) => { this.setState({ onScreenControlInput }) }}
                         issueCommand={handleCommandPress}
                         directionButtons={['left', 'right', 'up', 'down']}
                         commandButtons={['PAUSE', 'START']}

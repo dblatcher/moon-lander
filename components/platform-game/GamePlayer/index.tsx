@@ -18,7 +18,7 @@ import styles from "./styles.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
 import RollMeter from "../RollMeter";
 import Indicator from "../../Indicator";
-import { WorldStatus } from "../../../modules/types";
+import { WorldStatus, KeyMap } from "../../../modules/types";
 
 
 function sleep(ms: number) {
@@ -34,7 +34,7 @@ export default function GamePlayer(props: Readonly<{
     level: number
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     isPaused: boolean
-    controls: { [index: string]: boolean }
+    controls: KeyMap
     handleWorldStatus: { (worldStatus: WorldStatus): void }
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
@@ -145,7 +145,7 @@ export default function GamePlayer(props: Readonly<{
         <WorldInterface displayInput
             controls={(!worldStatus.playerLanded && mode === "PLAY") ? controls : {}}
             world={world}
-            controlFunction={controlRobot}
+            singleKeyControlFunction={controlRobot}
             getWorldStatus={getWorldStatus}
             reportWorldStatus={handleWorldStatus} />
 

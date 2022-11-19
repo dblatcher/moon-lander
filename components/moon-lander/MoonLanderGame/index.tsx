@@ -14,7 +14,7 @@ import { controlSpaceShip } from "../../../modules/moon-lander/controlSpaceShip"
 import { GameMode } from "../../../modules/GameMode";
 import { getPlayerFuel, getWorldStatus, getPlayerSpaceship } from "../../../modules/moon-lander/moonLanderWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
-import type { WorldStatus } from "../../../modules/types";
+import type { KeyMap, WorldStatus } from "../../../modules/types";
 import styles from "./MoonLanderGame.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
 
@@ -32,7 +32,7 @@ export default function MoonLanderGame(props: Readonly<{
     level: number
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     isPaused: boolean
-    controls: { [index: string]: boolean }
+    controls: KeyMap
     handleWorldStatus: { (worldStatus: WorldStatus): void }
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
@@ -146,7 +146,7 @@ export default function MoonLanderGame(props: Readonly<{
         <WorldInterface
             controls={(!worldStatus.playerLanded && mode === "PLAY") ? controls : {}}
             world={world}
-            controlFunction={controlSpaceShip}
+            singleKeyControlFunction={controlSpaceShip}
             getWorldStatus={getWorldStatus}
             reportWorldStatus={handleWorldStatus} />
 

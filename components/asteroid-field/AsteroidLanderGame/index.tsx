@@ -7,13 +7,12 @@ import FollowBodyCanvas from "../../FollowBodyCanvas";
 import NumberPanel from "../../NumberPanel";
 import Dialogue from "../../Dialogue";
 import PausedSymbol from "../../PausedSymbol";
-import DashboardPanel from "../../DashboardPanel";
 
 import { GameContainerState } from "../../GameContainerTemplate/types";
 import { controlSpaceShip } from "../../../modules/asteroid-field/controlSpaceShip";
 import { GameMode } from "../../../modules/GameMode";
 import { getWorldStatus, getPlayerSpaceship, getPlayerThrust } from "../../../modules/asteroid-field/worldValues";
-import { WorldStatus } from "../../../modules/types";
+import { KeyMap, WorldStatus } from "../../../modules/types";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";
@@ -34,7 +33,7 @@ export default function AsteroidGame(props: Readonly<{
     level: number
     mode: "TITLE" | "PLAY" | "HIGHSCORE" | "INTRO"
     isPaused: boolean
-    controls: { [index: string]: boolean }
+    controls: KeyMap
     handleWorldStatus: { (worldStatus: WorldStatus): void }
     addPoints: { (points: number): Promise<GameContainerState> }
     addLives: { (points: number): Promise<GameContainerState> }
@@ -152,7 +151,7 @@ export default function AsteroidGame(props: Readonly<{
         <WorldInterface
             controls={(!worldStatus.playerLanded && mode === "PLAY") ? controls : {}}
             world={world}
-            controlFunction={controlSpaceShip}
+            allKeyControlFunction={controlSpaceShip}
             getWorldStatus={getWorldStatus}
             reportWorldStatus={handleWorldStatus} />
 

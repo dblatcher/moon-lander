@@ -1,4 +1,5 @@
 import { World } from "physics-worlds";
+import { KeyMap } from "../types";
 import { getPlayerSpaceship } from "./worldValues";
 
 
@@ -19,29 +20,20 @@ export const controlMapping: Record<string, string> = {
     "o": "CONTROLTOGGLE",
 }
 
-export function controlSpaceShip(world: World, key: string) {
-
+export function controlSpaceShip(world: World, keyMap: KeyMap) {
     const player = getPlayerSpaceship(world)
     if (!player) { return }
 
-    const throttleRate = player.data.maxThrust ? (player.data.maxThrust * .2) : 200
+    player.setBoosters(keyMap['up'] || false)
 
-    switch (key) {
-        case 'up':
-            player.changeThrottle(throttleRate)
-            break;
-        case 'down':
-            player.changeThrottle(-throttleRate)
-            break;
-        case 'right':
-            player.steer("RIGHT")
-            break;
-        case 'left':
-            player.steer("LEFT")
-            break;
-        case 'fire':
-            player.shoot()
-            break;
+    if (keyMap['fire']) {
+        player.shoot()
+    }
+    if (keyMap['right']) {
+        player.steer("RIGHT")
+    }
+    if (keyMap['left']) {
+        player.steer("LEFT")
     }
 }
 

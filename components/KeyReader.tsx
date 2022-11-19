@@ -1,4 +1,6 @@
 import React from "react";
+import { KeyMap } from "../modules/types";
+
 
 /**
  * Component that reports which keyboard keys are down,
@@ -13,7 +15,7 @@ export default class KeyReader extends React.Component {
         issueCommand?: Function
     }
     state!: {
-        keyMap: { [index: string]: boolean }
+        keyMap: KeyMap
     }
 
     constructor(props: KeyReader["props"]) {
@@ -26,11 +28,11 @@ export default class KeyReader extends React.Component {
         this.reportKeyPress = this.reportKeyPress.bind(this);
     }
 
-    get mappedKeys(): { [index: string]: boolean } {
+    get mappedKeys(): KeyMap {
         const { controlMapping } = this.props;
         const { keyMap } = this.state;
         if (!controlMapping) { return keyMap }
-        const output: { [index: string]: boolean } = {}
+        const output: KeyMap = {}
 
         Object.keys(keyMap)
             .filter(key => keyMap[key] == true)

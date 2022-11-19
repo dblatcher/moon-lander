@@ -8,6 +8,8 @@ export interface WorldStatus {
     enemiesGone?: boolean
 }
 
+export type KeyMap = { [index: string]: boolean }
+
 export type StatusFunctions = {
     getWorldStatus: { (world: World): WorldStatus };
     isChangeToFailure: { (oldStatus: WorldStatus, newStatus: WorldStatus): boolean };

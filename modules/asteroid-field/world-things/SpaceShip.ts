@@ -22,6 +22,7 @@ interface SpaceShipData extends BodyData {
     shootCooldownDuration?: number
     shootCooldownCurrent?: number
     instanceId?: string
+    boostersOn?: boolean
 }
 
 class SpaceShip extends Body {
@@ -36,6 +37,7 @@ class SpaceShip extends Body {
         this.data.maxThrust = config.maxThrust || 100
         this.data.shootCooldownCurrent = 0
         this.data.shootCooldownDuration = config.shootCooldownDuration || 20
+        this.data.boostersOn = config.boostersOn || false
     }
 
     get typeId() { return 'SpaceShip' }
@@ -45,7 +47,16 @@ class SpaceShip extends Body {
     }
 
     tick() {
+        const { boostersOn, maxThrust = 100, thrust = 0 } = this.data
+
         if (this.data.shootCooldownCurrent && this.data.shootCooldownCurrent > 0) { this.data.shootCooldownCurrent-- }
+        const throttleRate = maxThrust * .2
+
+        if (boostersOn) {
+            this.changeThrottle(throttleRate)
+        } else if (thrust > 0) {
+            this.changeThrottle(-throttleRate)
+        }
     }
 
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
@@ -196,6 +207,10 @@ class SpaceShip extends Body {
                 this.data.heading = (this.data.heading || 0) - this.steerSpeed;
                 break;
         }
+    }
+
+    setBoosters(isOn: boolean) {
+        this.data.boostersOn = isOn
     }
 
     changeThrottle(change: number) {
