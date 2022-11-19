@@ -1,5 +1,6 @@
 import { Body, World } from "physics-worlds";
 import { WorldStatus } from "../types";
+import { Rock } from "./world-things/Rock";
 import { SpaceShip } from "./world-things/SpaceShip";
 
 function getPlayerSpaceship(world: World): SpaceShip | null {
@@ -8,15 +9,8 @@ function getPlayerSpaceship(world: World): SpaceShip | null {
     return playerBody as SpaceShip;
 }
 
-const getPlayerFuel = (world: World) => {
-    const player = getPlayerSpaceship(world)
-    if (!player) { return null }
-    return {
-        // value: player.data.fuel || 0,
-        // max: player.data.maxFuel || 0
-        value: 5,
-        max: 12,
-    }
+function countRocks(world: World): number {
+    return world.bodies.filter(body => body instanceof Rock).length
 }
 
 const getPlayerThrust = (world: World) => {
@@ -40,14 +34,13 @@ const getPlayerSpeed = (world: World) => {
 
 const isChangeToVictory = (oldStatus: WorldStatus, newStatus: WorldStatus): boolean => {
     return (
-        (!oldStatus.playerLanded && newStatus.playerLanded)
+        (!oldStatus.enemiesGone && newStatus.enemiesGone && !newStatus.playerDead)
     ) || false
 }
 
 const isChangeToFailure = (oldStatus: WorldStatus, newStatus: WorldStatus): boolean => {
     return (
-        (!oldStatus.playerDead && newStatus.playerDead) ||
-        (!oldStatus.playerStranded && newStatus.playerStranded)
+        (!oldStatus.playerDead && newStatus.playerDead)
     ) || false
 }
 
@@ -62,10 +55,11 @@ const getWorldStatus = (world: World): WorldStatus => {
         playerDead: !player,
         playerStranded: false,
         playerLanded: false,
+        enemiesGone: countRocks(world) === 0,
     }
 }
 
 export {
-    getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed,
+    getPlayerSpaceship, getPlayerThrust, getWorldStatus, getPlayerSpeed,
     isChangeToFailure, isChangeToVictory, playerIsInactive,
 }
