@@ -10,6 +10,7 @@ export const controlMapping: Record<string, string> = {
     "d": "right",
     "ArrowRight": "right",
     "s": "down",
+    "e": "fire",
     "ArrowDown": "down",
     " ": "START",
     "p": "PAUSE",
@@ -23,7 +24,7 @@ export function controlSpaceShip(world: World, key: string) {
     const player = getPlayerSpaceship(world)
     if (!player) { return }
 
-    const throttleRate = player.data.maxThrust ? (player.data.maxThrust / 30) : 200
+    const throttleRate = player.data.maxThrust ? (player.data.maxThrust * .2) : 200
 
     switch (key) {
         case 'up':
@@ -37,6 +38,9 @@ export function controlSpaceShip(world: World, key: string) {
             break;
         case 'left':
             player.steer("LEFT")
+            break;
+        case 'fire':
+            player.shoot()
             break;
     }
 }

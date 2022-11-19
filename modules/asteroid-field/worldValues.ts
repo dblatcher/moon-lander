@@ -1,6 +1,6 @@
 import { Body, World } from "physics-worlds";
 import { WorldStatus } from "../types";
-import { SpaceShip } from "../world-things/SpaceShip";
+import { SpaceShip } from "./world-things/SpaceShip";
 
 function getPlayerSpaceship(world: World): SpaceShip | null {
     const playerBody: Body | undefined = world.bodies.find(body => body instanceof SpaceShip && (body as SpaceShip).isPlayer)
@@ -12,8 +12,10 @@ const getPlayerFuel = (world: World) => {
     const player = getPlayerSpaceship(world)
     if (!player) { return null }
     return {
-        value: player.data.fuel || 0,
-        max: player.data.maxFuel || 0
+        // value: player.data.fuel || 0,
+        // max: player.data.maxFuel || 0
+        value: 5,
+        max: 12,
     }
 }
 
@@ -31,7 +33,8 @@ const getPlayerSpeed = (world: World) => {
     if (!player) { return null }
     return {
         value: player.momentum.magnitude,
-        danger: SpaceShip.MAX_IMPACT_SPEED
+        // danger: SpaceShip.MAX_IMPACT_SPEED
+        danger: 100
     }
 }
 
@@ -57,8 +60,8 @@ const getWorldStatus = (world: World): WorldStatus => {
 
     return {
         playerDead: !player,
-        playerStranded: player?.isStranded,
-        playerLanded: player?.landingPadIsRestingOn?.typeId === 'LandingPad',
+        playerStranded: false,
+        playerLanded: false,
     }
 }
 
