@@ -1,11 +1,7 @@
 import { Body, World } from "physics-worlds";
+import { WorldStatus } from "../types";
 import { SpaceShip } from "../world-things/SpaceShip";
 
-interface WorldStatus {
-    playerDead?: boolean
-    playerStranded?: boolean
-    playerLanded?: boolean
-}
 
 function getPlayerSpaceship(world: World): SpaceShip | null {
     const playerBody: Body | undefined = world.bodies.find(body => body instanceof SpaceShip && (body as SpaceShip).isPlayer)
@@ -67,9 +63,6 @@ const getWorldStatus = (world: World): WorldStatus => {
     }
 }
 
-export type {
-    WorldStatus
-}
 export {
     getPlayerSpaceship, getPlayerFuel, getPlayerThrust, getWorldStatus, getPlayerSpeed,
     isChangeToFailure, isChangeToVictory, playerIsInactive,

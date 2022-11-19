@@ -1,7 +1,8 @@
 import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
 import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import { GameContainerState, StatusFunctions, WorldStatus } from "./types";
+import { GameContainerState } from "./types";
+import { StatusFunctions, WorldStatus } from "../../modules/types";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";

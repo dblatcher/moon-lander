@@ -12,7 +12,8 @@ import DashboardPanel from "../../DashboardPanel";
 import { GameContainerState } from "../../GameContainerTemplate/types";
 import { controlSpaceShip } from "../../../modules/asteroid-field/controlSpaceShip";
 import { GameMode } from "../../../modules/GameMode";
-import { getPlayerFuel, WorldStatus, getWorldStatus, getPlayerSpaceship } from "../../../modules/asteroid-field/worldValues";
+import { getPlayerFuel, getWorldStatus, getPlayerSpaceship } from "../../../modules/asteroid-field/worldValues";
+import { WorldStatus } from "../../../modules/types";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";

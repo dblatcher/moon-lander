@@ -8,16 +8,17 @@ import NumberPanel from "../../NumberPanel";
 import Dialogue from "../../Dialogue";
 import PausedSymbol from "../../PausedSymbol";
 
-import { GameContainerState } from "../../moon-lander/GameContainer";
+import { GameContainerState } from "../../GameContainerTemplate/types";
 import { controlRobot } from "../../../modules/platform-game/controlRobot";
 import { GameMode } from "../../../modules/GameMode";
-import { WorldStatus, getWorldStatus, getPlayerRobot, getPlayerMotion } from "../../../modules/platform-game/platformGameWorldValues";
+import { getWorldStatus, getPlayerRobot, getPlayerMotion } from "../../../modules/platform-game/platformGameWorldValues";
 import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
 import RollMeter from "../RollMeter";
 import Indicator from "../../Indicator";
+import { WorldStatus } from "../../../modules/types";
 
 
 function sleep(ms: number) {

@@ -2,20 +2,20 @@ import type { NextPage } from 'next'
 import useSWR from 'swr';
 import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps, GamePageModel } from '../../modules/configuration'
 import { makeFetcher } from '../../modules/configuration/fetchers';
-import { asteroidField } from '../../modules/asteroid-field';
+import { moonLander } from '../../modules/moon-lander';
 import GamePageTemplate from '../../components/GamePageTemplate';
 import GameContainerTemplate from '../../components/GameContainerTemplate';
-import AsteroidLevelIntro from '../../components/asteroid-field/AsteroidLevelIntro';
-import AsteroidGame from '../../components/asteroid-field/AsteroidLanderGame';
-import AsteroidTitleScreen from '../../components/asteroid-field/AsteroidTitleScreen';
+import MoonLanderLevelIntro from '../../components/moon-lander/MoonLanderLevelIntro';
+import MoonLanderGame from '../../components/moon-lander/MoonLanderGame';
+import MoonLanderTitleScreen from '../../components/moon-lander/MoonLanderTitleScreen';
+import styles from '../../styles/Page.module.scss';
 
-import styles from '../../styles/Page.module.scss'
 
 
 const model: GamePageModel = {
-    title: asteroidField.title,
-    modes: asteroidField.gameModes,
-    route: asteroidField.route,
+    title: moonLander.title,
+    modes: moonLander.gameModes,
+    route: moonLander.route,
     scoreFetcherUrl: '/api/scores',
 }
 
@@ -30,11 +30,11 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 scoreData={data}
                 isDataBase={config.dataBaseType !== 'NONE'}
                 gameMode={gameMode}
-                TitleScreenComponent={AsteroidTitleScreen}
-                LevelIntroComponent={AsteroidLevelIntro}
-                GameComponent={AsteroidGame}
-                statusFunctions={asteroidField.statusFunctions}
-                controlMapping={asteroidField.controlMapping}
+                TitleScreenComponent={MoonLanderTitleScreen}
+                LevelIntroComponent={MoonLanderLevelIntro}
+                GameComponent={MoonLanderGame}
+                statusFunctions={moonLander.statusFunctions}
+                controlMapping={moonLander.controlMapping}
                 extraClassNames={[styles.yellowAndBlackStripes]}
             />
         </GamePageTemplate>
