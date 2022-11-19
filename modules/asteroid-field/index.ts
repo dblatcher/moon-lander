@@ -13,7 +13,8 @@ const asteroidField: GameDefinition = {
         isChangeToFailure,
         isChangeToVictory,
         playerIsInactive
-    }
+    },
+    scoreFetcherUrl: '/api/scores',
 }
 
 export { asteroidField }

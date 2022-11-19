@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import useSWR from 'swr';
-import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps, GamePageModel } from '../../modules/configuration'
+import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps } from '../../modules/configuration'
 import { makeFetcher } from '../../modules/configuration/fetchers';
 import { asteroidField } from '../../modules/asteroid-field';
 import GamePageTemplate from '../../components/GamePageTemplate';
@@ -12,20 +12,15 @@ import AsteroidTitleScreen from '../../components/asteroid-field/AsteroidTitleSc
 import styles from '../../styles/Page.module.scss'
 
 
-const model: GamePageModel = {
-    title: asteroidField.title,
-    modes: asteroidField.gameModes,
-    route: asteroidField.route,
-    scoreFetcherUrl: '/api/scores',
-}
+const { title, gameModes, scoreFetcherUrl } = asteroidField
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR(model.scoreFetcherUrl, makeFetcher(config))
-    const gameMode = model.modes[gameModeKey]
+    const { data, error } = useSWR(scoreFetcherUrl, makeFetcher(config))
+    const gameMode = gameModes[gameModeKey]
 
     return (
-        <GamePageTemplate title={`${model.title} - ${gameMode.title}`}>
+        <GamePageTemplate title={`${title} - ${gameMode.title}`}>
             <GameContainerTemplate
                 scoreData={data}
                 isDataBase={config.dataBaseType !== 'NONE'}
@@ -46,7 +41,7 @@ export const getStaticProps = buildGameGetStaticProps()
 
 
 export async function getStaticPaths() {
-    return getGamePageStaticPaths(model)
+    return getGamePageStaticPaths(asteroidField)
 }
 
 export default GamePage

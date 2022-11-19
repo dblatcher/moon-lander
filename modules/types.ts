@@ -27,4 +27,5 @@ export type GameDefinition = {
         isChangeToVictory: (oldStatus: WorldStatus, newStatus: WorldStatus) => boolean;
         playerIsInactive: (status: WorldStatus) => boolean;
     };
+    scoreFetcherUrl: string;
 }

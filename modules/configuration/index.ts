@@ -1,6 +1,7 @@
 
 import { PropsWithChildren } from "react";
 import { GameMode } from "../GameMode";
+import { GameDefinition } from "../types";
 
 
 interface ConfigurationProp {
@@ -31,16 +32,10 @@ function getStaticConfiguration(): ConfigurationProp {
     }
 }
 
-export type GamePageModel = {
-    title: string
-    modes: Record<string, GameMode>,
-    route: string,
-    scoreFetcherUrl: string,
-}
 
-export const getGamePageStaticPaths = (model: GamePageModel) => {
+export const getGamePageStaticPaths = (gameDefinition: GameDefinition) => {
     return {
-        paths: Object.keys(model.modes).map(key => `/${model.route}/${key}`),
+        paths: Object.keys(gameDefinition.gameModes).map(key => `/${gameDefinition.route}/${key}`),
         fallback: false
     }
 }

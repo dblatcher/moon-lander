@@ -13,7 +13,8 @@ const platformGame: GameDefinition = {
         isChangeToFailure,
         isChangeToVictory,
         playerIsInactive
-    }
+    },
+    scoreFetcherUrl: '/api/scores',
 }
 
 export { platformGame }
