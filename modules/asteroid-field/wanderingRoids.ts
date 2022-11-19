@@ -1,7 +1,8 @@
-import { Area, Geometry, StarField, World } from "physics-worlds"
-import { gloomyBackground } from "../asteroid-field/level-factory/gradientFills"
-import { atmosphere } from "../moon-lander/level-factory/gradientFills"
+import { Area, Force, Geometry, StarField, World } from "physics-worlds"
+import { gloomyBackground } from "./level-factory/gradientFills"
+import { atmosphere } from "./level-factory/gradientFills"
 import { DistantPlanet } from "../world-things/DistantPlanet"
+import { makeRock } from "./thingFactories"
 
 
 
@@ -9,15 +10,20 @@ import { DistantPlanet } from "../world-things/DistantPlanet"
 export function wanderingRoids() {
     const world = new World([
         new Area({
-            x: -50,
+            x: 250,
             y: 200,
             fillColor: atmosphere,
             size: 125,
-            density: .2
+            density: 0.01
         }),
+        makeRock(100, 100, 20, Force.fromVector(-5, 1)),
+        makeRock(300, 100, 60, Force.fromVector(5, 3)),
+        makeRock(800, 300, 20, Force.fromVector(5, 3)),
+        makeRock(200, 300, 40, Force.fromVector(1, -5)),
     ], {
         width: 1000,
         height: 1000,
+        hasWrappingEdges: true,
         fillColor: 'black',
         backGrounds: [
             new StarField({ numberOfStars: 100, depth: 1, width: 1000, height: 1000 }),

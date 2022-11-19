@@ -15,7 +15,7 @@ function createTestWorld2() {
     return world
 }
 
-export { wanderingRoids } from "./wanderingRoids"
+export { wanderingRoids } from "../asteroid-field/wanderingRoids"
 export {
     createTestWorld2, createShipCloseUp,
 }
