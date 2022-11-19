@@ -1,6 +1,5 @@
 import * as tutorials from "./level-factory/tutorials";
 import * as arcade from "./level-factory/arcade";
-import * as classics from "./level-factory/classic";
 
 import { GameMode } from "../GameMode";
 
@@ -49,22 +48,6 @@ const gameModes: { [index: string]: GameMode } = {
             tutorials.tutorial4,
         ]
     }),
-
-    'classic': new GameMode({
-        title:"Classic levels",
-        key:"classic",
-        hidden:true,
-        noScores: true,
-        allowRestart:true,
-        allowSkip:true,
-        startingLives: 3,
-        levelFunctions: [
-            classics.breezio,
-            classics.moonbaseAlpha,
-            classics.grandCanyon,
-            classics.planetFall,
-        ]
-    })
 }
 
 export { gameModes }
