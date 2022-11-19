@@ -8,6 +8,7 @@ import { createShipCloseUp } from '../modules/animation-factory'
 import { asteroidField } from '../modules/asteroid-field'
 import { platformGame } from '../modules/platform-game'
 import { moonLander } from '../modules/moon-lander'
+import GameModeList from '../components/GameModeList'
 
 const Home: NextPage = () => {
   return (
@@ -34,44 +35,12 @@ const Home: NextPage = () => {
               overflow: 'clip',
               textAlign: 'center',
               alignSelf: 'center',
+              flexShrink: 0,
             }} />
 
-          <ul className={styles.gameModeList}>
-            {Object.keys(moonLander.gameModes).filter(key => !moonLander.gameModes[key].hidden).map(key => (
-              <li key={key} >
-                <Link key={key} href={`/${moonLander.route}/${key}`} passHref={true}>
-                  <a>
-                    <h2>{moonLander.gameModes[key].title}</h2>
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-
-          <ul className={styles.gameModeList}>
-            {Object.keys(platformGame.gameModes).filter(key => !platformGame.gameModes[key].hidden).map(key => (
-              <li key={key} >
-                <Link key={key} href={`/${platformGame.route}/${key}`} passHref={true}>
-                  <a>
-                    <h2>{platformGame.gameModes[key].title}</h2>
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <ul className={styles.gameModeList}>
-            {Object.keys(asteroidField.gameModes).filter(key => !asteroidField.gameModes[key].hidden).map(key => (
-              <li key={key} >
-                <Link key={key} href={`/${asteroidField.route}/${key}`} passHref={true}>
-                  <a>
-                    <h2>{asteroidField.gameModes[key].title}</h2>
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <GameModeList game={moonLander} />
+          <GameModeList game={platformGame} />
+          <GameModeList game={asteroidField} />
 
           <p>
             <Link href={`/about`} passHref={true}>
