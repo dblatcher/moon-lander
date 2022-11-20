@@ -1,4 +1,4 @@
-import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing } from 'physics-worlds'
+import { Body, Force, BodyData, Shape, Geometry, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing, SoundControl } from 'physics-worlds'
 import { Bullet } from './Bullet'
 import { DustCloud } from './DustCloud'
 
@@ -27,6 +27,7 @@ interface SpaceShipData extends BodyData {
 
 class SpaceShip extends Body {
     data: SpaceShipData
+    thrustNoise?: SoundControl | null
 
     constructor(config: SpaceShipData, momentum: Force = Force.none) {
         super(config, momentum);
@@ -50,8 +51,15 @@ class SpaceShip extends Body {
         const { boostersOn, maxThrust = 100, thrust = 0 } = this.data
 
         if (this.data.shootCooldownCurrent && this.data.shootCooldownCurrent > 0) { this.data.shootCooldownCurrent-- }
-        const throttleRate = maxThrust * .1
 
+        if (this.isPlayer && this.world.soundDeck && !this.thrustNoise) {
+            this.thrustNoise = this.world.soundDeck.playNoise({ frequency: 50, duration: 3 }, { loop: true, volume: 0 })
+        }
+        if (this.thrustNoise) {
+            this.thrustNoise.volume = thrust > 0 ? .5 + (1.5 * thrust / maxThrust) : 0
+        }
+
+        const throttleRate = maxThrust * .1
         if (boostersOn) {
             this.changeThrottle(throttleRate)
         } else if (thrust > 0) {
@@ -222,6 +230,10 @@ class SpaceShip extends Body {
         this.data.thrust = newAmount
     }
 
+    leaveWorld(): void {
+        Body.prototype.leaveWorld.apply(this, [])
+        this.thrustNoise?.stop()
+    }
 }
 
 export type { SpaceShipData }
