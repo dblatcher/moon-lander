@@ -3,8 +3,7 @@ import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
 import { loadImageFill } from "../../../patterns/imageFills";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
-import { makeRock } from "../../thingFactories";
-import { SpaceShip } from "../../world-things/SpaceShip";
+import { generateRocks, makeRock, makeShip } from "../thingFactories";
 
 
 export async function tutorial1(): Promise<Level> {
@@ -15,18 +14,8 @@ export async function tutorial1(): Promise<Level> {
     }
 
     const world = new World([
-
-        new SpaceShip({
-            x: 100,
-            y: 100,
-            color: 'red',
-            size: 25,
-            maxThrust: 10000,
-            instanceId: SpaceShip.PLAYER_INSTANCE_ID,
-        }),
-
-        makeRock(400, 400, 10),
-
+        makeShip(worldDimensions.width / 2, worldDimensions.height / 2),
+        makeRock(400, 400, 100),
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
@@ -46,7 +35,7 @@ export async function tutorial2(): Promise<Level> {
 
     const [jupiter, neptune] = await Promise.all([
         loadImageFill('jupiter', 'red', { parallax: 2 }),
-        loadImageFill('neptune', 'blue', { parallax: 2.5 }),
+        loadImageFill('neptune', 'blue', { parallax: 3 }),
     ])
 
     const worldDimensions = {
@@ -55,44 +44,35 @@ export async function tutorial2(): Promise<Level> {
     }
 
     const world = new World([
-
-        new SpaceShip({
-            x: worldDimensions.width / 2,
-            y: worldDimensions.height / 2,
-            color: 'red',
-            size: 25,
-            maxThrust: 10000,
-            instanceId: SpaceShip.PLAYER_INSTANCE_ID,
+        makeShip(worldDimensions.width / 2, worldDimensions.height / 2),
+        ...generateRocks(4, worldDimensions, {
+            sizes: [70, 100],
+            avoid: { x: worldDimensions.width / 2, y: worldDimensions.height / 2, radius: 200 },
+            speedRange: [0, 10]
         }),
-
-        makeRock(400, 400, 50),
-        makeRock(1400, 400, 50, Force.fromVector(10, 5)),
-        makeRock(700, 200, 50, Force.fromVector(-6, 5)),
-        makeRock(100, 200, 40, Force.fromVector(-3, -1)),
-
     ], {
         ...worldDimensions,
         gravitationalConstant: .001,
         airDensity: .01,
         backGrounds: [
-            new StarField({ numberOfStars: 50, depth: 2, ...worldDimensions }),
-            new StarField({ numberOfStars: 25, depth: 4, ...worldDimensions }),
+            new StarField({ numberOfStars: 50, depth: 4, ...worldDimensions }),
+            new StarField({ numberOfStars: 25, depth: 8, ...worldDimensions }),
             new DistantPlanet({
                 x: 700,
                 y: 200,
-                radius: 160,
+                radius: 320,
                 parallax: 2,
                 fillColor: jupiter,
             }),
             new DistantPlanet({
                 x: 800,
                 y: 230,
-                radius: 100,
-                parallax: 2.5,
+                radius: 240,
+                parallax: 3,
                 fillColor: neptune,
             }),
         ],
-        hasWrappingEdges: true
+        hasWrappingEdges: true,
     });
 
     const levelIntro = new LevelIntro('Tutorial Two', 'tutorial-1');
