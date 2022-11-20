@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 import { GameDefinition } from "../../modules/types";
 import styles from '../../styles/Home.module.scss';
 
+
 interface Props {
     game: GameDefinition
+    children?: ReactNode
 }
 
-const GameModeList = ({ game }: Props) => {
+const GameModeList = ({ game, children }: Props) => {
 
     return (<section style={{ display: 'flex', alignItems: 'center' }}>
         <h2>{game.title}</h2>
@@ -21,6 +24,7 @@ const GameModeList = ({ game }: Props) => {
                 </li>
             ))}
         </ul>
+        {children}
     </section>)
 }
 

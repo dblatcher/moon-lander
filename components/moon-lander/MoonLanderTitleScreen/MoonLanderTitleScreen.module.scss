@@ -1,11 +1,13 @@
 @import "../../../styles/mixins";
 @import "../../../styles/design-mixins";
 @import "../../../styles/button";
+@import "../../../styles/tableWrapper";
 
 .article {
     @include fullHeight;
     text-align: center;
     justify-content: flex-start;
+    align-items: center;
     background-color:black;
     color: white;
     margin: 2rem;
@@ -14,9 +16,10 @@
     header {
         @include metal;
         position: relative;
-        padding: 2rem;
+        padding: 1em;
         margin-bottom: .5em;
         z-index: 1;
+        max-width: 30em;
 
         h1 {
             @include engraved(regular);
@@ -31,17 +34,6 @@
         }
     }
 
-    .controls {
-        @include raised();
-        @include metal();
-        margin: 1em auto;
-        display: flex;
-        padding: 1em;
-        color: black;
-        flex-direction: column;
-        align-items: flex-end;
-        max-width: 15em;
-    }
 
     .cornerAnimation {
         text-align: center;
@@ -63,37 +55,7 @@
     }
 
     .tableWrapper {
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            background-color: rgba($color: #fff, $alpha: .5);
-            width: .75rem;
-            border-radius: .5rem;
-        }
-        
-        &::-webkit-scrollbar-thumb {
-            border-radius: .5rem;
-            background-color: yellow;
-            border: .2rem outset yellow;
-        }
-
-        table {
-            width: 100%;
-
-            thead {
-                position: sticky;
-                top: 0px;
-                z-index: 2;
-
-                th {
-                    background-color: white;
-                    color: black;
-                }
-            }
-
-            tbody {
-                z-index: 1;
-            }
-        }
+        align-self: stretch;
+        @include tableWrapper();
     }
 }

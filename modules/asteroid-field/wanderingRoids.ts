@@ -3,9 +3,6 @@ import { gloomyBackground, atmosphere } from "../patterns/gradientFills"
 import { DistantPlanet } from "../world-things/DistantPlanet"
 import { makeRock } from "./level-factory/thingFactories"
 
-
-
-
 export function wanderingRoids() {
     const world = new World([
         new Area({

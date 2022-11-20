@@ -10,6 +10,15 @@ const switchStyle = {
     marginBottom: '.5em',
 }
 
+const frameStyle = {
+    border: "2px solid yellow",
+    borderRadius: '50%',
+    overflow: 'clip',
+    alignSelf: 'center',
+    flexShrink: 0,
+    margin: '1em 0',
+}
+
 export default function MoonLanderTitleScreen(props: {
     scoreData?: ScoreData
     showHighScores: boolean
@@ -23,20 +32,23 @@ export default function MoonLanderTitleScreen(props: {
 
     return <article className={styles.article}>
         <header>
-            <AnimationCanvas makeWorld={createShipCloseUp}
-                magnify={.75}
-                frameClass={styles.cornerAnimation} />
-
             <h1>MOON LANDER</h1>
             {title && <h2>{title}</h2>}
-            <div className={styles.controls}>
-
+            <div>
                 <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Switch style={switchStyle} label="sound" value={soundEnabled} toggle={() => { issueCommand('SOUNDTOGGLE') }} />
                 <Switch style={switchStyle} label="touch controls" value={showOnScreenControls} toggle={() => { issueCommand('CONTROLTOGGLE') }} />
             </div>
+
             <span className={styles["bottom-rivets"]}></span>
         </header>
+
+        <AnimationCanvas makeWorld={createShipCloseUp}
+            magnify={.8}
+            frameStyle={frameStyle} />
 
 
         {(showHighScores && scoreData) && (
