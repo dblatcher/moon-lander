@@ -4,8 +4,8 @@ import { LevelIntro } from "../../../LevelIntro";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
 import { LandingPad } from "../../../world-things/LandingPad";
 import { Terrain } from "../../../world-things/Terrain";
-import { atmosphere } from "../gradientFills";
-import { loadImageFill } from "../imageFills";
+import { atmosphere } from "../../../patterns/gradientFills";
+import { loadImageFill } from "../../../patterns/imageFills";
 import { makeMountain, makeShip } from "../items";
 
 

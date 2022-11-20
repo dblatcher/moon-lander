@@ -1,48 +1,8 @@
 import { Geometry, shapes, AbstractFill } from "physics-worlds";
-import { SpaceShip, SpaceShipData } from "../../world-things/SpaceShip";
-import { Terrain } from "../../world-things/Terrain";
-import { mountainGradient } from "./gradientFills";
+import { SpaceShip, SpaceShipData } from "../world-things/SpaceShip";
+import { mountainGradient } from "../../patterns/gradientFills";
 
 
-
-function makeMountain(fromLeft: number, size: number, worldDimensions: { height: number, width: number }) {
-    return new Terrain({
-        x: worldDimensions.width * fromLeft,
-        y: worldDimensions.height - (worldDimensions.width * size),
-        size: worldDimensions.width * size,
-        fillColor: mountainGradient,
-        color: 'brown',
-        shape: shapes.polygon,
-        corners: [{ x: -1, y: 1 }, { x: -.2, y: -.5 }, { x: 0, y: -1 }, { x: .1, y: -.5 }, { x: .3, y: -.6 }, { x: 1, y: 1 }]
-    })
-}
-
-
-function makeBuilding(fromLeft: number, height: number, relativeWidth: number, worldDimensions: { width: number, height: number },
-    config: {
-        fillColor?: string | AbstractFill,
-        color?: string,
-    } = {}
-) {
-    return new Terrain({
-
-        x: worldDimensions.width * fromLeft,
-        y: worldDimensions.height - (worldDimensions.width * height),
-        size: worldDimensions.width * height,
-        fillColor: config.fillColor || "gray",
-        color: config.color || 'white',
-        shape: shapes.polygon,
-        pattern: "BUILDING",
-        relativeWidth,
-        corners: [
-            { x: -relativeWidth, y: -1 },
-            { x: relativeWidth, y: -1 },
-            { x: relativeWidth, y: 1 },
-            { x: -relativeWidth, y: 1 },
-        ]
-    })
-
-}
 
 function makeShip(config: SpaceShipData) {
 
@@ -61,4 +21,4 @@ function makeShip(config: SpaceShipData) {
 }
 
 
-export { makeMountain, makeShip, makeBuilding }
+export {  makeShip }

@@ -1,6 +1,5 @@
 import { Area, Force, Geometry, StarField, World } from "physics-worlds"
-import { gloomyBackground } from "./level-factory/gradientFills"
-import { atmosphere } from "./level-factory/gradientFills"
+import { gloomyBackground, atmosphere } from "../patterns/gradientFills"
 import { DistantPlanet } from "../world-things/DistantPlanet"
 import { makeRock } from "./thingFactories"
 

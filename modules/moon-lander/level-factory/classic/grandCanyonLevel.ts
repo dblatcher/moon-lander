@@ -3,7 +3,7 @@ import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
 import { LandingPad } from "../../../world-things/LandingPad";
 import { Terrain } from "../../../world-things/Terrain";
-import { loadManyImageFills } from "../imageFills";
+import { loadManyImageFills } from "../../../patterns/imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../../../utility";
 

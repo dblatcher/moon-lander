@@ -4,7 +4,7 @@ import { LevelIntro } from "../../../LevelIntro";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
 import { RefuelPad } from "../../../world-things/LandingPad";
 import { Terrain } from "../../../world-things/Terrain";
-import { loadImageFill } from "../imageFills";
+import { loadImageFill } from "../../../patterns/imageFills";
 import { makeShip } from "../items";
 import { makeRectangleProperties } from "../../../utility";
 

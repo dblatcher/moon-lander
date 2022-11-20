@@ -1,6 +1,9 @@
 import { World, StarField, Force } from "physics-worlds";
 import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
+import { gloomyBackground } from "../../../patterns/gradientFills";
+import { loadImageFill } from "../../../patterns/imageFills";
+import { DistantPlanet } from "../../../world-things/DistantPlanet";
 import { makeRock } from "../../thingFactories";
 import { SpaceShip } from "../../world-things/SpaceShip";
 
@@ -42,6 +45,9 @@ export async function tutorial1(): Promise<Level> {
 
 export async function tutorial2(): Promise<Level> {
 
+    const jupiter = await loadImageFill('jupiter', 'red', { parallax: 2 })
+    const neptune = await loadImageFill('neptune', 'blue', { parallax: 2.5 })
+
     const worldDimensions = {
         width: 1600,
         height: 1200,
@@ -68,8 +74,22 @@ export async function tutorial2(): Promise<Level> {
         gravitationalConstant: .001,
         airDensity: .01,
         backGrounds: [
-            new StarField({ numberOfStars: 50, depth: 1, ...worldDimensions }),
+            new StarField({ numberOfStars: 50, depth: 2, ...worldDimensions }),
             new StarField({ numberOfStars: 25, depth: 4, ...worldDimensions }),
+            new DistantPlanet({
+                x: 700,
+                y: 200,
+                radius: 160,
+                parallax: 2,
+                fillColor: jupiter,
+            }),
+            new DistantPlanet({
+                x: 800,
+                y: 230,
+                radius: 100,
+                parallax: 2.5,
+                fillColor: neptune,
+            }),
         ],
         hasWrappingEdges: true
     });

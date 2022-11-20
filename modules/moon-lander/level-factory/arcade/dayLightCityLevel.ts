@@ -4,7 +4,7 @@ import { LandingPad } from "../../../world-things/LandingPad";
 import { Terrain } from "../../../world-things/Terrain";
 
 import { makeBuilding, makeShip } from "../items";
-import { loadManyImageFills } from "../imageFills";
+import { loadManyImageFills } from "../../../patterns/imageFills";
 
 import { Level } from "../../../Level";
 
