@@ -7,6 +7,7 @@ class BulletData implements BodyData {
     y!: number
     color?: string
     fillColor?: string
+    size?: number
     ticksRemaining?: number
 }
 

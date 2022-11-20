@@ -187,12 +187,13 @@ class SpaceShip extends Body {
         this.data.shootCooldownCurrent = shootCooldownDuration
 
         const bullet = new Bullet({
-            x: this.data.x + getVectorX(size + 5, heading),
-            y: this.data.y + getVectorY(size + 5, heading),
+            x: this.data.x + getVectorX(size + 10, heading),
+            y: this.data.y + getVectorY(size + 10, heading),
             color: 'red',
             fillColor: 'red',
+            size: 4,
             ticksRemaining: 100
-        }, new Force(10, heading))
+        }, new Force(20, heading))
 
         bullet.enterWorld(this.world)
         this.world.soundDeck?.playSample('laser')

@@ -81,7 +81,7 @@ function makeShip(x: number, y: number, color: string = 'red'): SpaceShip {
         x, y, color,
         elasticity: .7,
         size: 25,
-        maxThrust: 10000,
+        maxThrust: 15000,
         instanceId: SpaceShip.PLAYER_INSTANCE_ID,
     })
 }
