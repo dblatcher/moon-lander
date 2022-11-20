@@ -14,6 +14,11 @@ const platformGame: GameDefinition = {
         isChangeToVictory,
         playerIsInactive
     },
+    soundEffects: {
+        'die': "/audio/die.mp3",
+        'bang': "/audio/bang.mp3",
+        'beep': "/audio/beep.mp3",
+    },
     scoreFetcherUrl: '/api/scores',
 }
 

@@ -29,6 +29,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 GameComponent={MoonLanderGame}
                 statusFunctions={moonLander.statusFunctions}
                 controlMapping={moonLander.controlMapping}
+                soundEffects={moonLander.soundEffects}
                 extraClassNames={[styles.yellowAndBlackStripes]}
             />
         </GamePageTemplate>

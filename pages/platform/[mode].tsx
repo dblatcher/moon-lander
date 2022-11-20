@@ -35,6 +35,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                     playerIsInactive,
                 }}
                 controlMapping={controlMapping}
+                soundEffects={platformGame.soundEffects}
                 extraClassNames={[styles.red]}
             />
         </GamePageTemplate>

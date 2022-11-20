@@ -30,6 +30,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 GameComponent={AsteroidGame}
                 statusFunctions={asteroidField.statusFunctions}
                 controlMapping={asteroidField.controlMapping}
+                soundEffects={asteroidField.soundEffects}
                 extraClassNames={[styles.asteroids]}
             />
         </GamePageTemplate>

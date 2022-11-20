@@ -21,6 +21,7 @@ interface Props {
     gameMode: GameMode
     statusFunctions: StatusFunctions
     controlMapping: { [index: string]: string }
+    soundEffects: { [index: string]: string }
 
     TitleScreenComponent: FunctionComponent<{
         scoreData?: ScoreData
@@ -235,7 +236,8 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
     }
 
     async startLevel(levelNumber?: number): Promise<GameContainerState> {
-        const { numberOfLevels, makeLevel, speed } = this.props.gameMode;
+        const { soundEffects } = this.props;
+        const { numberOfLevels, makeLevel, speed, } = this.props.gameMode;
 
         if (typeof levelNumber === "undefined") { levelNumber = this.state.level }
         levelNumber = levelNumber > numberOfLevels ? 1 : levelNumber;
@@ -243,7 +245,7 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
         this.tearDownWorld();
         const [newWorld, levelIntro] = await makeLevel(levelNumber);
         this.world = newWorld;
-        this.world.soundDeck = makeSoundDeck()
+        this.world.soundDeck = makeSoundDeck(soundEffects)
 
         await this.setSoundEnabled(this.state.soundEnabled, true);
 

@@ -4,15 +4,11 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function makeSoundDeck() {
-
+function makeSoundDeck(effects: { [index: string]: string }) {
     const deck = new SoundDeck()
-
-    deck.defineSampleBuffer('die', "/audio/die.mp3");
-    deck.defineSampleBuffer('bang', "/audio/bang.mp3");
-    deck.defineSampleBuffer('beep', "/audio/beep.mp3");
-    deck.defineSampleBuffer('laser', "/audio/asteroid-field/laser.mp3");
-
+    Object.entries(effects).forEach(([name,src]) => {
+        deck.defineSampleBuffer(name, src)
+    })
     deck.enable()
     return deck
 }
