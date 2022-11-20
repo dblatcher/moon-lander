@@ -149,7 +149,7 @@ class SpaceShip extends Body {
             colors: ['white', color, color]
         }).enterWorld(this.world)
 
-        this.world.emitter.emit('SFX', { soundName: 'shipExploding', source: this });
+        this.world.soundDeck?.playSample('die')
     }
 
     handleCollision(report: CollisionDetection.CollisionReport) {
@@ -195,7 +195,7 @@ class SpaceShip extends Body {
         }, new Force(10, heading))
 
         bullet.enterWorld(this.world)
-        this.world.emitter.emit('SFX', { soundName: 'laser', source: this });
+        this.world.soundDeck?.playSample('laser')
     }
 
     steer(direction: "LEFT" | "RIGHT") {

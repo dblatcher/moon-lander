@@ -91,7 +91,7 @@ class Rock extends Body {
                 colors: [this.data.color || 'gray', 'white'],
             }).enterWorld(this.world);
 
-            this.world.emitter.emit('SFX', { soundName: 'rockThud', source: this });
+            this.world.soundDeck?.playSample('bang')
         } else {
 
             new DustCloud({
@@ -102,7 +102,7 @@ class Rock extends Body {
                 duration: 50,
                 colors: ['red', 'blue', 'pink']
             }).enterWorld(this.world);
-            this.world.emitter.emit('SFX', { soundName: 'rockDisintergrating', source: this });
+            this.world.soundDeck?.playSample('crumble')
         }
 
 
@@ -119,7 +119,7 @@ class Rock extends Body {
                 break;
 
             case 'Rock':
-                this.world.emitter.emit('SFX', { soundName: 'rockThud', config: { volume: .2 }, source: this });
+                this.world.soundDeck?.playSample('bang')
         }
 
         Body.prototype.handleCollision(report)
