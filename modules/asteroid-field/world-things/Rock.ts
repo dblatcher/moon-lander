@@ -43,19 +43,25 @@ class Rock extends Body {
                 impactDirection = otherThing.momentum.direction
             }
 
-            const makeFragment = (data: BodyData, splitDirection: number): Rock => {
+            const makeFragment = (data: BodyData, splitDirection: number, divider = 2): Rock => {
                 const { size = 1 } = this.data
                 const newRockConfig = Object.assign({}, data, {
-                    size: size / 2,
+                    size: size / divider,
                     x: data.x + Geometry.getVectorX(size / 2, splitDirection),
                     y: data.y + Geometry.getVectorY(size / 2, splitDirection),
                 })
-    
-                return new Rock(newRockConfig, new Force(3, splitDirection))
+
+                return new Rock(newRockConfig, new Force(6, splitDirection))
             }
 
-            makeFragment(this.data, impactDirection + Geometry._90deg).enterWorld(this.world)
-            makeFragment(this.data, impactDirection - Geometry._90deg).enterWorld(this.world)
+            if (this.data.size >= 100) {
+                makeFragment(this.data, impactDirection + 0 * Geometry._deg, 3).enterWorld(this.world)
+                makeFragment(this.data, impactDirection + 120 * Geometry._deg, 3).enterWorld(this.world)
+                makeFragment(this.data, impactDirection - 120 * Geometry._deg, 3).enterWorld(this.world)
+            } else {
+                makeFragment(this.data, impactDirection + Geometry._90deg).enterWorld(this.world)
+                makeFragment(this.data, impactDirection - Geometry._90deg).enterWorld(this.world)
+            }
 
             new ExpandingRing({
                 x: report ? report.impactPoint.x : this.data.x,
@@ -119,7 +125,7 @@ class Rock extends Body {
                 break;
 
             case 'Rock':
-                this.world.soundDeck?.playSample('bang')
+                this.world.soundDeck?.playSample('bang', { volume: .25 })
         }
 
         Body.prototype.handleCollision(report)
