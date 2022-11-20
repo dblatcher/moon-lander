@@ -15,9 +15,9 @@ const asteroidField: GameDefinition = {
         playerIsInactive
     },
     soundEffects: {
-        'die': "/audio/die.mp3",
-        'bang': "/audio/bang.mp3",
-        'beep': "/audio/beep.mp3",
+        'die': "/audio/asteroid-field/ship-die.mp3",
+        'bang': "/audio/asteroid-field/thud.mp3",
+        'crumble': "/audio/asteroid-field/crumble.mp3",
         'laser': "/audio/asteroid-field/laser.mp3",
     },
     scoreFetcherUrl: '/api/scores',
