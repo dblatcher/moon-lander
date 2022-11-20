@@ -60,14 +60,14 @@ export async function tutorial2(): Promise<Level> {
             new DistantPlanet({
                 x: 700,
                 y: 200,
-                radius: 320,
+                radius: 640,
                 parallax: 2,
                 fillColor: jupiter,
             }),
             new DistantPlanet({
-                x: 800,
+                x: 1100,
                 y: 230,
-                radius: 240,
+                radius: 320,
                 parallax: 3,
                 fillColor: neptune,
             }),
