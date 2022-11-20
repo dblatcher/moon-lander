@@ -13,7 +13,7 @@ import { controlSpaceShip } from "../../../modules/asteroid-field/controlSpaceSh
 import { GameMode } from "../../../modules/GameMode";
 import { getWorldStatus, getPlayerSpaceship, getPlayerThrust } from "../../../modules/asteroid-field/worldValues";
 import { KeyMap, WorldStatus } from "../../../modules/types";
-import { highlightLandingPad, makeTerrainBlack, spaceShipIsRedCircle, noAreas, highlightRefuelPad } from "../../../modules/minimap";
+import { highlightLandingPad, spaceShipIsRedCircle, noAreas, highlightRefuelPad, makeRocksBlack } from "../../../modules/minimap";
 
 import styles from "./styles.module.scss";
 import dialogueStyles from "../../Dialogue/styles.module.scss";
@@ -86,7 +86,7 @@ export default function AsteroidGame(props: Readonly<{
                     backGroundOverride={'transparent'}
                     dontRenderEffects
                     transformRules={[
-                        makeTerrainBlack,
+                        makeRocksBlack,
                         spaceShipIsRedCircle,
                         highlightLandingPad,
                         noAreas,

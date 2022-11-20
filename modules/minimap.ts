@@ -1,4 +1,5 @@
 import { RenderTransformationRule, Body, ViewPort, shapes, RenderFunctions, Area } from "physics-worlds"
+import { Rock } from "./asteroid-field/world-things/Rock";
 import { RefuelPad } from "./world-things/LandingPad";
 import { SpaceShip } from "./world-things/SpaceShip";
 
@@ -10,6 +11,18 @@ const makeTerrainBlack = new RenderTransformationRule(
 
         duplicate.data.color = "black";
         duplicate.data.fillColor = "black"
+        duplicate.renderOnCanvas(ctx, viewPort)
+    }
+)
+
+const makeRocksBlack = new RenderTransformationRule(
+    thing => thing instanceof Rock,
+    (thing, ctx: CanvasRenderingContext2D, viewPort: ViewPort) => {
+        const duplicate: Body = new Body({
+            ...thing.data,
+            color: 'black',
+            fillColor: 'black',
+        })
         duplicate.renderOnCanvas(ctx, viewPort)
     }
 )
@@ -78,5 +91,5 @@ const noAreas = new RenderTransformationRule(
 )
 
 export {
-    makeTerrainBlack, spaceShipIsRedCircle, highlightLandingPad, noAreas, highlightRefuelPad
+    makeTerrainBlack, spaceShipIsRedCircle, highlightLandingPad, noAreas, highlightRefuelPad, makeRocksBlack,
 }
