@@ -1,6 +1,7 @@
 import { Geometry, RadialGradientFill, LinearGradientFill, ImageFill } from "physics-worlds";
 import { Circle } from "physics-worlds/dist/src/geometry/definitions";
 
+const { getVectorX, getVectorY } = Geometry
 
 const atmosphere = new RadialGradientFill({
     fallbackColor: 'rgba(100,100,200,.5)',
@@ -50,6 +51,33 @@ const mountainGradient = new RadialGradientFill({
     }
 })
 
+const redSwirl = new RadialGradientFill({
+    fallbackColor: "pink",
+    canvasFunction: (ctx: CanvasRenderingContext2D, circle: Geometry.Circle, heading: number) => {
+
+        const offCenter: Geometry.Vector = {
+            x: getVectorX(circle.radius * .25, heading),
+            y: getVectorY(circle.radius * .25, heading)
+        }
+
+        const innerCircle: Geometry.Circle = {
+            x: circle.x + offCenter.x,
+            y: circle.y + offCenter.y,
+            radius: circle.radius * (1 / 2)
+        }
+
+        const gradient = ctx.createRadialGradient(innerCircle.x, innerCircle.y, innerCircle.radius, circle.x, circle.y, circle.radius);
+        gradient.addColorStop(0, 'red');
+        gradient.addColorStop(.1, 'pink');
+        gradient.addColorStop(.7, 'crimson');
+        gradient.addColorStop(.8, 'crimson');
+        gradient.addColorStop(.9, 'pink');
+        gradient.addColorStop(1, 'red');
+
+        return gradient;
+    }
+})
+
 export {
-    atmosphere, mountainGradient, gloomyBackground
+    atmosphere, mountainGradient, gloomyBackground, redSwirl
 }

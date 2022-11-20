@@ -1,7 +1,6 @@
 import { World, StarField, Force } from "physics-worlds";
 import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
-import { gloomyBackground } from "../../../patterns/gradientFills";
 import { loadImageFill } from "../../../patterns/imageFills";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
 import { makeRock } from "../../thingFactories";
@@ -45,8 +44,10 @@ export async function tutorial1(): Promise<Level> {
 
 export async function tutorial2(): Promise<Level> {
 
-    const jupiter = await loadImageFill('jupiter', 'red', { parallax: 2 })
-    const neptune = await loadImageFill('neptune', 'blue', { parallax: 2.5 })
+    const [jupiter, neptune] = await Promise.all([
+        loadImageFill('jupiter', 'red', { parallax: 2 }),
+        loadImageFill('neptune', 'blue', { parallax: 2.5 }),
+    ])
 
     const worldDimensions = {
         width: 1600,

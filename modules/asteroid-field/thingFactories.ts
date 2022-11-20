@@ -1,17 +1,17 @@
-import { Body, Force } from 'physics-worlds'
+import { AbstractFill, Body, Force } from 'physics-worlds'
 import { SpaceShip } from './world-things/SpaceShip'
 import { Rock } from './world-things/Rock'
 
 
 const rockColors = ['gainsboro', 'darksalmon', 'dimgray', 'darkgray', 'azure', 'cornsilk',]
 
-function makeRock(x: number, y: number, size: number, momentum?: Force): Body {
+function makeRock(x: number, y: number, size: number, momentum?: Force, fill?: string | AbstractFill): Body {
     const fillColor = rockColors[Math.floor(Math.random() * rockColors.length)]
 
     return new Rock({
         x, y, size,
         color: fillColor,
-        fillColor,
+        fillColor: fill || fillColor,
         elasticity: .5,
         density: 5,
         headingFollowsDirection: false
