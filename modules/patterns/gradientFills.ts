@@ -33,6 +33,40 @@ const gloomyBackground = new LinearGradientFill({
     }
 })
 
+const murkyPlanet =  new LinearGradientFill({
+    fallbackColor: 'yellowgreen',
+    canvasFunction(ctx: CanvasRenderingContext2D, line: [Geometry.Point, Geometry.Point]) {
+        const gradient = ctx.createLinearGradient(
+            line[0].x, line[0].y, line[1].x, line[1].y
+        )
+
+        gradient.addColorStop(1, 'brown')
+        gradient.addColorStop(.85, 'yellowgreen')
+        gradient.addColorStop(.52, 'whitesmoke')
+        gradient.addColorStop(.475, 'yellowgreen')
+        gradient.addColorStop(0.1, 'brown')
+        gradient.addColorStop(0, 'black')
+
+        return gradient;
+    }
+})
+
+const brownPlanet =  new LinearGradientFill({
+    fallbackColor: 'brown',
+    canvasFunction(ctx: CanvasRenderingContext2D, line: [Geometry.Point, Geometry.Point]) {
+        const gradient = ctx.createLinearGradient(
+            line[0].x, line[0].y, line[1].x, line[1].y
+        )
+
+        gradient.addColorStop(1, 'brown')
+        gradient.addColorStop(.575, 'red')
+        gradient.addColorStop(.475, 'red')
+        gradient.addColorStop(0.1, 'brown')
+
+        return gradient;
+    }
+})
+
 const mountainGradient = new RadialGradientFill({
     fallbackColor: 'brown',
     canvasFunction: (ctx: CanvasRenderingContext2D, circle: Circle, heading: number) => {
@@ -79,5 +113,5 @@ const redSwirl = new RadialGradientFill({
 })
 
 export {
-    atmosphere, mountainGradient, gloomyBackground, redSwirl
+    atmosphere, mountainGradient, gloomyBackground, redSwirl, murkyPlanet, brownPlanet
 }

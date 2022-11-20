@@ -1,5 +1,5 @@
 import { Area, Force, Geometry, StarField, World } from "physics-worlds"
-import { gloomyBackground, atmosphere } from "../patterns/gradientFills"
+import { gloomyBackground, atmosphere, murkyPlanet, brownPlanet } from "../patterns/gradientFills"
 import { DistantPlanet } from "../world-things/DistantPlanet"
 import { makeRock } from "./level-factory/thingFactories"
 
@@ -28,14 +28,14 @@ export function wanderingRoids() {
                 y: 600,
                 radius: 60,
                 parallax: 1,
-                fillColor: gloomyBackground,
+                fillColor: murkyPlanet,
             }),
             new DistantPlanet({
                 x: 700,
                 y: 200,
                 radius: 80,
                 parallax: 1,
-                fillColor: gloomyBackground,
+                fillColor: brownPlanet,
             }),
         ]
     })
