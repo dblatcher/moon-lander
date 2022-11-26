@@ -1,16 +1,25 @@
 import { Body, Force, Geometry, BodyData, RenderFunctions, CollisionDetection, ViewPort, ExpandingRing } from 'physics-worlds'
 import { DustCloud } from './DustCloud'
-import { SpaceShip } from './SpaceShip'
+
+const { translatePoint, _360deg } = Geometry
+
+type Crater = {
+    radius: number,
+    distance: number,
+    heading: number
+}
 
 class Rock extends Body {
 
     jaggedEdgeShape: Force[]
+    craters: Crater[]
     rotation: number
 
     constructor(config: BodyData, momentum: Force = Force.none) {
         super(config, momentum)
         this.jaggedEdgeShape = Rock.makeJaggedEdgeShape(config)
         this.rotation = (.02 + Math.random() * .01) * (Math.random() > .5 ? 1 : -1)
+        this.craters = Rock.makeCraters(config)
     }
 
     get typeId() { return 'Rock' }
@@ -25,12 +34,27 @@ class Rock extends Body {
         })
     }
 
+    renderCrater(crater: Crater, ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
+        const { x, y, heading: rockHeading = 0, color } = this.data
+        const { radius, distance, heading } = crater
+
+
+        RenderFunctions.renderCircle.onCanvas(ctx, {
+            ...translatePoint({ x, y }, new Force(distance, rockHeading + heading).vector),
+            radius,
+        }, { strokeColor: 'black', fillColor: color }, viewPort)
+    }
+
     renderOnCanvas(ctx: CanvasRenderingContext2D, viewPort: ViewPort) {
         RenderFunctions.renderPolygon.onCanvas(ctx, this.jaggedEdgePoints, { strokeColor: this.data.color, fillColor: this.data.fillColor }, viewPort)
+
+        this.craters.forEach(crater => {
+            this.renderCrater(crater, ctx, viewPort)
+
+        })
     }
 
     tick() {
-
         this.data.heading = (this.data.heading || 0) + this.rotation
     }
 
@@ -154,6 +178,24 @@ class Rock extends Body {
             corners.push(new Force(size - radiusVariance, (cornerSegment * i) + angleVariance))
         }
         return corners
+    }
+
+    static makeCraters(config: BodyData): Crater[] {
+        const { size = 1 } = config
+        const craters: Crater[] = []
+        const numberOfCrater = size < 30 ? 0 : Math.floor(size / 8 * (Math.random() / 5 + .75))
+
+        for (let i = 0; i < numberOfCrater; i++) {
+            const radius = Math.floor(Math.random() * 10) + 3
+            const maxDistance = size - radius - 2
+            craters.push({
+                radius,
+                heading: Math.random() * _360deg,
+                distance: Math.floor(Math.random() * maxDistance)
+            })
+        }
+
+        return craters
     }
 }
 
