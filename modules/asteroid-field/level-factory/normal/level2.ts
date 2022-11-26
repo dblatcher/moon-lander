@@ -1,37 +1,12 @@
-import { World, StarField, Force } from "physics-worlds";
+import { World, StarField } from "physics-worlds";
 import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
 import { loadImageFill } from "../../../patterns/imageFills";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
-import { generateRocks, makeRock, makeShip } from "../thingFactories";
+import { generateRocks, makeShip } from "../thingFactories";
 
 
-export async function tutorial1(): Promise<Level> {
-
-    const worldDimensions = {
-        width: 800,
-        height: 800,
-    }
-
-    const world = new World([
-        makeShip(worldDimensions.width / 2, worldDimensions.height / 2),
-        makeRock(400, 400, 100),
-    ], {
-        ...worldDimensions,
-        gravitationalConstant: .001,
-        backGrounds: [
-            new StarField({ numberOfStars: 100, depth: 1, ...worldDimensions, }),
-        ],
-        hasWrappingEdges: true
-    });
-
-    const levelIntro = new LevelIntro('Tutorial one', 'tutorial-1');
-
-
-    return [world, levelIntro];
-}
-
-export async function tutorial2(): Promise<Level> {
+export async function level2(): Promise<Level> {
 
     const [jupiter, neptune] = await Promise.all([
         loadImageFill('jupiter', 'red', { parallax: 2 }),
@@ -75,7 +50,7 @@ export async function tutorial2(): Promise<Level> {
         hasWrappingEdges: true,
     });
 
-    const levelIntro = new LevelIntro('Tutorial Two', 'tutorial-1');
+    const levelIntro = new LevelIntro('Level Two', 'tutorial-1');
 
 
     return [world, levelIntro];

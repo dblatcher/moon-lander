@@ -1,12 +1,10 @@
-import * as tutorials from "./level-factory/tutorials";
-
+import * as normal from "./level-factory/normal";
 import { GameMode } from "../GameMode";
 
 
 const gameModes: { [index: string]: GameMode } = {
-
     'normal': new GameMode({
-        title: "normal",
+        title: "arcade",
         key: "normal",
         startingLives: Infinity,
         speed: 40,
@@ -14,8 +12,8 @@ const gameModes: { [index: string]: GameMode } = {
         allowSkip: true,
         allowRestart: true,
         levelFunctions: [
-            // tutorials.tutorial1,
-            tutorials.tutorial2,
+            normal.level1,
+            normal.level2,
         ]
     }),
 }
