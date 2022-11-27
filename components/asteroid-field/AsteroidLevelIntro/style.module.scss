@@ -2,21 +2,26 @@
 @import "../../../styles/design-mixins";
 
 .panelHeader {
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 700;
+    background-color: black;
+    padding: .2em;
+
 
     label {
-        @include engraved(regular);
+        color: black;
+        text-shadow: 0 0 6px yellow;
     }
 }
 
-.lcdScreen {
-    @include lcdDark();
+.panelBody {
     box-sizing: border-box;
+    padding: .2em;
+    background-color: black;
+    color: yellow;
     min-height: 14rem;
     width: 30rem;
     max-width: 100%;
-    font-family: monospace;
 
     h3,h2,h4 {
         &:before {

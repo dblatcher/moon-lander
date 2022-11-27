@@ -50,11 +50,11 @@ export default class AsteroidLevelIntro extends React.Component {
         }
 
         return (
-            <Dialogue design="METAL">
+            <Dialogue design="PLAIN">
                 <header className={styles.panelHeader}>
-                    <label>Misson Briefing</label>
+                    <label>{levelIntro.title}</label>
                 </header>
-                <section className={styles.lcdScreen}>
+                <section className={styles.panelBody}>
 
                     {htmlContent ? (
                         <div
