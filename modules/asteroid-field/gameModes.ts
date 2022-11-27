@@ -14,6 +14,7 @@ const gameModes: { [index: string]: GameMode } = {
         levelFunctions: [
             normal.level1,
             normal.level2,
+            normal.level3,
         ]
     }),
 }
