@@ -183,15 +183,15 @@ class Rock extends Body {
     static makeCraters(config: BodyData): Crater[] {
         const { size = 1 } = config
         const craters: Crater[] = []
-        const numberOfCrater = size < 30 ? 0 : Math.floor(size / 8 * (Math.random() / 5 + .75))
+        const numberOfCrater = size < 30 ? 0 : 5 + Math.floor((size / 5) * Math.random())
 
         for (let i = 0; i < numberOfCrater; i++) {
-            const radius = Math.floor(Math.random() * 10) + 3
-            const maxDistance = size - radius - 2
+            const radius = Math.floor(Math.random() * 8) + 3
+            const maxDistance = size * (12 / 14) - radius * 2 - 1
             craters.push({
                 radius,
                 heading: Math.random() * _360deg,
-                distance: Math.floor(Math.random() * maxDistance)
+                distance: radius + Math.floor(Math.random() * maxDistance)
             })
         }
 
