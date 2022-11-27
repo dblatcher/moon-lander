@@ -13,6 +13,7 @@ import CommandMenu from "../CommandMenu";
 import styles from "./GameContainer.module.scss";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
+export const allCommands = ['START', 'PAUSE', 'QUIT', 'SOUNDTOGGLE', 'CONTROLTOGGLE', 'RESTARTLEVEL', 'SKIPLEVEL'] as const;
 
 
 interface Props {
@@ -374,8 +375,7 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                     <OnScreenControls
                         report={(onScreenControlInput: KeyMap) => { this.setState({ onScreenControlInput }) }}
                         issueCommand={handleCommandPress}
-                        directionButtons={['left', 'right', 'up', 'down']}
-                        commandButtons={['PAUSE', 'START']}
+                        controlMapping={controlMapping}
                     />
                 }
 
