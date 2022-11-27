@@ -75,6 +75,7 @@
     }
 
     .tableWrapper {
+        z-index: 1;
         @include tableWrapper();
     }
 

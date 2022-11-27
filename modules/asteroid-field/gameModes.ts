@@ -8,7 +8,7 @@ const gameModes: { [index: string]: GameMode } = {
         key: "normal",
         startingLives: Infinity,
         speed: 40,
-        noScores: true,
+        noScores: false,
         allowSkip: true,
         allowRestart: true,
         levelFunctions: [
