@@ -13,9 +13,10 @@ const gameModes: { [index: string]: GameMode } = {
         allowRestart: true,
         levelFunctions: [
             normal.level1,
-            normal.level2,
-            normal.level3,
-        ]
+            // normal.level2,
+            // normal.level3,
+        ],
+        makeProceduralLevel:normal.makeProceduralLevel
     }),
 }
 

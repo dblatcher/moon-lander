@@ -52,7 +52,6 @@ function generateRocks(amount: number, worldDimensions: { width: number, height:
         )
 
         if (rocks.some(rock => rock.isIntersectingWith(newRock))) {
-            console.log(tries, 'intersection')
             continue
         }
 
@@ -61,15 +60,10 @@ function generateRocks(amount: number, worldDimensions: { width: number, height:
             const { x, y, radius } = newRock.shapeValues
 
             if (Math.abs(x - avoid.x) < minDistance && Math.abs(y - avoid.y) < minDistance) {
-                console.log(tries, 'avoid')
                 continue
             }
         }
-
-        console.log(tries, rocks.length % sizes.length, newRock.data.size)
         rocks.push(newRock)
-
-
     }
 
     return rocks

@@ -49,16 +49,9 @@ export default function AsteroidGame(props: Readonly<{
     const onLastLevel = (level + 1 > gameMode.numberOfLevels);
 
     async function advance() {
-        const points = onLastLevel ? 100 : 50;
-
-        await addPoints(points)
+        await addPoints(100)
         await sleep(250);
-
-        if (onLastLevel) {
-            await endPlaySession()
-        } else {
-            await startLevel(level + 1)
-        }
+        await startLevel(level + 1)
     }
 
     async function retry() {
