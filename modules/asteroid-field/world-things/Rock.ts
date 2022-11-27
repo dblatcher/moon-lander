@@ -122,6 +122,7 @@ class Rock extends Body {
             }).enterWorld(this.world);
 
             this.world.soundDeck?.playSample('bang')
+            this.world.emitter.emit('add-points', 25)
         } else {
 
             new DustCloud({
@@ -133,11 +134,10 @@ class Rock extends Body {
                 colors: ['red', 'blue', 'pink']
             }).enterWorld(this.world);
             this.world.soundDeck?.playSample('crumble')
+            this.world.emitter.emit('add-points', 50)
         }
 
-
         this.leaveWorld()
-
     }
 
     handleCollision(report: CollisionDetection.CollisionReport) {

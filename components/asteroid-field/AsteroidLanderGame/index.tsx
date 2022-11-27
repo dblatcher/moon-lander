@@ -153,7 +153,9 @@ export default function AsteroidGame(props: Readonly<{
             world={world}
             allKeyControlFunction={controlSpaceShip}
             getWorldStatus={getWorldStatus}
-            reportWorldStatus={handleWorldStatus} />
+            reportWorldStatus={handleWorldStatus}
+            addPoints={addPoints}
+        />
 
     </article>
 }

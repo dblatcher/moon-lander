@@ -18,9 +18,15 @@ export default function WorldInterface<T extends {}>(props: {
     reportWorldStatus: Function
     getWorldStatus: { (world: World): T }
     world: World
+    addPoints?: { (points: number): void }
 }) {
 
-    const { controls, world, singleKeyControlFunction, allKeyControlFunction, reportWorldStatus: report = () => { }, getWorldStatus } = props;
+    const { 
+        controls, world, 
+        reportWorldStatus: report = () => { }, 
+        singleKeyControlFunction, allKeyControlFunction, 
+        getWorldStatus, addPoints 
+    } = props;
 
     function executeControlFunction(tickReport: any): void {
 
@@ -38,9 +44,17 @@ export default function WorldInterface<T extends {}>(props: {
         report(getWorldStatus(world))
     }
 
+    function handlePoints(points: any): void {
+        if (addPoints && typeof points === 'number') {
+            addPoints(points)
+        }
+    }
+
     useEffect(() => {
         world.emitter.on('tick', executeControlFunction)
+        world.emitter.on('add-points', handlePoints)
         return () => {
+            world.emitter.off('add-points', handlePoints)
             world.emitter.off('tick', executeControlFunction)
         }
     })
