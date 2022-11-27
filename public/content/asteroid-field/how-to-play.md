@@ -1,0 +1,10 @@
+### How to play
+Destroy the rocks and avoid crashing into them.
+- *UP / W*    : Increase thrust
+- *LEFT / A*  : Turn clockwise
+- *RIGHT / D* : Turn anti-clockwise
+- *CTRL / E*  : fire
+- *P* : Pause game
+
+
+

@@ -1,6 +1,5 @@
 import { World, StarField } from "physics-worlds";
 import { Level } from "../../../Level";
-import { LevelIntro } from "../../../LevelIntro";
 import { loadImageFill } from "../../../patterns/imageFills";
 import { DistantPlanet } from "../../../world-things/DistantPlanet";
 import { generateRocks, makeShip } from "../thingFactories";
@@ -23,7 +22,7 @@ export async function level2(): Promise<Level> {
         ...generateRocks(4, worldDimensions, {
             sizes: [70, 100],
             avoid: { x: worldDimensions.width / 2, y: worldDimensions.height / 2, radius: 200 },
-            speedRange: [0, 10]
+            speedRange: [0, 8]
         }),
     ], {
         ...worldDimensions,
@@ -50,8 +49,6 @@ export async function level2(): Promise<Level> {
         hasWrappingEdges: true,
     });
 
-    const levelIntro = new LevelIntro('Level Two', 'tutorial-1');
-
-
-    return [world, levelIntro];
+    
+    return [world];
 }

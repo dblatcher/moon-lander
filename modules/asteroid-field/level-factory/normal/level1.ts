@@ -22,7 +22,7 @@ export async function level1(): Promise<Level> {
         hasWrappingEdges: true
     });
 
-    const levelIntro = new LevelIntro('Level One', 'tutorial-1');
+    const levelIntro = new LevelIntro('Level One', 'asteroid-field/how-to-play');
 
 
     return [world, levelIntro];
