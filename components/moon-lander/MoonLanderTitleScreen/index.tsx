@@ -1,4 +1,5 @@
 
+import Link from "next/link";
 import { createShipCloseUp } from "../../../modules/animation-factory";
 import { ScoreData } from "../../../modules/data-access/ScoreData";
 import AnimationCanvas from "../../AnimationCanvas";
@@ -41,6 +42,10 @@ export default function MoonLanderTitleScreen(props: {
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Switch style={switchStyle} label="sound" value={soundEnabled} toggle={() => { issueCommand('SOUNDTOGGLE') }} />
                 <Switch style={switchStyle} label="touch controls" value={showOnScreenControls} toggle={() => { issueCommand('CONTROLTOGGLE') }} />
+            </div>
+
+            <div>
+                <Link passHref href="/moon-lander/about"><a >about this game</a></Link>
             </div>
 
             <span className={styles["bottom-rivets"]}></span>

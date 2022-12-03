@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../styles/Home.module.scss'
-import AnimationCanvas from '../components/AnimationCanvas'
-import { createShipCloseUp } from '../modules/animation-factory'
-import  VercelFooter  from '../components/VercelFooter'
+import styles from '../../styles/Home.module.scss'
+import AnimationCanvas from '../../components/AnimationCanvas'
+import { createShipCloseUp } from '../../modules/animation-factory'
+import VercelFooter from '../../components/VercelFooter'
 
 
 
@@ -21,14 +21,16 @@ const Home: NextPage = () => {
 
         <div className={styles.frame}>
 
-          <h2>About</h2>
-          <p>This site has free browser games.</p>
+          <h2>Moon-lander</h2>
+          <p>Moon-lander is a free browser game in which you pilot a small landing craft in a variety of planetary and deep space environments. The sucessfull pilot will need to cope with different atmospheres, terrains and levels of gravity to land safely.</p>
           <p>More of my free games can be found at <a className={styles.exLink} href="http://www.davidblatcher.co.uk/">http://www.davidblatcher.co.uk/</a>.</p>
 
-          <h3>Technical</h3>
-          <p>The games use my <a className={styles.exLink} href="https://github.com/dblatcher/worlds">physics-worlds</a> package to create the game levels. Physics-worlds is a flexible, object-orientated typescript physics engine intended for building games, simulations and animations.</p>
-          <p>The source code is available at <a className={styles.exLink} href="https://github.com/dblatcher/moon-lander">https://github.com/dblatcher/moon-lander</a>.</p>
-
+          <p>
+            <Link href="/moon-lander/normal" passHref={true}><a>&lArr; back to game</a></Link>
+          </p>
+          <p>
+            <Link href="/about" passHref={true}><a>&lArr; about site</a></Link>
+          </p>
           <p>
             <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
           </p>

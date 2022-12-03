@@ -1,15 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 import AnimationCanvas from '../components/AnimationCanvas'
-import { createShipCloseUp, wanderingRoids } from '../modules/animation-factory'
+import { createShipCloseUp } from '../modules/animation-factory'
 import { asteroidField } from '../modules/asteroid-field'
 import { platformGame } from '../modules/platform-game'
 import { moonLander } from '../modules/moon-lander'
 import GameModeList from '../components/GameModeList'
 import { titleAnimation } from '../modules/asteroid-field/titleAnimation'
+import VercelFooter from '../components/VercelFooter'
 
 const animationFrameStyle = {
   overflow: 'clip',
@@ -52,25 +52,14 @@ const Home: NextPage = () => {
 
           <p>
             <Link href={`/about`} passHref={true}>
-              <a>about this game &rArr;</a>
+              <a>about this site &rArr;</a>
             </Link>
           </p>
 
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+      <VercelFooter />
     </div>
   )
 }
