@@ -1,10 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-
-
-import styles from '../styles/Page.module.scss'
-
 import { useEffect, useState } from 'react';
 import { requestAddScore, requestGetScores, requestResetDbGetFullResponse } from '../modules/data-access/requests';
 import { getStaticConfiguration, PropsWithChildrenAndConfig } from '../modules/configuration';

@@ -10,7 +10,6 @@ import TitleScreen from '../../components/platform-game/TitleScreen';
 import IntroDialogue from '../../components/platform-game/IntroDialogue';
 import GamePlayer from '../../components/platform-game/GamePlayer';
 import { platformGame } from '../../modules/platform-game';
-import styles from '../../styles/Page.module.scss'
 
 const { title, gameModes, scoreFetcherUrl } = platformGame
 
@@ -36,7 +35,6 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 }}
                 controlMapping={controlMapping}
                 soundEffects={platformGame.soundEffects}
-                extraClassNames={[styles.red]}
             />
         </GamePageTemplate>
     )

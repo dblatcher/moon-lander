@@ -8,8 +8,7 @@ import GameContainerTemplate from '../../components/GameContainerTemplate';
 import MoonLanderLevelIntro from '../../components/moon-lander/MoonLanderLevelIntro';
 import MoonLanderGame from '../../components/moon-lander/MoonLanderGame';
 import MoonLanderTitleScreen from '../../components/moon-lander/MoonLanderTitleScreen';
-
-import styles from '../../styles/Page.module.scss'
+import styles from '../../components/moon-lander/moonLander.styles.module.scss'
 
 const { title, gameModes, scoreFetcherUrl } = moonLander
 

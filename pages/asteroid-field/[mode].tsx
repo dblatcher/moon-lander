@@ -8,8 +8,8 @@ import GameContainerTemplate from '../../components/GameContainerTemplate';
 import AsteroidLevelIntro from '../../components/asteroid-field/AsteroidLevelIntro';
 import AsteroidGame from '../../components/asteroid-field/AsteroidLanderGame';
 import AsteroidTitleScreen from '../../components/asteroid-field/AsteroidTitleScreen';
+import styles from '../../components/asteroid-field/asteroids.style.module.scss'
 
-import styles from '../../styles/Page.module.scss'
 
 
 const { title, gameModes, scoreFetcherUrl } = asteroidField

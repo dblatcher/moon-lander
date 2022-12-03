@@ -8,16 +8,3 @@
 .full-height-container {
     @include fullHeight;
 }
-
-.red {
-    background: red;
-}
-
-.yellowAndBlackStripes {
-    @include yellowAndBlackStripes;
-}
-
-.asteroids {
-    background-color: black;
-    padding: 0;
-}
