@@ -9,74 +9,74 @@
   @include fullHeight;
   @include yellowAndBlackStripes;
   padding: 2rem;
+}
 
-  .frame {
-    @include fullHeight;
-    background-color: black;
+.frame {
+  @include fullHeight;
+  background-color: black;
+  padding: 1rem;
+  overflow-y: auto;
+  color: white;
+
+  header {
+    @include metal;
+    position: relative;
+
+    font-size: 3rem;
+    text-align: center;
+
+    h1 {
+      @include engraved('');
+      margin: 0;
+    }
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  h3 {
+    margin: 1em 0 0 0;
+  }
+
+  p {
+    margin: 0 0 .5em 0;
+  }
+
+  .gameModeList {
+    list-style: none;
+    margin: 0;
     padding: 1rem;
-    overflow-y: auto;
-    color: white;
+    display: flex;
+    flex-wrap: wrap;
 
-    header {
-      @include metal;
-      position: relative;
-
-      font-size: 3rem;
+    li {
+      display: inline-block;
+      background-color: white;
+      color: black;
+      margin: .5rem;
+      padding: .1rem .4rem;
+      border-radius: .25rem;
+      min-width: 8rem;
       text-align: center;
 
-      h1 {
-        @include engraved('');
+      h2,
+      h3 {
         margin: 0;
       }
     }
 
-    h2 {
-      margin: 0;
-    }
+  }
 
-    h3 {
-      margin: 1em 0 0 0;
-    }
-
-    p {
-      margin: 0 0 .5em 0;
-    }
-
-    .gameModeList {
-      list-style: none;
-      margin: 0;
-      padding: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-
-      li {
-        display: inline-block;
-        background-color: white;
-        color: black;
-        margin: .5rem;
-        padding: .1rem .4rem;
-        border-radius: .25rem;
-        min-width: 8rem;
-        text-align: center;
-
-        h2,
-        h3 {
-          margin: 0;
-        }
-      }
-
-    }
-
-    .cornerAnimation {
-      border-radius: 50%;
-      overflow: clip;
-      text-align: center;
-      align-self: center;
-      position: absolute;
-      transform-origin: bottom right;
-      bottom: .5rem;
-      right: .5rem;
-    }
+  .cornerAnimation {
+    border-radius: 50%;
+    overflow: clip;
+    text-align: center;
+    align-self: center;
+    position: absolute;
+    transform-origin: bottom right;
+    bottom: .5rem;
+    right: .5rem;
   }
 }
 
