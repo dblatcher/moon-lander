@@ -1,4 +1,23 @@
+@import "../../styles/mixins";
+
 .asteroids {
     background-color: black;
     padding: 0;
 }
+
+.aboutPage {
+    @include fullHeight;
+    justify-content: center;
+}
+
+.aboutFrame {
+    z-index: 1;
+    padding: 1em;
+    margin: 1em 2em;
+    background-color: rgba($color: #fff, $alpha: 0.85);
+}
+
+.fullScreenAnimation {
+    @include fullSizeAnimation;
+}
+

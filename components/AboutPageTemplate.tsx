@@ -1,11 +1,11 @@
 import Head from "next/head"
-import { FunctionComponent, ReactChild, ReactChildren } from "react"
+import { FunctionComponent, ReactChild, ReactChildren, ReactNode } from "react"
 import styles from '../styles/Page.module.scss'
 import VercelFooter from "./VercelFooter"
 
 interface Props {
     title: string,
-    children: ReactChildren | ReactChild
+    children: ReactNode
     mainClassNames?: string[]
 }
 
