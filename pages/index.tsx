@@ -5,7 +5,6 @@ import styles from '../styles/Home.module.scss'
 import AnimationCanvas from '../components/AnimationCanvas'
 import { createShipCloseUp } from '../modules/animation-factory'
 import { asteroidField } from '../modules/asteroid-field'
-import { platformGame } from '../modules/platform-game'
 import { moonLander } from '../modules/moon-lander'
 import GameModeList from '../components/GameModeList'
 import { titleAnimation } from '../modules/asteroid-field/titleAnimation'
@@ -42,7 +41,6 @@ const Home: NextPage = () => {
               makeWorld={createShipCloseUp}
               frameStyle={animationFrameStyle} />
           </GameModeList>
-          <GameModeList game={platformGame} />
           <GameModeList game={asteroidField}>
             <AnimationCanvas
               magnify={.5}
