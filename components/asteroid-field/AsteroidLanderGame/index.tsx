@@ -67,9 +67,9 @@ export default function AsteroidGame(props: Readonly<{
                     <FollowBodyCanvas
                         world={world}
                         getSubject={getPlayerSpaceship}
-                        magnify={1}
+                        magnify={1.25}
                         height={1200} width={1200}
-                        framefill={'gray'} />
+                        framefill={'transparent'} />
                 </div>
             </div>
             <div className={styles.scannerScreen}>
@@ -93,15 +93,17 @@ export default function AsteroidGame(props: Readonly<{
                 level={level}
                 lives={lives} />
 
-            <Indicator
-                caption="THRUST"
-                world={world}
-                getValues={getPlayerThrust} />
+            <div className={styles.panel}>
+                <Indicator
+                    caption="THRUST"
+                    world={world}
+                    getValues={getPlayerThrust} />
+            </div>
 
         </section>
 
         {(worldStatus.enemiesGone && mode === "PLAY") && (
-            <Dialogue placement="TOP" design="YELLOW">
+            <Dialogue placement="TOP" design="METAL">
                 <p>All rocks are gone</p>
                 {onLastLevel && <p> Congratulations! That was the last level!</p>}
 
@@ -112,7 +114,7 @@ export default function AsteroidGame(props: Readonly<{
         )}
 
         {(worldStatus.playerDead && mode === "PLAY") && (
-            <Dialogue placement="TOP" design="YELLOW">
+            <Dialogue placement="TOP" design="METAL">
                 <p>You have crashed.</p>
 
                 {lives > 0 ? (
@@ -124,7 +126,7 @@ export default function AsteroidGame(props: Readonly<{
         )}
 
         {(worldStatus.playerStranded && !worldStatus.playerLanded && mode === "PLAY") && (
-            <Dialogue placement="TOP" design="YELLOW">
+            <Dialogue placement="TOP" design="METAL">
                 <p>Somehow stranded?</p>
 
                 {lives > 0 ? (

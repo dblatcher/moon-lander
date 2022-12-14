@@ -1,7 +1,23 @@
 @import "../../styles/mixins";
 
 .asteroids {
-    background-color: black;
+    background: 
+    radial-gradient(
+        circle farthest-corner at 75% 75%,
+        rgb(0, 0, 255),
+        rgb(0, 200, 255) 25%,
+        rgb(255, 250, 255) 30%,
+        transparent 50%,
+    ),
+    repeating-radial-gradient(
+        circle closest-corner at 25% 15%,
+        transparent 0px,
+        transparent 20px,
+        green 50px,
+        yellow 60px
+    ),
+    black,
+    ;
     padding: 0;
 }
 
