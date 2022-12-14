@@ -13,3 +13,10 @@ export interface GameContainerState {
     soundEnabled: boolean
     showOnScreenControls: boolean
 }
+
+export type Cord = {
+    notes?: number[],
+    duration?: number,
+    volume?: number,
+    type?: OscillatorType;
+}

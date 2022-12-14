@@ -1,61 +1,48 @@
 import { SoundDeck } from "physics-worlds";
+import { victorySongData, failSongData } from "./songs";
+import type { Cord } from "./types";
 
-function sleep(ms: number) {
+function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function makeSoundDeck(effects: { [index: string]: string }) {
     const deck = new SoundDeck()
-    Object.entries(effects).forEach(([name,src]) => {
+    Object.entries(effects).forEach(([name, src]) => {
         deck.defineSampleBuffer(name, src)
     })
     deck.enable()
     return deck
 }
 
-const notes = {
-    a3: 220,
-    c4: 261.63,
-    d4: 293.66,
-    e4f: 311.13,
-    e4: 329.63,
-    g4: 392,
-}
 
-async function playCord(deck: SoundDeck, notes: number | number[], duration: number, volume: number) {
+async function playCordData(deck: SoundDeck, cord: Cord): Promise<void> {
+    const { notes = [], duration = 1, type = 'sine', volume = .1 } = cord;
+    if (notes.length === 0 || !deck) {
+        return await sleep(duration)
+    }
 
-    let harmony: number[] = (typeof notes === 'number') ? [notes] : notes;
-
-    const sounds = harmony.map(frequency => {
-        return deck.playTone({ frequency, duration, type: 'sawtooth' }, { volume: volume / harmony.length })
+    const sounds = notes.map(frequency => {
+        return deck.playTone({ frequency, duration, type }, { volume: volume / notes.length })
     })
 
-    return sounds[0]?.whenEnded
+    return sounds[0]?.whenEnded.then(() => { return })
+}
+
+async function playSongData(song: Cord[], deck?: SoundDeck,): Promise<boolean> {
+    if (!deck) { return false }
+    for (let i = 0; i < song.length; i++) {
+        await playCordData(deck, song[i])
+    }
+    return true
 }
 
 async function playVictorySong(deck?: SoundDeck) {
-
-    if (!deck) { return false }
-    await playCord(deck, notes.c4, .5, .075)
-    await sleep(10);
-    await playCord(deck, [notes.d4, notes.g4], .75, .1)
-    await sleep(10);
-    await playCord(deck, [notes.a3, notes.e4, notes.e4], .5, .1)
-    await sleep(10);
-    await playCord(deck, [notes.e4, notes.g4, notes.c4], .5, .15)
-    return true
+    return playSongData(victorySongData, deck);
 }
 
 async function playFailSong(deck?: SoundDeck) {
-
-    if (!deck) { return false }
-    await sleep(500);
-    await playCord(deck, notes.e4f, .75, .075)
-    await sleep(10);
-    await playCord(deck, [notes.g4], .75, .1)
-    await sleep(10);
-    await playCord(deck, [notes.c4], .5, .1)
-    return true
+    return playSongData(failSongData, deck);
 }
 
 export { makeSoundDeck, playVictorySong, playFailSong }
