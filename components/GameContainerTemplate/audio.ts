@@ -1,6 +1,5 @@
 import { SoundDeck } from "physics-worlds";
-import { victorySongData, failSongData } from "./songs";
-import type { Cord } from "./types";
+import type { Cord, Song } from "./types";
 
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -29,7 +28,7 @@ async function playCordData(deck: SoundDeck, cord: Cord): Promise<void> {
     return sounds[0]?.whenEnded.then(() => { return })
 }
 
-async function playSongData(song: Cord[], deck?: SoundDeck,): Promise<boolean> {
+async function playSongData(song: Song, deck?: SoundDeck,): Promise<boolean> {
     if (!deck) { return false }
     for (let i = 0; i < song.length; i++) {
         await playCordData(deck, song[i])
@@ -37,12 +36,5 @@ async function playSongData(song: Cord[], deck?: SoundDeck,): Promise<boolean> {
     return true
 }
 
-async function playVictorySong(deck?: SoundDeck) {
-    return playSongData(victorySongData, deck);
-}
 
-async function playFailSong(deck?: SoundDeck) {
-    return playSongData(failSongData, deck);
-}
-
-export { makeSoundDeck, playVictorySong, playFailSong }
+export { makeSoundDeck, playSongData }

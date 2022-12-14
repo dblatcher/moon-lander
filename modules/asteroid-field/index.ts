@@ -2,6 +2,7 @@ import { GameDefinition } from "../types";
 import { controlMapping } from "./controlSpaceShip";
 import { gameModes } from "./gameModes";
 import { getWorldStatus, isChangeToFailure, isChangeToVictory, playerIsInactive } from './worldValues';
+import { songs } from "./songs"
 
 const asteroidField: GameDefinition = {
     title: 'Asteroid Field',
@@ -21,6 +22,7 @@ const asteroidField: GameDefinition = {
         'laser': "/audio/asteroid-field/laser.mp3",
     },
     scoreFetcherUrl: '/api/scores',
+    songs,
 }
 
 export { asteroidField }

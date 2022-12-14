@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ComponentClass } from "react";
 import { SoundDeck, World } from "physics-worlds";
-import { makeSoundDeck, playFailSong, playVictorySong } from "./audio";
-import { GameContainerState } from "./types";
+import { makeSoundDeck, playSongData } from "./audio";
+import { Song, GameContainerState } from "./types";
 import { KeyMap, StatusFunctions, WorldStatus } from "../../modules/types";
 import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
@@ -11,6 +11,7 @@ import KeyReader from "../KeyReader";
 import OnScreenControls from "../OnScreenControls";
 import CommandMenu from "../CommandMenu";
 import styles from "./GameContainer.module.scss";
+import { failSongData, victorySongData } from "./songs";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 export const allCommands = ['START', 'PAUSE', 'QUIT', 'SOUNDTOGGLE', 'CONTROLTOGGLE', 'RESTARTLEVEL', 'SKIPLEVEL'] as const;
@@ -55,6 +56,11 @@ interface Props {
     }>
 
     extraClassNames?: string[]
+
+    songs?: {
+        victory?: Song,
+        fail?: Song,
+    }
 }
 
 
@@ -197,14 +203,15 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
 
     handleWorldStatus(status: WorldStatus): void {
         const { worldStatus: oldStatus } = this.state;
+        const { songs = {} } = this.props
         const { isChangeToFailure, isChangeToVictory } = this.props.statusFunctions
 
         if (isChangeToVictory(oldStatus, status)) {
-            this.unlessSongAlreadyPlaying(playVictorySong)
+            this.unlessSongAlreadyPlaying((deck) => playSongData(songs.victory || victorySongData, deck))
         }
 
         if (isChangeToFailure(oldStatus, status)) {
-            this.unlessSongAlreadyPlaying(playFailSong)
+            this.unlessSongAlreadyPlaying((deck) => playSongData(songs.fail || failSongData, deck))
         }
 
         const newStatus: WorldStatus = {

@@ -1,17 +1,17 @@
-import type { Cord } from "./types"
+import type { Cord, Song } from "./types"
 
-const notes = {
+export const notes = {
     a3: 220,
     c4: 261.63,
     d4: 293.66,
     e4f: 311.13,
     e4: 329.63,
     g4: 392,
-}
+} as const;
 
-const rest = (duration: number): Cord => ({ duration })
+export const rest = (duration: number): Cord => ({ duration })
 
-export const testSongData: Cord[] = [
+export const testSongData: Song = [
     {
         notes: [notes.c4],
         type: 'sine',
@@ -28,7 +28,7 @@ export const testSongData: Cord[] = [
     },
 ]
 
-export const victorySongData: Cord[] = [
+export const victorySongData: Song = [
     {
         notes: [notes.c4],
         duration: .5,
@@ -56,7 +56,7 @@ export const victorySongData: Cord[] = [
     },
 ]
 
-export const failSongData: Cord[] = [
+export const failSongData: Song = [
     {
         notes: [],
         duration: 50,

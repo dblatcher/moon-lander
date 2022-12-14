@@ -12,7 +12,7 @@ import styles from '../../components/asteroid-field/asteroids.style.module.scss'
 
 
 
-const { title, gameModes, scoreFetcherUrl } = asteroidField
+const { title, gameModes, scoreFetcherUrl, songs } = asteroidField
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
@@ -32,6 +32,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 controlMapping={asteroidField.controlMapping}
                 soundEffects={asteroidField.soundEffects}
                 extraClassNames={[styles.asteroids]}
+                songs={songs}
             />
         </GamePageTemplate>
     )

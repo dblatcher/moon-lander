@@ -1,4 +1,5 @@
 import { World } from "physics-worlds";
+import { Song } from "../components/GameContainerTemplate/types";
 import { GameMode } from "./GameMode";
 
 export interface WorldStatus {
@@ -32,6 +33,10 @@ export type GameDefinition = {
     };
     soundEffects: {
         [index: string]: string;
+    }
+    songs?: {
+        fail?: Song,
+        victory?: Song,
     }
     scoreFetcherUrl: string;
 }

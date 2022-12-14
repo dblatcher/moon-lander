@@ -1,5 +1,5 @@
 import { LevelIntro } from "../../modules/LevelIntro";
-import { WorldStatus,KeyMap } from "../../modules/types";
+import { WorldStatus, KeyMap } from "../../modules/types";
 
 export interface GameContainerState {
     level: number
@@ -20,3 +20,5 @@ export type Cord = {
     volume?: number,
     type?: OscillatorType;
 }
+
+export type Song = Cord[]

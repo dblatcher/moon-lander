@@ -35,6 +35,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 }}
                 controlMapping={controlMapping}
                 soundEffects={platformGame.soundEffects}
+                songs={platformGame.songs}
             />
         </GamePageTemplate>
     )
