@@ -1,4 +1,4 @@
-import { Effect, EffectData, ViewPort, RenderFunctions, Geometry } from "physics-worlds";
+import { Effect, ViewPort, RenderFunctions, Geometry } from "physics-worlds";
 
 class Spec {
     x: number
@@ -46,7 +46,6 @@ interface DustCloudData {
 }
 
 class DustCloud extends Effect {
-    size: number
     specs: Spec[]
     numberOfSpecs: number
 
@@ -78,4 +77,5 @@ class DustCloud extends Effect {
     }
 }
 
-export { DustCloud, DustCloudData }
+export { DustCloud };
+export type { DustCloudData };
