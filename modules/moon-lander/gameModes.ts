@@ -4,18 +4,23 @@ import * as classics from "./level-factory/classic";
 
 import { GameMode } from "../GameMode";
 
+const mainLevels = [
+    classics.breezio,
+    arcade.makeDaylightCityLevel,
+    arcade.makeMountainsLevel,
+    classics.moonbaseAlpha,
+    arcade.makeCityLevel,
+    classics.planetFall,
+    arcade.makeBlueMoonLevel,
+    classics.grandCanyon,
+    arcade.makeCavernLevel,
+]
 
 const gameModes: { [index: string]: GameMode } = {
     'normal': new GameMode({
         title: "arcade",
         key: "normal",
-        levelFunctions: [
-            arcade.makeDaylightCityLevel,
-            arcade.makeMountainsLevel,
-            arcade.makeCityLevel,
-            arcade.makeBlueMoonLevel,
-            arcade.makeCavernLevel,
-        ]
+        levelFunctions: mainLevels
     }),
     'trainer': new GameMode({
         title: "arcade(trainer)",
@@ -23,15 +28,9 @@ const gameModes: { [index: string]: GameMode } = {
         startingLives: Infinity,
         noScores: true,
         hidden: true,
-        allowSkip:true,
-        allowRestart:true,
-        levelFunctions: [
-            arcade.makeDaylightCityLevel,
-            arcade.makeMountainsLevel,
-            arcade.makeCityLevel,
-            arcade.makeBlueMoonLevel,
-            arcade.makeCavernLevel,
-        ]
+        allowSkip: true,
+        allowRestart: true,
+        levelFunctions: mainLevels
     }),
     'tutorial': new GameMode({
         title: "tutorial",
@@ -39,8 +38,8 @@ const gameModes: { [index: string]: GameMode } = {
         startingLives: Infinity,
         speed: 40,
         noScores: true,
-        allowSkip:true,
-        allowRestart:true,
+        allowSkip: true,
+        allowRestart: true,
         levelFunctions: [
             tutorials.tutorial1,
             tutorials.tutorial2,
@@ -48,22 +47,6 @@ const gameModes: { [index: string]: GameMode } = {
             tutorials.tutorial4,
         ]
     }),
-
-    'classic': new GameMode({
-        title:"Classic levels",
-        key:"classic",
-        hidden:true,
-        noScores: true,
-        allowRestart:true,
-        allowSkip:true,
-        startingLives: 3,
-        levelFunctions: [
-            classics.breezio,
-            classics.moonbaseAlpha,
-            classics.grandCanyon,
-            classics.planetFall,
-        ]
-    })
 }
 
 export { gameModes }
