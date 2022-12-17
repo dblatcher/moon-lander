@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { GameDefinition } from "../../modules/types";
-import styles from '../../styles/Home.module.scss';
+import styles from './styles.module.scss';
 
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 const GameModeList = ({ game, children }: Props) => {
 
-    return (<section style={{ display: 'flex', alignItems: 'center' }}>
+    return (<section className={styles.container}>
         <h2>{game.title}</h2>
         <ul className={styles.gameModeList}>
             {Object.keys(game.gameModes).filter(key => !game.gameModes[key].hidden).map(key => (
