@@ -7,7 +7,7 @@ import { GameMode } from "../GameMode";
 
 const gameModes: { [index: string]: GameMode } = {
     'normal': new GameMode({
-        title: "arcade mode",
+        title: "arcade",
         key: "normal",
         levelFunctions: [
             arcade.makeDaylightCityLevel,
@@ -18,7 +18,7 @@ const gameModes: { [index: string]: GameMode } = {
         ]
     }),
     'trainer': new GameMode({
-        title: "arcade mode(trainer)",
+        title: "arcade(trainer)",
         key: "trainer",
         startingLives: Infinity,
         noScores: true,
