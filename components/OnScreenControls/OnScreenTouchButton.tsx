@@ -14,6 +14,6 @@ export function OnScreenTouchButton(props: {
         onTouchStart={() => { respond(true, action) }}
         onTouchCancel={() => { respond(false, action) }}
         onTouchEnd={() => { respond(false, action) }}
-        key={action}>{action}
+        key={action}>
     </div>
 }

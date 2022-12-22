@@ -43,6 +43,7 @@
     font-size: small;
     font-family: monospace;
     padding: .5em;
+    min-width: 4em;
 
     &.up {
         transform: translateX(-50%);
