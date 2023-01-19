@@ -43,7 +43,7 @@ async function level(): Promise<Level> {
         ],
     });
 
-    const levelIntro = new LevelIntro("moonbase alpha", "moon-lander/1");
+    const levelIntro = new LevelIntro("moonbase alpha", "moon-lander/moonbase-alpha");
     return [world, levelIntro]
 }
 
