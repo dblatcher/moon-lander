@@ -90,8 +90,7 @@ async function level(): Promise<Level> {
         ],
     });
 
-    const levelIntro = new LevelIntro("Breezio four", "classic/2");
-    return [world, levelIntro]
+    return [world]
 }
 
 export { level }

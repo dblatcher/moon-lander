@@ -59,7 +59,7 @@ async function level(): Promise<Level> {
         ],
     });
 
-    const levelIntro = new LevelIntro("Breezio four", "classic/2");
+    const levelIntro = new LevelIntro("Breezio four", "moon-lander/2");
     return [world, levelIntro]
 }
 

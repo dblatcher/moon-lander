@@ -43,7 +43,7 @@ async function level(): Promise<Level> {
         fillColor:jupiter,
     });
 
-    const levelIntro = new LevelIntro("The Grand Canyon of Cygnus 4", "classic/3");
+    const levelIntro = new LevelIntro("The Grand Canyon of Cygnus 4", "moon-lander/3");
     return [world, levelIntro]
 }
 

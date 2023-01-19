@@ -55,7 +55,7 @@ async function level(): Promise<Level> {
         airDensity: .2,
     });
 
-    const levelIntro = new LevelIntro("Planet Fall", "classic/planet-fall");
+    const levelIntro = new LevelIntro("Planet Fall", "moon-lander/planet-fall");
     return [world, levelIntro]
 }
 
