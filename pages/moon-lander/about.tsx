@@ -4,8 +4,7 @@ import styles from '../../styles/Home.module.scss'
 import AnimationCanvas from '../../components/AnimationCanvas'
 import { createShipCloseUp } from '../../modules/animation-factory'
 import AboutPageTemplate from '../../components/AboutPageTemplate'
-
-
+import AboutContent from './AboutContent.mdx'
 
 const Home: NextPage = () => {
   return (
@@ -13,9 +12,9 @@ const Home: NextPage = () => {
 
       <div className={styles.frame}>
 
-        <h2>Moon-lander</h2>
-        <p>Moon-lander is a free browser game in which you pilot a small landing craft in a variety of planetary and deep space environments. The sucessfull pilot will need to cope with different atmospheres, terrains and levels of gravity to land safely.</p>
-        <p>More of my free games can be found at <a className={styles.exLink} href="http://www.davidblatcher.co.uk/">http://www.davidblatcher.co.uk/</a>.</p>
+        <div className={styles.markdown}>
+          <AboutContent />
+        </div>
 
         <p>
           <Link href="/moon-lander/normal" passHref={true}><a>&lArr; back to game</a></Link>

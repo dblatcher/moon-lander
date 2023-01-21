@@ -1,7 +1,6 @@
 import React from "react";
 import { LevelIntro } from "../../../modules/LevelIntro";
 import Dialogue from "../../Dialogue";
-
 import styles from "./style.module.scss";
 
 export default class MoonLanderLevelIntro extends React.Component {

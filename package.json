@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^2.2.1",
+    "@mdx-js/react": "^2.2.1",
+    "@next/mdx": "^13.1.4",
+    "@types/mdx": "^2.0.3",
     "micromark": "^3.0.10",
     "next": "11.1.2",
     "physics-worlds": "^2.3.0",

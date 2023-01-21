@@ -37,3 +37,19 @@
     @include fullSizeAnimation;
 }
 
+.markdown {
+
+    h2 {
+        margin: 0 0 .5em;
+        border-bottom: 1px solid black;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    blockquote {
+        border: 1px dashed black;
+        padding: .25em;
+    }
+}
