@@ -4,15 +4,12 @@ import Dialogue from "../../Dialogue";
 
 import styles from "./style.module.scss";
 
-export default class IntroDialogue extends React.Component {
-    props!: Readonly<{
-        children?: React.ReactNode;
-        levelIntro?: LevelIntro
-    }>;
-
-    state!: Readonly<{
-        htmlContent?: string
-    }>;
+export default class IntroDialogue extends React.Component<{
+    children?: React.ReactNode;
+    levelIntro?: LevelIntro
+}, {
+    htmlContent?: string
+}> {
 
     constructor(props: IntroDialogue["props"]) {
         super(props)
@@ -67,7 +64,7 @@ export default class IntroDialogue extends React.Component {
                         </div>
                     )}
 
-                    <p className={styles.blinking} style={{textAlign:'center'}}>PRESS SPACE TO BEGIN</p>
+                    <p className={styles.blinking} style={{ textAlign: 'center' }}>PRESS SPACE TO BEGIN</p>
                 </section>
             </Dialogue>
         )

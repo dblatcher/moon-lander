@@ -7,17 +7,16 @@ import { KeyMap } from "../modules/types";
  * optionally converting the key names to aliased
  * string relevant to the parent App.
  */
-export default class KeyReader extends React.Component {
-    props!: {
+export default class KeyReader extends React.Component<
+    {
         controlMapping?: { [index: string]: string }
         displayInput?: boolean
         report?: Function
         issueCommand?: Function
-    }
-    state!: {
+    }, {
         keyMap: KeyMap
     }
-
+> {
     constructor(props: KeyReader["props"]) {
         super(props)
         this.state = {
