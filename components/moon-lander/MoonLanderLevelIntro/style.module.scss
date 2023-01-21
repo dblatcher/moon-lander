@@ -38,3 +38,9 @@
 .blinking {
     animation: blink 1s linear 0s infinite;
 }
+
+.loadingMessage {
+    span {
+        animation: blink .5s linear 0s infinite;
+    }
+}
