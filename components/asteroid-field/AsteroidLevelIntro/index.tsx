@@ -21,8 +21,14 @@ export default class AsteroidLevelIntro extends React.Component {
         }
     }
 
+    get introNeedsToFetchContent(): boolean {
+        return !!(!this.props.levelIntro?.ContentComponent && this.props.levelIntro?.filename)
+    }
+
     componentDidMount() {
-        this.loadBreifing()
+        if (this.introNeedsToFetchContent) {
+            this.loadBreifing()
+        }
     }
 
     loadBreifing() {
@@ -40,6 +46,7 @@ export default class AsteroidLevelIntro extends React.Component {
     render() {
         const { levelIntro } = this.props
         const { htmlContent } = this.state
+        const ContentComponent = levelIntro ? levelIntro.ContentComponent : undefined;
 
         if (!levelIntro) {
             return (
@@ -56,23 +63,30 @@ export default class AsteroidLevelIntro extends React.Component {
                 </header>
                 <section className={styles.panelBody}>
 
-                    {htmlContent ? (
-                        <div
-                            className={styles.breifingContent}
-                            dangerouslySetInnerHTML={{ __html: htmlContent }}>
-                        </div>
+                    {this.introNeedsToFetchContent && (<>
+                        {
+                            htmlContent ? (
+                                <div
+                                    className={styles.breifingContent}
+                                    dangerouslySetInnerHTML={{ __html: htmlContent }} >
+                                </div>
 
-                    ) : (
-                        <div>
-                            <h4>Loading mission briefing<span className={styles.blinking}>...</span></h4>
-                            <br></br>
-                            <br></br>
-                        </div>
+                            ) : (
+                                <div>
+                                    <h4>Loading mission briefing<span className={styles.blinking}>...</span></h4>
+                                    <br></br>
+                                    <br></br>
+                                </div>
+                            )}
+                    </>)}
+
+                    {ContentComponent && (
+                        <ContentComponent />
                     )}
 
-                    <p className={styles.blinking} style={{textAlign:'center'}}>PRESS SPACE TO BEGIN</p>
+                    <p className={styles.blinking} style={{ textAlign: 'center' }}>PRESS SPACE TO BEGIN</p>
                 </section>
-            </Dialogue>
+            </Dialogue >
         )
     }
 }

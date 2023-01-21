@@ -2,6 +2,8 @@ import { World, StarField } from "physics-worlds";
 import { Level } from "../../../Level";
 import { LevelIntro } from "../../../LevelIntro";
 import { makeRock, makeShip } from "../thingFactories";
+import HowToPlay from "./how-to-play.mdx"
+
 
 export async function level1(): Promise<Level> {
 
@@ -22,7 +24,7 @@ export async function level1(): Promise<Level> {
         hasWrappingEdges: true
     });
 
-    const levelIntro = new LevelIntro('Level One', 'asteroid-field/how-to-play');
+    const levelIntro = new LevelIntro('Level One', undefined, HowToPlay);
 
 
     return [world, levelIntro];
