@@ -21,12 +21,16 @@ const getAll = async (res: NextApiResponse<Data>) => {
             console.log(
                 'Table does not exist, creating and seeding it with dummy data now...'
             )
-            await seed()
-            const users = await sql`SELECT * FROM Users;`;
-            return res.status(200).json({ users })
+            try {
+                await seed()
+                const users = await sql`SELECT * FROM Users;`;
+                return res.status(200).json({ users })
+            } catch (seedError) {
+                return res.status(500).json({ error: 'seed fail' })
+            }
         }
 
-        return res.status(400).json({ error: 'select fail' })
+        return res.status(500).json({ error: 'get all fail' })
     }
 }
 
