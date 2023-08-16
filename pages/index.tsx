@@ -9,6 +9,7 @@ import { moonLander } from '../modules/moon-lander'
 import GameModeList from '../components/GameModeList'
 import { titleAnimation } from '../modules/asteroid-field/titleAnimation'
 import VercelFooter from '../components/VercelFooter'
+import { PostgresTest } from '../components/PostgresTest'
 
 const animationFrameStyle = {
   overflow: 'clip',
@@ -16,6 +17,10 @@ const animationFrameStyle = {
   flexShrink: 0,
   marginLeft: 'auto',
 }
+
+export const runtime = 'edge'
+export const preferredRegion = 'home'
+export const dynamic = 'force-dynamic'
 
 const Home: NextPage = () => {
   return (
@@ -47,6 +52,9 @@ const Home: NextPage = () => {
               makeWorld={titleAnimation}
               frameStyle={animationFrameStyle} />
           </GameModeList>
+
+
+          <PostgresTest />
 
           <p>
             <Link href={`/about`} passHref={true}>
