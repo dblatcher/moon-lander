@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { sql, QueryResult, QueryResultRow } from '@vercel/postgres';
-import { seed } from '../../lib/seed';
+import { seed } from '../../lib/postgres/seed';
+import { parseError, ERROR_CODES } from '../../lib/postgres/errors';
 
 type Data = {
     users?: QueryResult<QueryResultRow>
@@ -8,28 +9,6 @@ type Data = {
 }
 
 
-type PostgresException = {
-    name: string;
-    code: string;
-    message: string;
-}
-
-const ERROR_CODES = {
-    undefined_table: "42P01"
-}
-
-const parseError = (error: unknown): PostgresException | undefined => {
-    if (!error || typeof error !== 'object') {
-        return undefined
-    }
-    const record = error as Record<string, unknown>;
-
-    if (typeof record['code'] !== 'string') {
-        return
-    }
-
-    return record as PostgresException
-}
 
 const getAll = async (res: NextApiResponse<Data>) => {
     try {
@@ -55,11 +34,8 @@ const handlePost = async (
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) => {
-
     console.log(req.body)
-
     const { email, name, image } = req.body
-
     if (typeof email !== 'string' || typeof name !== 'string' || typeof image !== 'string') {
         return res.status(400).json({ error: 'invalid input' })
     }
