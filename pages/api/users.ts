@@ -1,19 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { sql, QueryResult, QueryResultRow } from '@vercel/postgres';
+import { sql } from '@vercel/postgres';
 import { seed } from '../../lib/postgres/seed';
 import { parseError, ERROR_CODES } from '../../lib/postgres/errors';
 
+type User = {
+    createdAt: string
+    email: string
+    id: number
+    image: string
+    name: string
+}
+
 type Data = {
-    users?: QueryResult<QueryResultRow>
+    users?: User[]
     error?: string
 }
 
-
-
 const getAll = async (res: NextApiResponse<Data>) => {
     try {
-        const users = await sql`SELECT * FROM Users;`;
-        return res.status(200).json({ users })
+        const result = await sql<User>`SELECT * FROM Users;`;
+        return res.status(200).json({ users: result.rows })
     } catch (error) {
         const postgresException = parseError(error)
 
@@ -23,8 +29,8 @@ const getAll = async (res: NextApiResponse<Data>) => {
             )
             try {
                 await seed()
-                const users = await sql`SELECT * FROM Users;`;
-                return res.status(200).json({ users })
+                const result = await sql<User>`SELECT * FROM Users;`;
+                return res.status(200).json({ users: result.rows })
             } catch (seedError) {
                 return res.status(500).json({ error: 'seed fail' })
             }
