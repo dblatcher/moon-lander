@@ -2,14 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { sql } from '@vercel/postgres';
 import { seed, userToInsertStatus } from '../../lib/postgres/seed-users';
 import { parseError, ERROR_CODES } from '../../lib/postgres/errors';
-
-type User = {
-    createdAt: string
-    email: string
-    id: number
-    image: string
-    name: string
-}
+import { User } from '../../lib/postgres/types';
 
 type Data = {
     users?: User[]
@@ -44,7 +37,6 @@ const handlePost = async (
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) => {
-    console.log(req.body)
     const { email, name, image } = req.body
     if (typeof email !== 'string' || typeof name !== 'string' || typeof image !== 'string') {
         return res.status(400).json({ error: 'invalid input' })

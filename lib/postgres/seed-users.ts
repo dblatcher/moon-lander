@@ -1,11 +1,8 @@
 import { sql } from '@vercel/postgres'
+import { UserData } from './types'
 
-type UserData = {
-  email: string
-  image: string
-  name: string
-}
 
+// TO DO - option without ON CONFLICT
 export const userToInsertStatus = (user: UserData) => sql`
 INSERT INTO users (name, email, image)
 VALUES (${user.email}, ${user.name}, ${user.image})

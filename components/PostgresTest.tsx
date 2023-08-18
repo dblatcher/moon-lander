@@ -1,29 +1,44 @@
+import { useState } from 'react'
+import { getUsers, addUser } from "../lib/postgres/client-side"
+import { User } from '../lib/postgres/types'
 
 export const PostgresTest = () => {
 
-  const getData = async () => {
-    const response = await fetch('/api/users')
-    const data = await response.json()
-    console.log({ data })
+  const [users, setUsers] = useState<User[]>([])
+
+
+  const getThem = async () => {
+    const data = await getUsers()
+    setUsers(data.users)
   }
-  const addData = async () => {
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: 'test', email: 'test@example.com', image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg', })
-    })
-    const data = await response.json()
-    console.log({ data })
+
+  const addOneAndGetThem = async () => {
+
+    const name = Math.random().toString().substring(2)
+
+    const newUser = {
+      name,
+      email: `${name}@example.com`,
+      image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
+    }
+    const data = await addUser(newUser)
+    setUsers(data.users)
   }
 
   return (
     <div>
       <p>Postgress test</p>
-      <button onClick={getData}>get data</button>
-      <button onClick={addData}>add data</button>
+      <button onClick={getThem}>get data</button>
+      <button onClick={addOneAndGetThem}>add data</button>
+
+      <div>
+        {users.map(user => (
+
+          <li key={user.id}>
+            <span>{user.name}</span>
+          </li>
+        ))}
+      </div>
     </div>
   )
 }
