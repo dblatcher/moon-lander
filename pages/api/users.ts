@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { sql } from '@vercel/postgres';
-import { seed } from '../../lib/postgres/seed';
+import { seed, userToInsertStatus } from '../../lib/postgres/seed-users';
 import { parseError, ERROR_CODES } from '../../lib/postgres/errors';
 
 type User = {
@@ -51,7 +51,7 @@ const handlePost = async (
     }
 
     try {
-        await sql`INSERT INTO Users (Email, Name, Image) VALUES (${email}, ${name}, ${image});`;
+        await userToInsertStatus({ email, name, image })
     } catch (error) {
         console.log(error)
         return res.status(400).json({ error: 'insert fail' })
