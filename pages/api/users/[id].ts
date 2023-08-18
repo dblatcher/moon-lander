@@ -29,7 +29,6 @@ export default async function handler(
     res: NextApiResponse<Maybe<User>>
 ) {
     const { id } = req.query
-    console.log({ id })
     const idAsString = Array.isArray(id) ? id[0] ?? '' : id
     return getUserById(idAsString, res)
 }
