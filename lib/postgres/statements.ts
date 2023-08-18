@@ -8,10 +8,8 @@ VALUES (${user.email}, ${user.name}, ${user.image})
 ON CONFLICT (email) DO NOTHING;
 `
 
-export const userToDeleteStatement = (user: UserData) => sql`
-INSERT INTO users (name, email, image)
-VALUES (${user.email}, ${user.name}, ${user.image})
-ON CONFLICT (email) DO NOTHING;
+export const userIdToDeleteStatement = (id: string) => sql`
+DELETE FROM users WHERE id = ${id};
 `
 
 export const createUsersTable = () => sql`

@@ -1,18 +1,22 @@
 import { useState } from 'react'
-import { getUsers, addUser, getUser } from "../lib/postgres/client-side"
-import { User } from '../lib/postgres/types'
+import { getUsers, addUser, getUser, deleteUser } from "../lib/postgres/client-side"
+import { Maybe, User } from '../lib/postgres/types'
 
 export const PostgresTest = () => {
 
   const [users, setUsers] = useState<User[]>([])
+  const [errors, setErrors] = useState<string[]>([])
 
+  const addMaybeError = (maybe: Maybe<unknown>) => {
+    if (!maybe.error) { return }
+    setErrors([...errors, maybe.error])
+  }
 
   const getThem = async () => {
     const data = await getUsers()
+    addMaybeError(data)
     if (data.result) {
       setUsers(data.result)
-    } else {
-      console.error(data)
     }
   }
 
@@ -24,16 +28,22 @@ export const PostgresTest = () => {
       image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
     }
     const data = await addUser(newUser)
+    addMaybeError(data)
     if (data.result) {
       setUsers(data.result)
-    } else {
-      console.error(data)
     }
   }
 
   const getOne = async (id: number) => {
-    const data = await getUser(id.toString())
+    const data = await getUser(id)
+    addMaybeError(data)
     console.table(data)
+  }
+
+  const deleteOne = async (id: number) => {
+    const data = await deleteUser(id)
+    addMaybeError(data)
+    await getThem()
   }
 
   return (
@@ -49,9 +59,14 @@ export const PostgresTest = () => {
           <li key={user.id}>
             <span>{user.name}</span>
             <button onClick={() => getOne(user.id)}>log user</button>
+            <button onClick={() => deleteOne(user.id)}>delete user</button>
           </li>
         ))}
       </div>
+      <p>
+        <strong>ERRORS: </strong>
+        <em>{errors.join("; ")}</em>
+      </p>
     </div>
   )
 }

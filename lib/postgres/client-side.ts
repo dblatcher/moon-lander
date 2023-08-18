@@ -5,7 +5,7 @@ export const getUsers = async (): Promise<Maybe<User[]>> => {
     return await response.json()
 }
 
-export const getUser = async (id: string): Promise<Maybe<User>> => {
+export const getUser = async (id: number): Promise<Maybe<User>> => {
     const response = await fetch(`/api/users/${id}`)
     return await response.json()
 }
@@ -20,4 +20,13 @@ export const addUser = async (user: UserData): Promise<Maybe<User[]>> => {
         body: JSON.stringify(user)
     })
     return await response.json()
+}
+
+export const deleteUser = async (id: number): Promise<Maybe<number>> => {
+    const response = await fetch(`/api/users/delete/${id}`, {
+        method: 'DELETE',
+        credentials: "same-origin",
+    })
+
+    return response.json()
 }
