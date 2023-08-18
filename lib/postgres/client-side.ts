@@ -1,24 +1,16 @@
-import { User, UserData } from "./types"
+import { User, UserData, Maybe } from "./types"
 
-export const getUsers = async (): Promise<{
-    users: User[]
-}> => {
+export const getUsers = async (): Promise<Maybe<User[]>> => {
     const response = await fetch('/api/users')
-    const data = await response.json() as { users: User[] }
-    return data
+    return await response.json()
 }
 
-export const getUser = async (id: string): Promise<{
-    user: User
-}> => {
+export const getUser = async (id: string): Promise<Maybe<User>> => {
     const response = await fetch(`/api/users/${id}`)
-    const data = await response.json() as { user: User }
-    return data
+    return await response.json()
 }
 
-export const addUser = async (user: UserData): Promise<{
-    users: User[]
-}> => {
+export const addUser = async (user: UserData): Promise<Maybe<User[]>> => {
     const response = await fetch('/api/users', {
         method: 'POST',
         credentials: "same-origin",
@@ -27,6 +19,5 @@ export const addUser = async (user: UserData): Promise<{
         },
         body: JSON.stringify(user)
     })
-    const data = await response.json() as { users: User[] }
-    return data
+    return await response.json()
 }

@@ -14,3 +14,8 @@ export type User = UserData & {
     createdAt: string
     id: number
 }
+
+export type Maybe<T> = {
+    result?: T;
+    error?: string;
+}

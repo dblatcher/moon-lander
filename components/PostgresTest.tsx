@@ -9,7 +9,11 @@ export const PostgresTest = () => {
 
   const getThem = async () => {
     const data = await getUsers()
-    setUsers(data.users)
+    if (data.result) {
+      setUsers(data.result)
+    } else {
+      console.error(data)
+    }
   }
 
   const addOneAndGetThem = async () => {
@@ -20,26 +24,31 @@ export const PostgresTest = () => {
       image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
     }
     const data = await addUser(newUser)
-    setUsers(data.users)
+    if (data.result) {
+      setUsers(data.result)
+    } else {
+      console.error(data)
+    }
   }
 
-  const getOne =async () => {
-    const data = await getUser('3')
-    console.table(data.user)
+  const getOne = async (id: number) => {
+    const data = await getUser(id.toString())
+    console.table(data)
   }
 
   return (
     <div>
       <p>Postgress test</p>
-      <button onClick={getOne}>get one</button>
       <button onClick={getThem}>get data</button>
       <button onClick={addOneAndGetThem}>add data</button>
+      <button onClick={() => getOne(-1)}>log user -  will fail</button>
 
       <div>
         {users.map(user => (
 
           <li key={user.id}>
             <span>{user.name}</span>
+            <button onClick={() => getOne(user.id)}>log user</button>
           </li>
         ))}
       </div>

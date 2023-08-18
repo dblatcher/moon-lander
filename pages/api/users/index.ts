@@ -2,17 +2,14 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { sql } from '@vercel/postgres';
 import { seed, userToInsertStatus } from '../../../lib/postgres/seed-users';
 import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
-import { User } from '../../../lib/postgres/types';
+import { User,Maybe } from '../../../lib/postgres/types';
 
-type Data = {
-    users?: User[]
-    error?: string
-}
 
-const getAll = async (res: NextApiResponse<Data>) => {
+
+const getAll = async (res: NextApiResponse<Maybe<User[]>>) => {
     try {
         const result = await sql<User>`SELECT * FROM Users;`;
-        return res.status(200).json({ users: result.rows })
+        return res.status(200).json({ result: result.rows })
     } catch (error) {
         const postgresException = parseError(error)
 
@@ -23,7 +20,7 @@ const getAll = async (res: NextApiResponse<Data>) => {
             try {
                 await seed()
                 const result = await sql<User>`SELECT * FROM Users;`;
-                return res.status(200).json({ users: result.rows })
+                return res.status(200).json({ result: result.rows })
             } catch (seedError) {
                 return res.status(500).json({ error: 'seed fail' })
             }
@@ -35,7 +32,7 @@ const getAll = async (res: NextApiResponse<Data>) => {
 
 const handlePost = async (
     req: NextApiRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<Maybe<User[]>>
 ) => {
     const { email, name, image } = req.body
     if (typeof email !== 'string' || typeof name !== 'string' || typeof image !== 'string') {
@@ -54,7 +51,7 @@ const handlePost = async (
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<Maybe<User[]>>
 ) {
 
     if (req.method === 'POST') {
