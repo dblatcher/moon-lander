@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { sql } from '@vercel/postgres';
-import { seed, userToInsertStatus } from '../../lib/postgres/seed-users';
-import { parseError, ERROR_CODES } from '../../lib/postgres/errors';
-import { User } from '../../lib/postgres/types';
+import { seed, userToInsertStatus } from '../../../lib/postgres/seed-users';
+import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
+import { User } from '../../../lib/postgres/types';
 
 type Data = {
     users?: User[]

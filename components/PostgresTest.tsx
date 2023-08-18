@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getUsers, addUser } from "../lib/postgres/client-side"
+import { getUsers, addUser, getUser } from "../lib/postgres/client-side"
 import { User } from '../lib/postgres/types'
 
 export const PostgresTest = () => {
@@ -13,9 +13,7 @@ export const PostgresTest = () => {
   }
 
   const addOneAndGetThem = async () => {
-
     const name = Math.random().toString().substring(2)
-
     const newUser = {
       name,
       email: `${name}@example.com`,
@@ -25,9 +23,15 @@ export const PostgresTest = () => {
     setUsers(data.users)
   }
 
+  const getOne =async () => {
+    const data = await getUser('3')
+    console.table(data.user)
+  }
+
   return (
     <div>
       <p>Postgress test</p>
+      <button onClick={getOne}>get one</button>
       <button onClick={getThem}>get data</button>
       <button onClick={addOneAndGetThem}>add data</button>
 

@@ -8,7 +8,15 @@ export const getUsers = async (): Promise<{
     return data
 }
 
-export const addUser = async (user:UserData): Promise<{
+export const getUser = async (id: string): Promise<{
+    user: User
+}> => {
+    const response = await fetch(`/api/users/${id}`)
+    const data = await response.json() as { user: User }
+    return data
+}
+
+export const addUser = async (user: UserData): Promise<{
     users: User[]
 }> => {
     const response = await fetch('/api/users', {
