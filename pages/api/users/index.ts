@@ -55,14 +55,14 @@ const insertNew = async (body: Record<string, unknown>): Promise<Maybe<User>> =>
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Maybe<User[]> | Maybe<User>>
+    res: NextApiResponse<Maybe<User[]>> | NextApiResponse<Maybe<User>>
 ) {
 
     if (req.method === 'POST') {
         const insertResult = await insertNew(req.body)
-        return sendResponse(res, insertResult)
+        return sendResponse(res as NextApiResponse<Maybe<User>>, insertResult)
     }
 
     const selectResult = await selectAll()
-    return sendResponse(res, selectResult)
+    return sendResponse(res as NextApiResponse<Maybe<User[]>>, selectResult)
 }
