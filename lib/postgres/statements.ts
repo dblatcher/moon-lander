@@ -4,7 +4,7 @@ import { User, UserData } from './types'
 // TO DO - option without ON CONFLICT
 export const userToInsertStatement = (user: UserData) => sql`
 INSERT INTO users (name, email, image)
-VALUES (${user.email}, ${user.name}, ${user.image})
+VALUES (${user.name}, ${user.email}, ${user.image})
 ON CONFLICT (email) DO NOTHING;
 `
 
@@ -13,6 +13,9 @@ DELETE FROM users WHERE id = ${id};
 `
 
 export const selectAllUsersStatement = () => sql<User>`SELECT * FROM Users;`
+
+export const userIdToSelectStatement = (id: string) => sql<User>`SELECT * FROM Users WHERE id = ${id}`
+export const emailToSelectStatement = (email: string) => sql<User>`SELECT * FROM Users WHERE email = ${email}`
 
 export const createUsersTable = () => sql`
 CREATE TABLE IF NOT EXISTS users (

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { seed } from '../../../lib/postgres/seed-users';
 import { parseError, ERROR_CODES, categoryToHttpCode } from '../../../lib/postgres/errors';
 import { User, Maybe } from '../../../lib/postgres/types';
-import { selectAllUsersStatement, userToInsertStatement } from '../../../lib/postgres/statements';
+import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement } from '../../../lib/postgres/statements';
 
 
 const selectAll = async (): Promise<Maybe<User[]>> => {
@@ -39,26 +39,34 @@ const handleGet = async (res: NextApiResponse<Maybe<User[]>>) => {
 
 const handlePost = async (
     req: NextApiRequest,
-    res: NextApiResponse<Maybe<User[]>>
+    res: NextApiResponse<Maybe<User>>
 ) => {
     const { email, name, image } = req.body
     if (typeof email !== 'string' || typeof name !== 'string' || typeof image !== 'string') {
-        return res.status(400).json({ error: 'invalid input' })
+        return res.status(400).json({ error: 'invalid input', errorCategory: 'BAD_INPUT' })
     }
 
     try {
-        await userToInsertStatement({ email, name, image })
+        const insertResult = await userToInsertStatement({ email, name, image })
+        console.log({insertResult})
+
+        if (insertResult.rowCount === 0) {
+            return res.status(400).json({ error: 'could not insert', errorCategory: 'BAD_INPUT' })
+        }
+        const selectNewResult = await emailToSelectStatement(email)
+        console.log({selectNewResult})
+        const [newUser] = selectNewResult.rows
+        return res.status(200).json({ result: newUser })
+
     } catch (error) {
         console.log(error)
-        return res.status(400).json({ error: 'insert fail' })
+        return res.status(400).json({ error: 'insert fail', errorCategory: 'DB_ERROR' })
     }
-
-    return handleGet(res)
 }
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Maybe<User[]>>
+    res: NextApiResponse<Maybe<User[]> | Maybe<User>>
 ) {
 
     if (req.method === 'POST') {

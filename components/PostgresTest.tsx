@@ -1,6 +1,21 @@
 import { useState } from 'react'
 import { getUsers, addUser, getUser, deleteUser } from "../lib/postgres/client-side"
-import { Maybe, User } from '../lib/postgres/types'
+import { Maybe, User, UserData } from '../lib/postgres/types'
+
+const randomUser = () => {
+  const name = Math.random().toString().substring(2)
+  return {
+    name,
+    email: `${name}@example.com`,
+    image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
+  }
+}
+
+const fixedUser = {
+  name: 'test',
+  email: `test@example.com`,
+  image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
+}
 
 export const PostgresTest = () => {
 
@@ -20,18 +35,10 @@ export const PostgresTest = () => {
     }
   }
 
-  const addOneAndGetThem = async () => {
-    const name = Math.random().toString().substring(2)
-    const newUser = {
-      name,
-      email: `${name}@example.com`,
-      image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
-    }
+  const addOneAndGetThem = async (newUser: UserData) => {
     const data = await addUser(newUser)
     addMaybeError(data)
-    if (data.result) {
-      setUsers(data.result)
-    }
+    await getThem()
   }
 
   const getOne = async (id: number) => {
@@ -48,25 +55,43 @@ export const PostgresTest = () => {
 
   return (
     <div>
+      <hr></hr>
       <p>Postgress test</p>
       <button onClick={getThem}>get data</button>
-      <button onClick={addOneAndGetThem}>add data</button>
+      <button onClick={() => addOneAndGetThem(randomUser())}>add random user</button>
+      <button onClick={() => addOneAndGetThem(fixedUser)}>add fixed user</button>
       <button onClick={() => getOne(-1)}>log user -  will fail</button>
 
-      <div>
-        {users.map(user => (
+      <table>
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+            <th>log</th>
+            <th>delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
 
-          <li key={user.id}>
-            <span>{user.name}</span>
-            <button onClick={() => getOne(user.id)}>log user</button>
-            <button onClick={() => deleteOne(user.id)}>delete user</button>
-          </li>
-        ))}
-      </div>
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>
+                <button onClick={() => getOne(user.id)}>log user</button>
+              </td>
+              <td>
+                <button onClick={() => deleteOne(user.id)}>delete user</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <p>
         <strong>ERRORS: </strong>
         <em>{errors.join("; ")}</em>
       </p>
+      <hr></hr>
     </div>
   )
 }

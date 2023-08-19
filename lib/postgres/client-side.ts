@@ -10,7 +10,7 @@ export const getUser = async (id: number): Promise<Maybe<User>> => {
     return await response.json()
 }
 
-export const addUser = async (user: UserData): Promise<Maybe<User[]>> => {
+export const addUser = async (user: UserData): Promise<Maybe<User>> => {
     const response = await fetch('/api/users', {
         method: 'POST',
         credentials: "same-origin",

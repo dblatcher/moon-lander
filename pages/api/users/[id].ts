@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils"
 import { Maybe, User } from "../../../lib/postgres/types"
-import { sql } from "@vercel/postgres"
 import { ERROR_CODES, parseError } from "../../../lib/postgres/errors"
+import { userIdToSelectStatement } from "../../../lib/postgres/statements"
 
 
 const getUserById = async (id: string, res: NextApiResponse<Maybe<User>>) => {
     try {
-        const result = await sql<User>`SELECT * FROM Users WHERE id = ${id}`;
+        const result = await userIdToSelectStatement(id);
         const [user] = result.rows
         if (!user) {
             return res.status(404).json({ error: `no user with id ${id}` })
