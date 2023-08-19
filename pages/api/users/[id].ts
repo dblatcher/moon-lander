@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils"
+import { NextApiRequest, NextApiResponse } from "next"
 import { Maybe, User } from "../../../lib/postgres/types"
 import { ERROR_CODES, parseError } from "../../../lib/postgres/errors"
 import { userIdToSelectStatement } from "../../../lib/postgres/statements"
