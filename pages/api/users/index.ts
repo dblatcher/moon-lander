@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { seed } from '../../../lib/postgres/seed-users';
-import { parseError, ERROR_CODES, categoryToHttpCode } from '../../../lib/postgres/errors';
+import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
 import { User, Maybe } from '../../../lib/postgres/types';
 import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement } from '../../../lib/postgres/statements';
+import { sendResponse } from '../../../lib/postgres/results-to-response';
 
 
 const selectAll = async (): Promise<Maybe<User[]>> => {
@@ -29,40 +30,28 @@ const selectAll = async (): Promise<Maybe<User[]>> => {
     }
 }
 
-const handleGet = async (res: NextApiResponse<Maybe<User[]>>) => {
-    const selectResult = await selectAll()
-    if (selectResult.result && !selectResult.error) {
-        return res.status(200).json(selectResult)
-    }
-    return res.status(categoryToHttpCode(selectResult.errorCategory)).json(selectResult)
-}
-
-const handlePost = async (
-    req: NextApiRequest,
-    res: NextApiResponse<Maybe<User>>
-) => {
-    const { email, name, image } = req.body
+const insertNew = async (body: Record<string, unknown>): Promise<Maybe<User>> => {
+    const { email, name, image } = body
     if (typeof email !== 'string' || typeof name !== 'string' || typeof image !== 'string') {
-        return res.status(400).json({ error: 'invalid input', errorCategory: 'BAD_INPUT' })
+        return { error: 'missing input', errorCategory: 'BAD_INPUT' }
     }
 
     try {
+        // insert statements have a NO NOTHING clause for email conflicts
+        // TO DO - handle as an SQL exception?
         const insertResult = await userToInsertStatement({ email, name, image })
-        console.log({insertResult})
-
         if (insertResult.rowCount === 0) {
-            return res.status(400).json({ error: 'could not insert', errorCategory: 'BAD_INPUT' })
+            return { error: 'could not insert', errorCategory: 'BAD_INPUT' }
         }
         const selectNewResult = await emailToSelectStatement(email)
-        console.log({selectNewResult})
         const [newUser] = selectNewResult.rows
-        return res.status(200).json({ result: newUser })
-
+        return { result: newUser }
     } catch (error) {
         console.log(error)
-        return res.status(400).json({ error: 'insert fail', errorCategory: 'DB_ERROR' })
+        return { error: 'insert fail', errorCategory: 'DB_ERROR' }
     }
 }
+
 
 export default async function handler(
     req: NextApiRequest,
@@ -70,8 +59,10 @@ export default async function handler(
 ) {
 
     if (req.method === 'POST') {
-        return handlePost(req, res)
+        const insertResult = await insertNew(req.body)
+        return sendResponse(res, insertResult)
     }
 
-    return handleGet(res)
+    const selectResult = await selectAll()
+    return sendResponse(res, selectResult)
 }

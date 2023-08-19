@@ -23,6 +23,8 @@ export const categoryToHttpCode = (category?: ErrorCategory): number => {
     switch (category) {
         case "NO_MATCHING_RECORD":
             return 404
+        case "BAD_INPUT":
+            return 400
         case "DB_ERROR":
         default:
             return 500
