@@ -15,7 +15,7 @@ export type User = UserData & {
     id: number
 }
 
-export type ErrorCategory = 'DB_ERROR' | 'NO_MATCHING_RECORD' | 'BAD_INPUT'
+export type ErrorCategory = 'DB_ERROR' | 'NO_MATCHING_RECORD' | 'BAD_INPUT' | 'METHOD_NOT_SUPPORTED'
 
 export type Maybe<T> = {
     result?: T;
