@@ -19,9 +19,8 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Maybe<number>>
 ) {
-    // TO DO - something with this
     if (req.method !== 'DELETE') {
-        return res.status(405).json({ error: `${req.method} not supported`, errorCategory: 'METHOD_NOT_SUPPORTED' })
+        return sendResponse(res, { error: `${req.method} not supported`, errorCategory: 'METHOD_NOT_SUPPORTED' })
     }
 
     const { id } = req.query

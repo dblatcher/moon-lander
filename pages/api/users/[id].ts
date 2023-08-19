@@ -21,7 +21,7 @@ const getUserById = async (id?: string): Promise<Maybe<User>> => {
         if (postgresException?.code === ERROR_CODES.undefined_table) {
             return { error: 'no users', errorCategory: 'NO_MATCHING_RECORD' }
         }
-        return { error: 'get all fail', errorCategory: 'DB_ERROR' }
+        return { error: 'get user failed', errorCategory: 'DB_ERROR' }
     }
 }
 
