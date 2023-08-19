@@ -1,16 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { sql } from '@vercel/postgres';
 import { seed } from '../../../lib/postgres/seed-users';
-import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
-import { User,Maybe } from '../../../lib/postgres/types';
-import { userToInsertStatement } from '../../../lib/postgres/statements';
+import { parseError, ERROR_CODES, categoryToHttpCode } from '../../../lib/postgres/errors';
+import { User, Maybe } from '../../../lib/postgres/types';
+import { selectAllUsersStatement, userToInsertStatement } from '../../../lib/postgres/statements';
 
 
-
-const getAll = async (res: NextApiResponse<Maybe<User[]>>) => {
+const selectAll = async (): Promise<Maybe<User[]>> => {
     try {
-        const result = await sql<User>`SELECT * FROM Users;`;
-        return res.status(200).json({ result: result.rows })
+        const result = await selectAllUsersStatement();
+        return { result: result.rows }
     } catch (error) {
         const postgresException = parseError(error)
 
@@ -20,15 +18,23 @@ const getAll = async (res: NextApiResponse<Maybe<User[]>>) => {
             )
             try {
                 await seed()
-                const result = await sql<User>`SELECT * FROM Users;`;
-                return res.status(200).json({ result: result.rows })
+                const result = await selectAllUsersStatement();
+                return { result: result.rows }
             } catch (seedError) {
-                return res.status(500).json({ error: 'seed fail' })
+                return { error: 'seed fail', errorCategory: 'DB_ERROR' }
             }
         }
 
-        return res.status(500).json({ error: 'get all fail' })
+        return { error: 'get all fail', errorCategory: 'DB_ERROR' }
     }
+}
+
+const handleGet = async (res: NextApiResponse<Maybe<User[]>>) => {
+    const selectResult = await selectAll()
+    if (selectResult.result && !selectResult.error) {
+        return res.status(200).json(selectResult)
+    }
+    return res.status(categoryToHttpCode(selectResult.errorCategory)).json(selectResult)
 }
 
 const handlePost = async (
@@ -47,7 +53,7 @@ const handlePost = async (
         return res.status(400).json({ error: 'insert fail' })
     }
 
-    return getAll(res)
+    return handleGet(res)
 }
 
 export default async function handler(
@@ -59,5 +65,5 @@ export default async function handler(
         return handlePost(req, res)
     }
 
-    return getAll(res)
+    return handleGet(res)
 }

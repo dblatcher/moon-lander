@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres'
-import { UserData } from './types'
+import { User, UserData } from './types'
 
 // TO DO - option without ON CONFLICT
 export const userToInsertStatement = (user: UserData) => sql`
@@ -11,6 +11,8 @@ ON CONFLICT (email) DO NOTHING;
 export const userIdToDeleteStatement = (id: string) => sql`
 DELETE FROM users WHERE id = ${id};
 `
+
+export const selectAllUsersStatement = () => sql<User>`SELECT * FROM Users;`
 
 export const createUsersTable = () => sql`
 CREATE TABLE IF NOT EXISTS users (

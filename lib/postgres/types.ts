@@ -15,7 +15,10 @@ export type User = UserData & {
     id: number
 }
 
+export type ErrorCategory = 'DB_ERROR'|'NO_MATCHING_RECORD'
+
 export type Maybe<T> = {
     result?: T;
     error?: string;
+    errorCategory?: ErrorCategory
 }

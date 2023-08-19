@@ -1,4 +1,4 @@
-import { PostgresException } from "./types";
+import { PostgresException, ErrorCategory } from "./types";
 
 
 export const ERROR_CODES = {
@@ -16,4 +16,16 @@ export const parseError = (error: unknown): PostgresException | undefined => {
     }
 
     return record as PostgresException
+}
+
+export const categoryToHttpCode = (category?: ErrorCategory): number => {
+
+    switch (category) {
+        case "NO_MATCHING_RECORD":
+            return 404
+        case "DB_ERROR":
+        default:
+            return 500
+    }
+
 }
