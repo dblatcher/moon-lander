@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { userIdToDeleteStatement } from '../../../../lib/postgres/statements';
+import { userIdToDeleteStatement } from '../../../../lib/postgres/user-table';
 import { Maybe } from '../../../../lib/postgres/types';
 import { sendResponse } from '../../../../lib/postgres/results-to-response';
 

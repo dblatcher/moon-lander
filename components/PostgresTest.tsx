@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { getUsers, addUser, getUser, deleteUser } from "../lib/postgres/client-side"
-import { Maybe, User, UserData } from '../lib/postgres/types'
+import { Maybe } from '../lib/postgres/types'
+import type { User, UserData } from '../lib/postgres/user-table'
+import { addUser, deleteUser, getUser, getUsers } from "../lib/postgres/user-table"
 
 const randomUser = () => {
   const name = Math.random().toString().substring(2)

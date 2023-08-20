@@ -1,5 +1,5 @@
 import type { ConfigurationProp } from "."
-import { getUsers } from "../../lib/postgres/user-table/client-side"
+import { getUsers } from "../../lib/postgres/user-table"
 import type { Score, ScoreData } from "../data-access/ScoreData"
 
 const localFetcher = async (url: string): Promise<ScoreData> => {

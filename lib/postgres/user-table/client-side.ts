@@ -1,4 +1,5 @@
-import { User, UserData, Maybe } from "./types"
+import { User, UserData } from "./types"
+import { Maybe } from "../types"
 
 export const getUsers = async (): Promise<Maybe<User[]>> => {
     const response = await fetch('/api/users')

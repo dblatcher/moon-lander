@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { seed } from '../../../lib/postgres/seed-users';
 import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
-import { User, Maybe } from '../../../lib/postgres/types';
-import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement } from '../../../lib/postgres/statements';
+import { Maybe } from '../../../lib/postgres/types';
+import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement, seed, type User } from '../../../lib/postgres/user-table';
 import { sendResponse } from '../../../lib/postgres/results-to-response';
 
 

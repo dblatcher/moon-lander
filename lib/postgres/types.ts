@@ -4,17 +4,6 @@ export type PostgresException = {
     message: string;
 }
 
-export type UserData = {
-    email: string
-    image: string
-    name: string
-}
-
-export type User = UserData & {
-    createdAt: string
-    id: number
-}
-
 export type ErrorCategory = 'DB_ERROR' | 'NO_MATCHING_RECORD' | 'BAD_INPUT' | 'METHOD_NOT_SUPPORTED'
 
 export type Maybe<T> = {
