@@ -20,7 +20,7 @@ const AboutPageTemplate: FunctionComponent<Props> = ({
 
             <Head>
                 <title>{title}</title>
-                <link legacybehavior rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <main className={[styles["full-height-container"], ...mainClassNames].join(" ")}>

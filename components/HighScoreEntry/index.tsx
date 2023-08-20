@@ -33,7 +33,7 @@ export default function HighScoreEntry(props: {
             setIsInitialRender(true)
             inputRef.current.focus()
         }
-    })
+    },[inputRef,isInitialRender])
 
     const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton, styles["greenButton--disabled"]].join(" ");
 
@@ -53,7 +53,7 @@ export default function HighScoreEntry(props: {
                     </div>
                 </div>
                 <div>
-                    <button className={styles.orangeButton} onClick={event => { event.preventDefault(); exit(); }}>Don't enter score</button>
+                    <button className={styles.orangeButton} onClick={event => { event.preventDefault(); exit(); }}>Don&apos;t enter score</button>
                     <button className={submitButtonClassNames}>Send score</button>
                 </div>
             </form>

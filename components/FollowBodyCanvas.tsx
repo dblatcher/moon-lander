@@ -34,7 +34,7 @@ export default function FollowBodyCanvas(props: {
             })
             viewPort.current.renderCanvas()
         }
-    }, [world])
+    }, [world, effectiveWidth, framefill, getSubject, height, magnify])
 
     return <canvas ref={canvas}></canvas>
 }
