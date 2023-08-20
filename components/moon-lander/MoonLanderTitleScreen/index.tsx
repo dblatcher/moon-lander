@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import { createShipCloseUp } from "../../../modules/animation-factory";
-import { ScoreData } from "../../../modules/data-access/ScoreData";
+import { Score } from "../../../lib/postgres/arcade-world-scores-table";
 import AnimationCanvas from "../../AnimationCanvas";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
@@ -21,7 +21,10 @@ const frameStyle = {
 }
 
 export default function MoonLanderTitleScreen(props: {
-    scoreData?: ScoreData
+    scoreData?: {
+        message?: string;
+        scores: Score[]
+    }
     showHighScores: boolean
     title?: string
     issueCommand?: Function
@@ -58,7 +61,7 @@ export default function MoonLanderTitleScreen(props: {
 
         {(showHighScores && scoreData) && (
             <section className={styles.tableWrapper}>
-                <HighScoreTable data={scoreData} />
+                <HighScoreTable scores={scoreData.scores} errorMessage={scoreData.message} />
             </section>
         )}
 

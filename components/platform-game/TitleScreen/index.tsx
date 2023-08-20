@@ -1,5 +1,5 @@
 
-import { ScoreData } from "../../../modules/data-access/ScoreData";
+import { Score } from "../../../lib/postgres/arcade-world-scores-table";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
 import styles from "./styles.module.scss";
@@ -9,7 +9,10 @@ const switchStyle = {
 }
 
 export default function TitleScreen(props: {
-    scoreData?: ScoreData
+    scoreData?: {
+        message?: string;
+        scores: Score[]
+    }
     showHighScores: boolean
     title?: string
     issueCommand?: Function
@@ -35,7 +38,7 @@ export default function TitleScreen(props: {
 
         {(showHighScores && scoreData) && (
             <section className={styles.tableWrapper}>
-                <HighScoreTable data={scoreData} />
+                <HighScoreTable scores={scoreData.scores} errorMessage={scoreData.message} />
             </section>
         )}
 

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEventHandler, useEffect, useRef, useState } from "react";
-import { requestAddScore } from "../../modules/data-access/requests";
 import Dialogue from "../Dialogue";
 import styles from "./styles.module.scss"
+import { insertScore } from "../../lib/postgres/arcade-world-scores-table";
 
 
 export default function HighScoreEntry(props: {
@@ -22,7 +22,7 @@ export default function HighScoreEntry(props: {
         event.preventDefault()
         if (!name || isSubmitting) { return }
         setIsSubmitting(true);
-        requestAddScore({ score, name, created: Date.now() })
+        insertScore({ score, name, gameId:'mooon-lander' })
             .then(() => {
                 exit()
             })

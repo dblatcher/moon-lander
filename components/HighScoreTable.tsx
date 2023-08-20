@@ -1,7 +1,7 @@
-import { ScoreData } from "../modules/data-access/ScoreData";
+import { Score } from "../lib/postgres/arcade-world-scores-table";
 
 
-function formatDate(dateValue: number | null | undefined, asTime = false): string {
+function formatDate(dateValue: string | null | undefined, asTime = false): string {
   if (!dateValue) { return "N/A" }
   const date = new Date(dateValue);
   if (isNaN(date.valueOf())) {
@@ -12,16 +12,16 @@ function formatDate(dateValue: number | null | undefined, asTime = false): strin
 
 
 export default function HighScoreTable(props: {
-  data: ScoreData
+  scores?: Score[]
+  errorMessage?: string
   displayErrors?: boolean
 }) {
 
-  const { data, displayErrors } = props
+  const { displayErrors, errorMessage, scores } = props
 
-  if (displayErrors && data.message) {
-    return <p>{data.message}</p>
+  if (displayErrors && errorMessage) {
+    return <p>{errorMessage}</p>
   }
-
   return <table>
     <thead>
       <tr>
@@ -32,12 +32,12 @@ export default function HighScoreTable(props: {
       </tr>
     </thead>
     <tbody>
-      {data.scores.map((entry, index) => (
+      {scores?.map((entry, index) => (
         <tr key={index}>
           <td>{entry.name}</td>
           <td>{entry.score}</td>
-          <td>{formatDate(entry.created)}</td>
-          <td>{formatDate(entry.created, true)}</td>
+          <td>{formatDate(entry.createdAt)}</td>
+          <td>{formatDate(entry.createdAt, true)}</td>
         </tr>
       ))}
     </tbody>

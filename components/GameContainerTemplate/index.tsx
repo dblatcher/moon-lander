@@ -3,7 +3,6 @@ import { SoundDeck, World } from "physics-worlds";
 import { makeSoundDeck, playSongData } from "./audio";
 import { Song, GameContainerState } from "./types";
 import { KeyMap, StatusFunctions, WorldStatus } from "../../modules/types";
-import { ScoreData } from "../../modules/data-access/ScoreData";
 import { GameMode } from "../../modules/GameMode";
 import { LevelIntro } from "../../modules/LevelIntro";
 import HighScoreEntry from "../HighScoreEntry";
@@ -12,13 +11,17 @@ import OnScreenControls from "../OnScreenControls";
 import CommandMenu from "../CommandMenu";
 import styles from "./GameContainer.module.scss";
 import { failSongData, victorySongData } from "./songs";
+import { Score } from "../../lib/postgres/arcade-world-scores-table";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 export const allCommands = ['START', 'PAUSE', 'QUIT', 'SOUNDTOGGLE', 'CONTROLTOGGLE', 'RESTARTLEVEL', 'SKIPLEVEL'] as const;
 
 
 interface Props {
-    scoreData?: ScoreData
+    scoreData?: {
+        message?: string;
+        scores: Score[]
+    }
     isDataBase: boolean
     gameMode: GameMode
     statusFunctions: StatusFunctions
@@ -26,7 +29,10 @@ interface Props {
     soundEffects: { [index: string]: string }
 
     TitleScreenComponent: FunctionComponent<{
-        scoreData?: ScoreData
+        scoreData?: {
+            message?: string;
+            scores: Score[]
+        }
         showHighScores: boolean
         title?: string
         issueCommand?: Function

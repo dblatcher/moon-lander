@@ -1,17 +1,20 @@
 
 import { wanderingRoids } from "../../../modules/animation-factory";
-import { ScoreData } from "../../../modules/data-access/ScoreData";
 import AnimationCanvas from "../../AnimationCanvas";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
 import styles from "./styles.module.scss";
+import { Score } from "../../../lib/postgres/arcade-world-scores-table";
 
 const switchStyle = {
     marginBottom: '.5em',
 }
 
 export default function AsteroidTitleScreen(props: {
-    scoreData?: ScoreData
+    scoreData?: {
+        message?: string;
+        scores: Score[]
+    }
     showHighScores: boolean
     title?: string
     issueCommand?: Function
@@ -40,7 +43,7 @@ export default function AsteroidTitleScreen(props: {
 
         {(showHighScores && scoreData) && (
             <section className={styles.tableWrapper}>
-                <HighScoreTable data={scoreData} />
+                <HighScoreTable scores={scoreData.scores} errorMessage={scoreData.message} />
             </section>
         )}
 
