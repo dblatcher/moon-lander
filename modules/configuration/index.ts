@@ -1,12 +1,11 @@
 
 import { PropsWithChildren } from "react";
-import { GameMode } from "../GameMode";
 import { GameDefinition } from "../types";
 
 
 interface ConfigurationProp {
     [index: string]: string
-    dataBaseType: "LOCAL" | "NONE" | "POSTGRES"
+    dataBaseType: "NONE" | "POSTGRES"
 }
 
 interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
@@ -21,8 +20,7 @@ function getStaticConfiguration(): ConfigurationProp {
 
     let dataBaseType: ConfigurationProp['dataBaseType'];
 
-    switch (process.env.DATABASE_TYPE)  {
-        case 'LOCAL':
+    switch (process.env.DATABASE_TYPE) {
         case 'POSTGRES':
             dataBaseType = process.env.DATABASE_TYPE;
             break;

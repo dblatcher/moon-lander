@@ -22,8 +22,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "modules/data-access/database.ts"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"
