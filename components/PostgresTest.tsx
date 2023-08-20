@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Maybe } from '../lib/postgres/types'
 import type { User, UserData } from '../lib/postgres/user-table'
 import { addUser, deleteUser, getUser, getUsers } from "../lib/postgres/user-table"
+import { insertScore } from '../lib/postgres/arcade-world-scores-table'
 
 const randomUser = () => {
   const name = Math.random().toString().substring(2)
@@ -54,12 +55,24 @@ export const PostgresTest = () => {
     await getThem()
   }
 
+
+  const addRandomScore = async () => {
+    const insert = await insertScore({
+      name: 'test player',
+      score: 4242,
+      gameId: "moon-lander",
+    })
+
+    console.log(insert)
+  }
+
   return (
     <div>
       <hr></hr>
       <p>Postgress test</p>
       <button onClick={getThem}>get data</button>
       <button onClick={() => addOneAndGetThem(randomUser())}>add random user</button>
+      <button onClick={() => addRandomScore()}>add random score</button>
       <button onClick={() => addOneAndGetThem(fixedUser)}>add fixed user</button>
       <button onClick={() => getOne(-1)}>log user -  will fail</button>
 
