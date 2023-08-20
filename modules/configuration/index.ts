@@ -6,7 +6,7 @@ import { GameDefinition } from "../types";
 
 interface ConfigurationProp {
     [index: string]: string
-    dataBaseType: "LOCAL" | "NONE"
+    dataBaseType: "LOCAL" | "NONE" | "POSTGRES"
 }
 
 interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
@@ -19,12 +19,16 @@ interface GamePageProps extends PropsWithChildrenAndConfig {
 
 function getStaticConfiguration(): ConfigurationProp {
 
-    let dataBaseType: "LOCAL" | "NONE";
+    let dataBaseType: ConfigurationProp['dataBaseType'];
 
-    if (process.env.DATABASE_TYPE === 'LOCAL') {
-        dataBaseType = 'LOCAL';
-    } else {
-        dataBaseType = 'NONE';
+    switch (process.env.DATABASE_TYPE)  {
+        case 'LOCAL':
+        case 'POSTGRES':
+            dataBaseType = process.env.DATABASE_TYPE;
+            break;
+        default:
+            dataBaseType = 'NONE'
+            break;
     }
 
     return {
