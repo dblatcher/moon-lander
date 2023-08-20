@@ -16,7 +16,7 @@ const GameModeList = ({ game, children }: Props) => {
         <ul className={styles.gameModeList}>
             {Object.keys(game.gameModes).filter(key => !game.gameModes[key].hidden).map(key => (
                 <li key={key} >
-                    <Link key={key} href={`/${game.route}/${key}`} passHref={true}>
+                    <Link legacyBehavior key={key} href={`/${game.route}/${key}`} passHref={true}>
                         <a>
                             <h3>{game.gameModes[key].title}</h3>
                         </a>

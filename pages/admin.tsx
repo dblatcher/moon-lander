@@ -77,7 +77,7 @@ const AdminPage: NextPage = (props: PropsWithChildrenAndConfig) => {
 
             <main className={""}>
 
-                <Link href="/" passHref={true}>homepage</Link>
+                <Link legacyBehavior href="/" passHref={true}>homepage</Link>
 
                 <h1>admin page</h1>
 

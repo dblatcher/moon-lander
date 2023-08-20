@@ -17,13 +17,13 @@ const Home: NextPage = () => {
           <AboutContent />
         </div>
         <p>
-          <Link href="/asteroid-field/normal" passHref={true}><a>&lArr; back to game</a></Link>
+          <Link legacyBehavior href="/asteroid-field/normal" passHref={true}><a>&lArr; back to game</a></Link>
         </p>
         <p>
-          <Link href="/about" passHref={true}><a>&lArr; about site</a></Link>
+          <Link legacyBehavior href="/about" passHref={true}><a>&lArr; about site</a></Link>
         </p>
         <p>
-          <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
+          <Link legacyBehavior href="/" passHref={true}><a>&lArr; homepage</a></Link>
         </p>
 
       </div>

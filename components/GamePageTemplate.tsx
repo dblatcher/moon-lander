@@ -20,7 +20,7 @@ const GamePageTemplate: FunctionComponent<{ title: string, children: ReactChildr
 
             <main className={styles["full-height-container"]}>
 
-                <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
+                <Link legacyBehavior href="/" passHref={true}><a>&lArr; homepage</a></Link>
 
                 <FullScreenWrapper>
                     {children}

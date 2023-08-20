@@ -45,7 +45,7 @@ export default function MoonLanderTitleScreen(props: {
             </div>
 
             <div>
-                <Link passHref href="/moon-lander/about"><a >about this game</a></Link>
+                <Link legacyBehavior passHref href="/moon-lander/about"><a >about this game</a></Link>
             </div>
 
             <span className={styles["bottom-rivets"]}></span>

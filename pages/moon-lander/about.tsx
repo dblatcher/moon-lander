@@ -17,13 +17,13 @@ const Home: NextPage = () => {
         </div>
 
         <p>
-          <Link href="/moon-lander/normal" passHref={true}><a>&lArr; back to game</a></Link>
+          <Link legacyBehavior href="/moon-lander/normal" passHref={true}><a>&lArr; back to game</a></Link>
         </p>
         <p>
-          <Link href="/about" passHref={true}><a>&lArr; about site</a></Link>
+          <Link legacyBehavior href="/about" passHref={true}><a>&lArr; about site</a></Link>
         </p>
         <p>
-          <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
+          <Link legacyBehavior href="/" passHref={true}><a>&lArr; homepage</a></Link>
         </p>
 
         <AnimationCanvas makeWorld={createShipCloseUp}

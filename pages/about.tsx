@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <p>The games use my <a className={styles.exLink} href="https://github.com/dblatcher/worlds">physics-worlds</a> package to create the game levels. Physics-worlds is a flexible, object-orientated typescript physics engine intended for building games, simulations and animations.</p>
         <p>The source code is available at <a className={styles.exLink} href="https://github.com/dblatcher/moon-lander">https://github.com/dblatcher/moon-lander</a>.</p>
         <p>
-          <Link href="/" passHref={true}><a>&lArr; homepage</a></Link>
+          <Link legacyBehavior href="/" passHref={true}><a>&lArr; homepage</a></Link>
         </p>
 
         <AnimationCanvas makeWorld={createShipCloseUp}
