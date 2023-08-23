@@ -19,7 +19,7 @@ const moonLander: GameDefinition = {
         'bang': "/audio/bang.mp3",
         'beep': "/audio/beep.mp3",
     },
-    scoreFetcherUrl: '/api/scores',
+    highScoreGameId: 'moon-lander',
 }
 
 export { moonLander }

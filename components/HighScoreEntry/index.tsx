@@ -6,6 +6,7 @@ import { insertScore } from "../../lib/postgres/arcade-world-scores-table";
 
 export default function HighScoreEntry(props: {
     score: number
+    highScoreGameId: string
     exit: { (): Promise<any> }
 }) {
     const { score, exit } = props;
@@ -21,8 +22,13 @@ export default function HighScoreEntry(props: {
     const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault()
         if (!name || isSubmitting) { return }
+
+        if (!props.highScoreGameId) {
+            return exit()
+        }
+
         setIsSubmitting(true);
-        insertScore({ score, name, gameId:'mooon-lander' })
+        insertScore({ score, name, gameId: props.highScoreGameId })
             .then(() => {
                 exit()
             })
@@ -33,7 +39,7 @@ export default function HighScoreEntry(props: {
             setIsInitialRender(true)
             inputRef.current.focus()
         }
-    },[inputRef,isInitialRender])
+    }, [inputRef, isInitialRender])
 
     const submitButtonClassNames = name.length > 0 ? styles.greenButton : [styles.greenButton, styles["greenButton--disabled"]].join(" ");
 

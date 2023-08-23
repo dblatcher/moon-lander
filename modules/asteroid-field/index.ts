@@ -21,7 +21,7 @@ const asteroidField: GameDefinition = {
         'crumble': "/audio/asteroid-field/crumble.mp3",
         'laser': "/audio/asteroid-field/laser.mp3",
     },
-    scoreFetcherUrl: '/api/scores',
+    highScoreGameId: 'asteroid-field',
     songs,
 }
 

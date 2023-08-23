@@ -38,5 +38,5 @@ export type GameDefinition = {
         fail?: Song,
         victory?: Song,
     }
-    scoreFetcherUrl: string;
+    highScoreGameId: string;
 }

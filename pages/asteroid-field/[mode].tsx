@@ -12,11 +12,11 @@ import styles from '../../components/asteroid-field/asteroids.style.module.scss'
 
 
 
-const { title, gameModes, scoreFetcherUrl, songs } = asteroidField
+const { title, gameModes, highScoreGameId, songs } = asteroidField
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR(scoreFetcherUrl, makeFetcher(config))
+    const { data, error } = useSWR(highScoreGameId, makeFetcher(config))
     const gameMode = gameModes[gameModeKey]
 
     return (
@@ -33,6 +33,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 soundEffects={asteroidField.soundEffects}
                 extraClassNames={[styles.asteroids]}
                 songs={songs}
+                highScoreGameId={highScoreGameId}
             />
         </GamePageTemplate>
     )

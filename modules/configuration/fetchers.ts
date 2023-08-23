@@ -1,5 +1,5 @@
 import type { ConfigurationProp } from "."
-import { Score, getScores } from "../../lib/postgres/arcade-world-scores-table"
+import { Score, getScoresForGame } from "../../lib/postgres/arcade-world-scores-table"
 
 const dummyFetcher = async (url: string): Promise<{
     message?: string;
@@ -11,12 +11,12 @@ const dummyFetcher = async (url: string): Promise<{
     }
 }
 
-const postgresFetcher = async (url: string): Promise<{
+const postgresFetcher = async (gameId: string): Promise<{
     message?: string;
     scores: Score[]
 }> => {
 
-    const response = await getScores()
+    const response = await getScoresForGame(gameId)
 
     return {
         message: response.error,

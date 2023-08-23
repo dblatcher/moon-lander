@@ -10,11 +10,11 @@ import MoonLanderGame from '../../components/moon-lander/MoonLanderGame';
 import MoonLanderTitleScreen from '../../components/moon-lander/MoonLanderTitleScreen';
 import styles from '../../components/moon-lander/moonLander.styles.module.scss'
 
-const { title, gameModes, scoreFetcherUrl, songs } = moonLander
+const { title, gameModes, highScoreGameId, songs } = moonLander
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR(scoreFetcherUrl, makeFetcher(config))
+    const { data, error } = useSWR(highScoreGameId, makeFetcher(config))
     const gameMode = gameModes[gameModeKey]
 
     return (
@@ -31,6 +31,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 soundEffects={moonLander.soundEffects}
                 extraClassNames={[styles.yellowAndBlackStripes]}
                 songs={moonLander.songs}
+                highScoreGameId={highScoreGameId}
             />
         </GamePageTemplate>
     )

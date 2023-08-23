@@ -19,7 +19,7 @@ const platformGame: GameDefinition = {
         'bang': "/audio/bang.mp3",
         'beep': "/audio/beep.mp3",
     },
-    scoreFetcherUrl: '/api/scores',
+    highScoreGameId: 'platform-game',
 }
 
 export { platformGame }

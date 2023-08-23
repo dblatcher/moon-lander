@@ -27,6 +27,7 @@ interface Props {
     statusFunctions: StatusFunctions
     controlMapping: { [index: string]: string }
     soundEffects: { [index: string]: string }
+    highScoreGameId: string
 
     TitleScreenComponent: FunctionComponent<{
         scoreData?: {
@@ -333,6 +334,7 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
             scoreData, isDataBase, gameMode, controlMapping,
             extraClassNames = [],
             TitleScreenComponent, LevelIntroComponent, GameComponent,
+            highScoreGameId
         } = this.props;
         const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
         const { world, controls, handleCommandPress } = this;
@@ -349,7 +351,8 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                         soundEnabled={soundEnabled}
                         showOnScreenControls={showOnScreenControls}
                         scoreData={scoreData}
-                        title={gameMode.title} />
+                        title={gameMode.title} 
+                    />
                 }
 
                 {(!!world && (mode === "PLAY" || mode === "HIGHSCORE" || mode === "INTRO")) &&
@@ -376,7 +379,7 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                 }
 
                 {(mode === "HIGHSCORE") &&
-                    <HighScoreEntry score={score} exit={this.goToTitles} />
+                    <HighScoreEntry score={score} exit={this.goToTitles} highScoreGameId={highScoreGameId} />
                 }
 
                 <KeyReader

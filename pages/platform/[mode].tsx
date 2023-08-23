@@ -11,11 +11,11 @@ import IntroDialogue from '../../components/platform-game/IntroDialogue';
 import GamePlayer from '../../components/platform-game/GamePlayer';
 import { platformGame } from '../../modules/platform-game';
 
-const { title, gameModes, scoreFetcherUrl } = platformGame
+const { title, gameModes, highScoreGameId } = platformGame
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR(scoreFetcherUrl, makeFetcher(config))
+    const { data, error } = useSWR(highScoreGameId, makeFetcher(config))
     const gameMode = gameModes[gameModeKey]
 
     return (
@@ -36,6 +36,7 @@ const GamePage: NextPage = (props: GamePageProps) => {
                 controlMapping={controlMapping}
                 soundEffects={platformGame.soundEffects}
                 songs={platformGame.songs}
+                highScoreGameId={highScoreGameId}
             />
         </GamePageTemplate>
     )
