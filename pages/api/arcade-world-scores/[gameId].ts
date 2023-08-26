@@ -10,10 +10,10 @@ export default async function handler(
     res: NextApiResponse<Maybe<Score[]>>
 ) {
     const { dataBaseType } = getStaticConfiguration()
+    const table = dataBaseType === 'POSTGRES' ? postgresScoreTable : localScoreTable;
+
     const { gameId } = req.query
     const idAsString = Array.isArray(gameId) ? gameId[0] ?? '' : gameId
-    const result = dataBaseType === 'POSTGRES'
-        ? await postgresScoreTable.getScoresForId(idAsString)
-        : await localScoreTable.getScoresForId(idAsString)
+    const result = await table.getScoresForId(idAsString)
     return sendResponse(res, result)
 }
