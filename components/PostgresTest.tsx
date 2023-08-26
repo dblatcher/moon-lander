@@ -1,27 +1,10 @@
 import { useState } from 'react'
 import { Maybe } from '../lib/postgres/types'
-import type { User, UserData } from '../lib/postgres/user-table'
-import { addUser, deleteUser, getUser, getUsers } from "../lib/postgres/user-table"
-import { insertScore } from '../lib/postgres/arcade-world-scores-table'
-
-const randomUser = () => {
-  const name = Math.random().toString().substring(2)
-  return {
-    name,
-    email: `${name}@example.com`,
-    image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
-  }
-}
-
-const fixedUser = {
-  name: 'test',
-  email: `test@example.com`,
-  image: 'https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg'
-}
+import { insertScore, getAllScores, Score } from '../lib/postgres/arcade-world-scores-table'
 
 export const PostgresTest = () => {
 
-  const [users, setUsers] = useState<User[]>([])
+  const [scores, setScores] = useState<Score[]>([])
   const [errors, setErrors] = useState<string[]>([])
 
   const addMaybeError = (maybe: Maybe<unknown>) => {
@@ -30,40 +13,23 @@ export const PostgresTest = () => {
   }
 
   const getThem = async () => {
-    const data = await getUsers()
+    const data = await getAllScores()
     addMaybeError(data)
     if (data.result) {
-      setUsers(data.result)
+      setScores(data.result)
     }
   }
 
-  const addOneAndGetThem = async (newUser: UserData) => {
-    const data = await addUser(newUser)
-    addMaybeError(data)
-    await getThem()
-  }
-
-  const getOne = async (id: number) => {
-    const data = await getUser(id)
-    addMaybeError(data)
-    console.table(data)
-  }
-
-  const deleteOne = async (id: number) => {
-    const data = await deleteUser(id)
-    addMaybeError(data)
-    await getThem()
-  }
 
 
-  const addRandomScore = async () => {
+  const addRandomScore = async (gameId: string) => {
     const insert = await insertScore({
       name: 'test player',
-      score: 4242,
-      gameId: "moon-lander",
+      score: Math.floor(Math.random() * 100),
+      gameId,
     })
 
-    console.log(insert)
+    getThem()
   }
 
   return (
@@ -71,32 +37,26 @@ export const PostgresTest = () => {
       <hr></hr>
       <p>Postgress test</p>
       <button onClick={getThem}>get data</button>
-      <button onClick={() => addOneAndGetThem(randomUser())}>add random user</button>
-      <button onClick={() => addRandomScore()}>add random score</button>
-      <button onClick={() => addOneAndGetThem(fixedUser)}>add fixed user</button>
-      <button onClick={() => getOne(-1)}>log user -  will fail</button>
+      <button onClick={() => addRandomScore('moon-lander')}>add moon-lander random score</button>
+      <button onClick={() => addRandomScore('asteroid-field')}>add asteroid-field random score</button>
 
       <table>
         <thead>
           <tr>
             <th>name</th>
-            <th>email</th>
-            <th>log</th>
-            <th>delete</th>
+            <th>score</th>
+            <th>gameId</th>
+            <th>createdAt</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {scores.map(score => (
 
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>
-                <button onClick={() => getOne(user.id)}>log user</button>
-              </td>
-              <td>
-                <button onClick={() => deleteOne(user.id)}>delete user</button>
-              </td>
+            <tr key={score.id}>
+              <td>{score.name}</td>
+              <td>{score.score}</td>
+              <td>{score.gameId}</td>
+              <td>{score.createdAt}</td>
             </tr>
           ))}
         </tbody>
