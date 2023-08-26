@@ -1,5 +1,5 @@
 import { Maybe } from "../types"
-import { Score, ScoreTableInterface } from "./types"
+import { Score, ScoreTableInterface, validateScore } from "./types"
 
 const mockScores: Score[] = [
     {
@@ -20,11 +20,10 @@ const selectAll = async (): Promise<Maybe<Score[]>> => {
 }
 
 const insertNew = async (body: Record<string, unknown>): Promise<Maybe<number>> => {
-    const { name, score, gameId } = body
-    if (typeof score !== 'number' || typeof name !== 'string' || typeof gameId !== 'string') {
+    if (!validateScore(body)) {
         return { error: 'missing or invalid input', errorCategory: 'BAD_INPUT' }
     }
-
+    const { name, score, gameId } = body
     mockScores.push({
         name, score, gameId,
         createdAt: new Date().toISOString(),
