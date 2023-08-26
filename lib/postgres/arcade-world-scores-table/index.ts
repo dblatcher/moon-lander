@@ -1,3 +1,4 @@
 export * from "./client-side"
-export * from "./statements"
 export * from "./types"
+export * from "./local-score-table"
+export * from "./postgres-score-table"

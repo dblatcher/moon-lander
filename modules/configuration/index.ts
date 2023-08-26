@@ -5,7 +5,7 @@ import { GameDefinition } from "../types";
 
 interface ConfigurationProp {
     [index: string]: string
-    dataBaseType: "NONE" | "POSTGRES"
+    dataBaseType: "NONE" | "POSTGRES" | "LOCAL"
 }
 
 interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
@@ -16,12 +16,13 @@ interface GamePageProps extends PropsWithChildrenAndConfig {
     gameModeKey?: string
 }
 
-function getStaticConfiguration(): ConfigurationProp {
+export function getStaticConfiguration(): ConfigurationProp {
 
     let dataBaseType: ConfigurationProp['dataBaseType'];
 
     switch (process.env.DATABASE_TYPE) {
         case 'POSTGRES':
+        case 'LOCAL':
             dataBaseType = process.env.DATABASE_TYPE;
             break;
         default:
@@ -54,4 +55,3 @@ export const buildGameGetStaticProps = () => async (context: { params: { mode: s
 
 
 export type { ConfigurationProp, PropsWithChildrenAndConfig, GamePageProps }
-export { getStaticConfiguration, }

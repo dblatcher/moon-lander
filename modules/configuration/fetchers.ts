@@ -11,7 +11,7 @@ const dummyFetcher = async (url: string): Promise<{
     }
 }
 
-const postgresFetcher = async (gameId: string): Promise<{
+const apiFetcher = async (gameId: string): Promise<{
     message?: string;
     scores: Score[]
 }> => {
@@ -25,8 +25,8 @@ const postgresFetcher = async (gameId: string): Promise<{
 }
 
 const makeFetcher = (config: ConfigurationProp) => {
-    if ((config.dataBaseType === 'POSTGRES'))
-        return postgresFetcher
+    if ((config.dataBaseType !== 'NONE'))
+        return apiFetcher
     return dummyFetcher;
 }
 
