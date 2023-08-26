@@ -4,7 +4,7 @@ import AnimationCanvas from "../../AnimationCanvas";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
 import styles from "./styles.module.scss";
-import { Score } from "../../../lib/postgres/arcade-world-scores-table";
+import { Score } from "../../../lib/database/arcade-world-scores-table";
 
 const switchStyle = {
     marginBottom: '.5em',

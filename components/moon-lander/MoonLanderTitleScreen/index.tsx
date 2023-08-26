@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import { createShipCloseUp } from "../../../modules/animation-factory";
-import { Score } from "../../../lib/postgres/arcade-world-scores-table";
+import { Score } from "../../../lib/database/arcade-world-scores-table";
 import AnimationCanvas from "../../AnimationCanvas";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";

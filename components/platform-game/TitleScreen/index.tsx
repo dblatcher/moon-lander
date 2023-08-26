@@ -1,5 +1,5 @@
 
-import { Score } from "../../../lib/postgres/arcade-world-scores-table";
+import { Score } from "../../../lib/database/arcade-world-scores-table";
 import HighScoreTable from "../../HighScoreTable";
 import Switch from "../../Switch";
 import styles from "./styles.module.scss";

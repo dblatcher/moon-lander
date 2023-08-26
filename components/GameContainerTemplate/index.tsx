@@ -11,7 +11,7 @@ import OnScreenControls from "../OnScreenControls";
 import CommandMenu from "../CommandMenu";
 import styles from "./GameContainer.module.scss";
 import { failSongData, victorySongData } from "./songs";
-import { Score } from "../../lib/postgres/arcade-world-scores-table";
+import { Score } from "../../lib/database/arcade-world-scores-table";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 export const allCommands = ['START', 'PAUSE', 'QUIT', 'SOUNDTOGGLE', 'CONTROLTOGGLE', 'RESTARTLEVEL', 'SKIPLEVEL'] as const;

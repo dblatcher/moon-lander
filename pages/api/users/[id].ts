@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { Maybe } from "../../../lib/postgres/types"
-import { ERROR_CODES, parseError } from "../../../lib/postgres/errors"
-import { userIdToSelectStatement, type User } from "../../../lib/postgres/user-table"
-import { sendResponse } from "../../../lib/postgres/results-to-response"
+import { Maybe } from "../../../lib/database/types"
+import { ERROR_CODES, parseError } from "../../../lib/database/errors"
+import { userIdToSelectStatement, type User } from "../../../lib/database/user-table"
+import { sendResponse } from "../../../lib/database/results-to-response"
 
 
 const getUserById = async (id?: string): Promise<Maybe<User>> => {

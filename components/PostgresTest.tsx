@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Maybe } from '../lib/postgres/types'
-import { insertScore, getAllScores, Score } from '../lib/postgres/arcade-world-scores-table'
+import { Maybe } from '../lib/database/types'
+import { insertScore, getAllScores, Score } from '../lib/database/arcade-world-scores-table'
 
 export const PostgresTest = () => {
 

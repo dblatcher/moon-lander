@@ -1,5 +1,5 @@
 import type { ConfigurationProp } from "."
-import { Score, getScoresForGame } from "../../lib/postgres/arcade-world-scores-table"
+import { Score, getScoresForGame } from "../../lib/database/arcade-world-scores-table"
 
 const dummyFetcher = async (url: string): Promise<{
     message?: string;

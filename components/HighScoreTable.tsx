@@ -1,4 +1,4 @@
-import { Score } from "../lib/postgres/arcade-world-scores-table";
+import { Score } from "../lib/database/arcade-world-scores-table";
 
 
 function formatDate(dateValue: string | null | undefined, asTime = false): string {

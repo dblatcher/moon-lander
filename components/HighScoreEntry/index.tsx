@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEventHandler, useEffect, useRef, useState } from "react";
 import Dialogue from "../Dialogue";
 import styles from "./styles.module.scss"
-import { insertScore } from "../../lib/postgres/arcade-world-scores-table";
+import { insertScore } from "../../lib/database/arcade-world-scores-table";
 
 
 export default function HighScoreEntry(props: {

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { userIdToDeleteStatement } from '../../../../lib/postgres/user-table';
-import { Maybe } from '../../../../lib/postgres/types';
-import { sendResponse } from '../../../../lib/postgres/results-to-response';
+import { userIdToDeleteStatement } from '../../../../lib/database/user-table';
+import { Maybe } from '../../../../lib/database/types';
+import { sendResponse } from '../../../../lib/database/results-to-response';
 
 const deleteUser = async (id?: string): Promise<Maybe<number>> => {
     if (!id) {

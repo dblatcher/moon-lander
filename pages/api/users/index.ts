@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { parseError, ERROR_CODES } from '../../../lib/postgres/errors';
-import { Maybe } from '../../../lib/postgres/types';
-import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement, seed, type User } from '../../../lib/postgres/user-table';
-import { sendResponse } from '../../../lib/postgres/results-to-response';
+import { parseError, ERROR_CODES } from '../../../lib/database/errors';
+import { Maybe } from '../../../lib/database/types';
+import { emailToSelectStatement, selectAllUsersStatement, userToInsertStatement, seed, type User } from '../../../lib/database/user-table';
+import { sendResponse } from '../../../lib/database/results-to-response';
 
 
 const selectAll = async (): Promise<Maybe<User[]>> => {
