@@ -9,7 +9,7 @@ VALUES (${score.name}, ${Math.floor(score.score)}, ${score.gameId});
 export const selectAllScoresStatement = () => sql<Score>`SELECT * FROM ArcadeWorldScores;`
 
 export const selectScoresForGameIdStatement = (gameId: string) =>
-  sql<Score>`SELECT * FROM ArcadeWorldScores WHERE "gameId" = ${gameId};`
+  sql<Score>`SELECT * FROM ArcadeWorldScores WHERE "gameId" = ${gameId} ORDER BY Score DESC;`
 
 export const createTable = () => sql<Score>`
 CREATE TABLE IF NOT EXISTS ArcadeWorldScores (

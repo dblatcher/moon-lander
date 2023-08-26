@@ -8,11 +8,25 @@ const mockScores: Score[] = [
         score: 42,
         gameId: 'moon-lander',
         name: 'test player',
-    }
+    },
+    {
+        createdAt: new Date(20 * 1000 * 60).toString(),
+        id: 1,
+        score: 22,
+        gameId: 'moon-lander',
+        name: 'test player2',
+    },
+    {
+        createdAt: new Date(20 * 1000 * 60).toString(),
+        id: 1,
+        score: 142,
+        gameId: 'moon-lander',
+        name: 'test player',
+    },
 ]
 
 const getScoresForId = async (gameId?: string): Promise<Maybe<Score[]>> => {
-    return { result: mockScores.filter(score => score.gameId === gameId) }
+    return { result: mockScores.filter(score => score.gameId === gameId).sort((a, b) => b.score - a.score) }
 }
 
 const selectAll = async (): Promise<Maybe<Score[]>> => {
