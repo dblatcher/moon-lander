@@ -1,22 +1,18 @@
-
 import { PropsWithChildren } from "react";
 import { GameDefinition } from "../types";
 
-
-interface ConfigurationProp {
-    [index: string]: string
+export interface ConfigurationProp {
     dataBaseType: "NONE" | "POSTGRES" | "LOCAL"
 }
 
-interface PropsWithChildrenAndConfig extends PropsWithChildren<{}> {
-    config?: ConfigurationProp
-}
 
-interface GamePageProps extends PropsWithChildrenAndConfig {
+export interface GamePageProps extends PropsWithChildren<{}> {
+    config?: ConfigurationProp
     gameModeKey?: string
 }
 
-export function getStaticConfiguration(): ConfigurationProp {
+/** Get the configuartion values from the environment which are **SAFE TO BE EXPOSED CLIENT SIDE**. */
+export function getSharedConfig(): ConfigurationProp {
 
     let dataBaseType: ConfigurationProp['dataBaseType'];
 
@@ -47,11 +43,8 @@ export const getGamePageStaticPaths = (gameDefinition: GameDefinition) => {
 export const buildGameGetStaticProps = () => async (context: { params: { mode: string } }): Promise<{ props: GamePageProps }> => {
     return {
         props: {
-            config: getStaticConfiguration(),
+            config: getSharedConfig(),
             gameModeKey: context.params.mode,
         },
     }
 }
-
-
-export type { ConfigurationProp, PropsWithChildrenAndConfig, GamePageProps }
