@@ -14,7 +14,8 @@ export const getScoresForGame = async (gameId: string): Promise<Maybe<Score[]>> 
 export const insertScore = async (score: ScoreData): Promise<Maybe<number>> => {
     const response = await fetch('/api/arcade-world-scores', {
         method: 'POST',
-        credentials: "same-origin",
+        credentials: 'include',
+        mode: 'same-origin',
         headers: {
             "Content-Type": "application/json",
         },
