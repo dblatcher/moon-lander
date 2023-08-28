@@ -1,3 +1,4 @@
+import { Score } from "../../lib/database/arcade-world-scores-table";
 import { LevelIntro } from "../../modules/LevelIntro";
 import { WorldStatus, KeyMap } from "../../modules/types";
 
@@ -12,6 +13,10 @@ export interface GameContainerState {
     levelIntro?: LevelIntro
     soundEnabled: boolean
     showOnScreenControls: boolean
+    scoreData?: {
+        message?: string;
+        scores: Score[]
+    }
 }
 
 export type Cord = {

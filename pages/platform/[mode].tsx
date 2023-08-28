@@ -1,7 +1,5 @@
 import type { NextPage } from 'next'
-import useSWR from 'swr';
 import { GamePageProps, getGamePageStaticPaths, buildGameGetStaticProps } from '../../modules/configuration'
-import { makeFetcher } from '../../modules/configuration/fetchers';
 import { controlMapping } from '../../modules/platform-game/controlRobot';
 import { getWorldStatus, isChangeToFailure, isChangeToVictory, playerIsInactive } from '../../modules/platform-game/platformGameWorldValues';
 import GamePageTemplate from '../../components/GamePageTemplate';
@@ -15,13 +13,11 @@ const { title, gameModes, highScoreGameId } = platformGame
 
 const GamePage: NextPage = (props: GamePageProps) => {
     const { config = { dataBaseType: 'NONE' }, gameModeKey = "normal" } = props;
-    const { data, error } = useSWR(highScoreGameId, makeFetcher(config))
     const gameMode = gameModes[gameModeKey]
 
     return (
         <GamePageTemplate title={`${title} - ${gameMode.title}`}>
             <GameContainerTemplate
-                scoreData={data}
                 isDataBase={config.dataBaseType !== 'NONE'}
                 gameMode={gameMode}
                 TitleScreenComponent={TitleScreen}

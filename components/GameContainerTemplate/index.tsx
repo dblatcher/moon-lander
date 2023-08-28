@@ -11,17 +11,13 @@ import OnScreenControls from "../OnScreenControls";
 import CommandMenu from "../CommandMenu";
 import styles from "./GameContainer.module.scss";
 import { failSongData, victorySongData } from "./songs";
-import { Score } from "../../lib/database/arcade-world-scores-table";
+import { Score, getScoresForGame, insertScore } from "../../lib/database/arcade-world-scores-table";
 
 export type Command = 'START' | 'PAUSE' | 'QUIT' | 'SOUNDTOGGLE' | 'CONTROLTOGGLE' | 'RESTARTLEVEL' | 'SKIPLEVEL'
 export const allCommands = ['START', 'PAUSE', 'QUIT', 'SOUNDTOGGLE', 'CONTROLTOGGLE', 'RESTARTLEVEL', 'SKIPLEVEL'] as const;
 
 
 interface Props {
-    scoreData?: {
-        message?: string;
-        scores: Score[]
-    }
     isDataBase: boolean
     gameMode: GameMode
     statusFunctions: StatusFunctions
@@ -89,9 +85,12 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
             keyBoardControlInput: {},
             onScreenControlInput: {},
             worldStatus: {},
-            mode: "TITLE",
+            mode: 'TITLE',
             soundEnabled: true,
             showOnScreenControls: false,
+            scoreData: {
+                scores: []
+            }
         }
 
         this.togglePaused = this.togglePaused.bind(this)
@@ -104,6 +103,11 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
         this.handleCommandPress = this.handleCommandPress.bind(this)
         this.asyncSetState = this.asyncSetState.bind(this)
         this.setSoundEnabled = this.setSoundEnabled.bind(this)
+        this.sendScore = this.sendScore.bind(this)
+    }
+
+    componentDidMount(): void {
+        void this.getScores()
     }
 
     componentWillUnmount() {
@@ -114,6 +118,39 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
         this.world?.stopTime();
         this.world?.soundDeck?.mute()
         this.world = undefined;
+    }
+
+    async getScores() {
+        const { isDataBase, highScoreGameId } = this.props
+        if (!isDataBase) {
+            return
+        }
+        const maybe = await getScoresForGame(highScoreGameId)
+
+        if (maybe.result) {
+            this.setState({
+                scoreData: {
+                    scores: maybe.result
+                }
+            })
+        }
+    }
+
+    async sendScore(name: string): Promise<boolean> {
+        const { highScoreGameId } = this.props
+        const { score, scoreData = { scores: [] } } = this.state
+        const maybeInsert = await insertScore({
+            score, gameId: highScoreGameId, name
+        })
+        const success = maybeInsert.result
+        if (success) {
+            await this.getScores()
+            this.goToTitles()
+        } else if (maybeInsert.error) (
+            this.setState({ scoreData: { ...scoreData, message: maybeInsert.error } })
+        )
+
+        return !!maybeInsert.result
     }
 
     get controls() {
@@ -279,10 +316,10 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
     }
 
     async endPlaySession(): Promise<GameContainerState> {
-        const { isDataBase, gameMode } = this.props;
+        const { isDataBase, gameMode, highScoreGameId } = this.props;
         const { score } = this.state;
 
-        if (!gameMode.noScores && isDataBase && score > 0) {
+        if (!gameMode.noScores && !!highScoreGameId && isDataBase && score > 0) {
             return this.goToHighScore()
         }
 
@@ -331,12 +368,11 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
 
     render() {
         const {
-            scoreData, isDataBase, gameMode, controlMapping,
+            isDataBase, gameMode, controlMapping,
             extraClassNames = [],
             TitleScreenComponent, LevelIntroComponent, GameComponent,
-            highScoreGameId
         } = this.props;
-        const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls } = this.state;
+        const { worldStatus, score, lives, mode, level, levelIntro, soundEnabled, showOnScreenControls, scoreData } = this.state;
         const { world, controls, handleCommandPress } = this;
 
         const mainClassNames = [styles.component, ...extraClassNames].join(" ")
@@ -351,7 +387,7 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                         soundEnabled={soundEnabled}
                         showOnScreenControls={showOnScreenControls}
                         scoreData={scoreData}
-                        title={gameMode.title} 
+                        title={gameMode.title}
                     />
                 }
 
@@ -379,7 +415,10 @@ export default class GameContainerTemplate extends React.Component<Props, GameCo
                 }
 
                 {(mode === "HIGHSCORE") &&
-                    <HighScoreEntry score={score} exit={this.goToTitles} highScoreGameId={highScoreGameId} />
+                    <HighScoreEntry
+                        score={score}
+                        exit={this.goToTitles}
+                        sendScore={this.sendScore} />
                 }
 
                 <KeyReader

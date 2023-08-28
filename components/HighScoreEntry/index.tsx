@@ -1,15 +1,14 @@
 import React, { ChangeEvent, FormEventHandler, useEffect, useRef, useState } from "react";
 import Dialogue from "../Dialogue";
 import styles from "./styles.module.scss"
-import { insertScore } from "../../lib/database/arcade-world-scores-table";
 
 
 export default function HighScoreEntry(props: {
     score: number
-    highScoreGameId: string
     exit: { (): Promise<any> }
+    sendScore: { (name: string): Promise<boolean> }
 }) {
-    const { score, exit } = props;
+    const { score, exit, sendScore } = props;
     const [name, setName] = useState("")
     const [isInitialRender, setIsInitialRender] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -19,19 +18,12 @@ export default function HighScoreEntry(props: {
         setName(event.target.value)
     }
 
-    const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault()
         if (!name || isSubmitting) { return }
-
-        if (!props.highScoreGameId) {
-            return exit()
-        }
-
         setIsSubmitting(true);
-        insertScore({ score, name, gameId: props.highScoreGameId })
-            .then(() => {
-                exit()
-            })
+        await sendScore(name)
+        setIsSubmitting(false)
     }
 
     useEffect(() => {
