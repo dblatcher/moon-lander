@@ -9,7 +9,6 @@ import { moonLander } from '../modules/moon-lander'
 import GameModeList from '../components/GameModeList'
 import { titleAnimation } from '../modules/asteroid-field/titleAnimation'
 import VercelFooter from '../components/VercelFooter'
-import { PostgresTest } from '../components/PostgresTest'
 
 const animationFrameStyle = {
   overflow: 'clip',
@@ -52,9 +51,6 @@ const Home: NextPage = () => {
               makeWorld={titleAnimation}
               frameStyle={animationFrameStyle} />
           </GameModeList>
-
-
-          <PostgresTest />
 
           <p>
             <Link legacyBehavior href={`/about`} passHref={true}>
