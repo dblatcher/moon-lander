@@ -11,16 +11,23 @@ const mockScores: Score[] = [
     },
     {
         createdAt: new Date(20 * 1000 * 60).toString(),
-        id: 1,
+        id: 2,
         score: 22,
         gameId: 'moon-lander',
         name: 'test player2',
     },
     {
         createdAt: new Date(20 * 1000 * 60).toString(),
-        id: 1,
+        id: 3,
         score: 142,
         gameId: 'moon-lander',
+        name: 'test player',
+    },
+    {
+        createdAt: new Date(20 * 1000 * 60).toString(),
+        id: 4,
+        score: 142,
+        gameId: 'asteroid-field',
         name: 'test player',
     },
 ]
