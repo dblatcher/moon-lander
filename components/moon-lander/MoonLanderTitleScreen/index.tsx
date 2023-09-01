@@ -17,7 +17,6 @@ const frameStyle = {
     overflow: 'clip',
     alignSelf: 'center',
     flexShrink: 0,
-    margin: '1em 0',
 }
 
 export default function MoonLanderTitleScreen(props: {
@@ -38,9 +37,7 @@ export default function MoonLanderTitleScreen(props: {
         <header>
             <h1>MOON LANDER</h1>
             {title && <h2>{title}</h2>}
-            <div>
-                <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
-            </div>
+
 
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Switch style={switchStyle} label="sound" value={soundEnabled} toggle={() => { issueCommand('SOUNDTOGGLE') }} />
@@ -54,10 +51,14 @@ export default function MoonLanderTitleScreen(props: {
             <span className={styles["bottom-rivets"]}></span>
         </header>
 
-        <AnimationCanvas makeWorld={createShipCloseUp}
-            magnify={.8}
-            frameStyle={frameStyle} />
-
+        <main>
+            <AnimationCanvas makeWorld={createShipCloseUp}
+                magnify={.8}
+                frameStyle={frameStyle} />
+            <div className={styles.buttonHolder}>
+                <button className={styles.startButton} onClick={() => { issueCommand('START') }}>START</button>
+            </div>
+        </main>
 
         {(showHighScores && scoreData) && (
             <section className={styles.tableWrapper}>
